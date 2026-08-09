@@ -1,9 +1,24 @@
 import CopyCommand from "@/components/CopyCommand";
+import LatestVersion from "@/components/LatestVersion";
 import Mark from "@/components/Mark";
 import Starfield from "@/components/Starfield";
 import { specification } from "@/data/gestures";
 
 const repo = "https://github.com/Vaccone-Software/lodestar";
+
+// Baked at build so the static page is right on deploy day; the client
+// re-reads the API so it stays right between deploys.
+async function latestTag(): Promise<string> {
+  try {
+    const response = await fetch(
+      "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1",
+    );
+    const data = await response.json();
+    const tag = data?.[0]?.tag_name;
+    if (typeof tag === "string" && tag.startsWith("v")) return tag;
+  } catch {}
+  return "v0.9.2";
+}
 
 function SectionLabel({ index, title }: { index: string; title: string }) {
   return (
@@ -22,7 +37,8 @@ function Keys({ children }: { children: string }) {
   );
 }
 
-export default function Page() {
+export default async function Page() {
+  const baked = await latestTag();
   return (
     <main className="mx-auto max-w-2xl px-6">
       <section className="relative -mx-6 flex min-h-svh flex-col items-center justify-center px-6 text-center">
@@ -46,7 +62,9 @@ export default function Page() {
               >
                 notarized zip
               </a>
-              {" · "}v0.9.1 · macOS 13 or later · Fair Source
+              {" · "}
+              <LatestVersion fallback={baked} /> · macOS 13 or later · Fair
+              Source
             </p>
           </div>
         </div>
