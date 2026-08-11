@@ -21,3 +21,15 @@ html {
   background: var(--color-accent);
   color: var(--color-ground);
 }
+
+/* A keyboard-first product's site should feel designed under the Tab key. */
+:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
