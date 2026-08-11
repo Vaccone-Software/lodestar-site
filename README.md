@@ -3,8 +3,8 @@
 The Lodestar product page. Next.js, Tailwind, Maple Mono, one page.
 
 ```sh
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 Deployed on Vercel. The product lives at
