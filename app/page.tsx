@@ -19,7 +19,7 @@ async function latestTag(): Promise<string> {
     const tag = data?.[0]?.tag_name;
     if (typeof tag === "string" && tag.startsWith("v")) return tag;
   } catch {}
-  return "v0.9.9";
+  return "v0.9.10";
 }
 
 function SectionLabel({
@@ -226,7 +226,7 @@ export default async function Page() {
             </p>
             <p className="text-faint">
               SIP stays on. Spaces stay untouched. One private API call,
-              documented. 246 tests.
+              documented. 248 tests.
             </p>
           </div>
         </section>
