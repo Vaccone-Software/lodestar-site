@@ -1,4 +1,5 @@
 import CopyCommand from "@/components/CopyCommand";
+import DownloadButton from "@/components/DownloadButton";
 import LatestVersion from "@/components/LatestVersion";
 import Mark from "@/components/Mark";
 import ScrollCue from "@/components/ScrollCue";
@@ -18,7 +19,7 @@ async function latestTag(): Promise<string> {
     const tag = data?.[0]?.tag_name;
     if (typeof tag === "string" && tag.startsWith("v")) return tag;
   } catch {}
-  return "v0.9.2";
+  return "v0.9.8";
 }
 
 function SectionLabel({
@@ -69,14 +70,17 @@ export default async function Page() {
             Keyboard navigation for macOS. Destination over process.
           </p>
           <div className="mt-10 w-full max-w-xl">
-            <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
+            <DownloadButton fallback={baked} />
+            <div className="mt-3">
+              <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
+            </div>
             <p className="text-faint mt-3 text-xs">
-              or the{" "}
+              notarized ·{" "}
               <a
-                href={`${repo}/releases/latest`}
+                href={`${repo}/releases`}
                 className="text-dim hover:text-ink underline decoration-white/25 underline-offset-4"
               >
-                notarized zip
+                all releases
               </a>
               {" · "}
               <LatestVersion fallback={baked} /> · macOS 13 or later · Fair
@@ -192,7 +196,12 @@ export default async function Page() {
         <section id="install" className="py-20">
           <SectionLabel index="04" title="Install" href="#install" />
           <div className="text-dim space-y-5 leading-relaxed">
+            <DownloadButton fallback={baked} />
             <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
+            <p>
+              The download is a notarized DMG: drag Lodestar to Applications.
+              Homebrew lands the same app.
+            </p>
             <p>
               Open it, grant Accessibility, and Lodestar wakes on its own. Hyper
               is right ⌘, which stops being a command key. That is the trade,
@@ -213,7 +222,7 @@ export default async function Page() {
             </p>
             <p className="text-faint">
               SIP stays on. Spaces stay untouched. One private API call,
-              documented. 163 tests.
+              documented. 234 tests.
             </p>
           </div>
         </section>
