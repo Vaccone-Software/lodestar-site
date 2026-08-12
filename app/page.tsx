@@ -19,7 +19,7 @@ async function latestTag(): Promise<string> {
     const tag = data?.[0]?.tag_name;
     if (typeof tag === "string" && tag.startsWith("v")) return tag;
   } catch {}
-  return "v0.9.8";
+  return "v0.9.9";
 }
 
 function SectionLabel({
@@ -200,7 +200,10 @@ export default async function Page() {
             <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
             <p>
               The download is a notarized DMG: drag Lodestar to Applications.
-              Homebrew lands the same app.
+              Homebrew lands the same app. From there Lodestar keeps itself
+              current: updates verify against the same Developer ID and apply
+              silently in idle moments.{" "}
+              <span className="text-faint">app.auto-update turns it off.</span>
             </p>
             <p>
               Open it, grant Accessibility, and Lodestar wakes on its own. Hyper
@@ -222,7 +225,7 @@ export default async function Page() {
             </p>
             <p className="text-faint">
               SIP stays on. Spaces stay untouched. One private API call,
-              documented. 234 tests.
+              documented. 246 tests.
             </p>
           </div>
         </section>
