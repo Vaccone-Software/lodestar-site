@@ -211,10 +211,11 @@ export default async function Page() {
               and it is configurable.
             </p>
             <p>
-              Your config is one commented YAML file with schema backed
-              completion, validated against your machine. A global CLI comes
-              along: <Keys>lodestar check</Keys> <Keys>lodestar diagnose</Keys>{" "}
-              <Keys>lodestar apps</Keys>. Agents get a stable contract in{" "}
+              Your config is one sparse JSON file: only what you changed, the
+              schema documenting every option, every write validated against
+              your machine. A global CLI comes along:{" "}
+              <Keys>lodestar config</Keys> <Keys>lodestar check</Keys>{" "}
+              <Keys>lodestar diagnose</Keys>. Agents get a stable contract in{" "}
               <a
                 href={`${repo}/blob/main/AGENTS.md`}
                 className="text-ink underline decoration-white/25 underline-offset-4"
