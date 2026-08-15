@@ -6,30 +6,30 @@ export const specification: Group[] = [
     label: "Going places",
     gestures: [
       {
-        keys: "hyper space",
+        keys: "lode space",
         meaning:
           "The searcher. Type, land full screen. Ranks by what you actually use.",
       },
       {
-        keys: "hyper A…Z",
+        keys: "lode A…Z",
         meaning:
           "Graph chains. Letters you chose, walked to any app or browser profile.",
       },
       {
-        keys: "hyper ⇥",
+        keys: "lode ⇥",
         meaning: "Window chooser for the focused app, most recent first.",
       },
       {
-        keys: "hyper ⏎",
+        keys: "lode ⏎",
         meaning:
           "The web bar. Links, domains, and searches, each routed to the right profile.",
       },
       {
-        keys: "hyper 1…9",
+        keys: "lode 1…9",
         meaning: "Jump to a window by its position. 9 is always the last.",
       },
       {
-        keys: "hyper X · ⇧X",
+        keys: "lode X · ⇧X",
         meaning: "Back and forward through the attention timeline.",
       },
     ],
@@ -41,21 +41,21 @@ export const specification: Group[] = [
         keys: "⇧ on a summon",
         meaning: "Beside me. An equal split instead of full screen.",
       },
-      { keys: "hyper O", meaning: "Flip the split, horizontal to vertical." },
+      { keys: "lode O", meaning: "Flip the split, horizontal to vertical." },
       {
-        keys: "hyper ⇧1…9",
+        keys: "lode ⇧1…9",
         meaning: "Slide the focused window to that position.",
       },
       {
-        keys: "hyper [ · ]",
+        keys: "lode [ · ]",
         meaning: "Throw the focused window to the previous or next display.",
       },
       {
-        keys: "hyper Z · ⇧Z",
+        keys: "lode Z · ⇧Z",
         meaning: "Undo and redo the layout, one global timeline.",
       },
       {
-        keys: "hyper 0",
+        keys: "lode 0",
         meaning: "Sweep every background window out of sight. Never dialogs.",
       },
     ],
@@ -64,21 +64,21 @@ export const specification: Group[] = [
     label: "Inside the app",
     gestures: [
       {
-        keys: "hyper ,",
+        keys: "lode ,",
         meaning:
           "Scroll mode. j k for lines, d u for half pages, gg and ⇧G for the ends.",
       },
       {
-        keys: "hyper .",
+        keys: "lode .",
         meaning: "Menu search. The frontmost app's entire menu bar, fuzzy.",
       },
       {
-        keys: "hyper ;",
+        keys: "lode ;",
         meaning:
           "Click hints. Every pressable element wears a label. Type it to click.",
       },
       {
-        keys: "hyper ⇧;",
+        keys: "lode ⇧;",
         meaning: "Chain clicks. Each click relabels the window. esc leaves.",
       },
     ],
@@ -87,16 +87,12 @@ export const specification: Group[] = [
     label: "Saved worlds",
     gestures: [
       {
-        keys: "hyper ` A…Z",
-        meaning: "Marks. Letter addresses for specific windows, bound with ⇧.",
-      },
-      {
-        keys: "hyper ' A…Z",
+        keys: "lode ' A…Z",
         meaning:
           "Breaths. Whole saved layouts, restored across restarts. Apps relaunch.",
       },
       {
-        keys: "hyper ' '",
+        keys: "lode ' '",
         meaning: "Update the latest breath to the current world.",
       },
     ],
@@ -105,12 +101,12 @@ export const specification: Group[] = [
     label: "The system teaches itself",
     gestures: [
       {
-        keys: "hold hyper",
+        keys: "hold lode",
         meaning:
           "Peek the map. The graph and every window's index, while held.",
       },
       {
-        keys: "hyper ?",
+        keys: "lode ?",
         meaning:
           "The cheat sheet. Every gesture and your live bindings, one sheet.",
       },

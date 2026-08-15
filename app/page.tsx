@@ -19,7 +19,7 @@ async function latestTag(): Promise<string> {
     const tag = data?.[0]?.tag_name;
     if (typeof tag === "string" && tag.startsWith("v")) return tag;
   } catch {}
-  return "v0.9.10";
+  return "v0.9.13";
 }
 
 function SectionLabel({
@@ -105,7 +105,7 @@ export default async function Page() {
             </p>
             <p>
               So every gesture names a destination, and the system takes you
-              there. Full screen, instantly, silently. <Keys>hyper S</Keys> and
+              there. Full screen, instantly, silently. <Keys>lode S</Keys> and
               you are in Slack. Not launching, not arranging. There.
             </p>
             <p>
@@ -121,6 +121,16 @@ export default async function Page() {
             title="The specification"
             href="#specification"
           />
+          <p className="text-dim border-hairline mb-12 border-l pl-5 text-[13px] leading-relaxed sm:text-sm">
+            <span className="text-ink">
+              The lode key is the one key everything hangs from.
+            </span>{" "}
+            A lodestar is the star you steer by, and the lode is the way itself:
+            hold it, and every destination below is a keystroke away. It is the
+            right command key by default, so nothing you already press changes
+            meaning, and you can point it at another modifier in the config.
+            Hold it alone and the system draws you its map.
+          </p>
           <div className="space-y-12">
             {specification.map((group) => (
               <div key={group.label}>
@@ -162,7 +172,7 @@ export default async function Page() {
               That is why chains wait indefinitely instead of timing out. Why
               successful navigation is silent: the screen changing is the
               feedback. Why windows you did not summon are left alone. And why
-              the system teaches its own map: hold hyper, and every destination
+              the system teaches its own map: hold lode, and every destination
               shows itself.
             </p>
             <p>
@@ -206,7 +216,7 @@ export default async function Page() {
               <span className="text-faint">app.auto-update turns it off.</span>
             </p>
             <p>
-              Open it, grant Accessibility, and Lodestar wakes on its own. Hyper
+              Open it, grant Accessibility, and Lodestar wakes on its own. Lode
               is right ⌘, which stops being a command key. That is the trade,
               and it is configurable.
             </p>
@@ -226,7 +236,7 @@ export default async function Page() {
             </p>
             <p className="text-faint">
               SIP stays on. Spaces stay untouched. One private API call,
-              documented. 248 tests.
+              documented. 254 tests.
             </p>
           </div>
         </section>
