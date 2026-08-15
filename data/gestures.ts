@@ -55,8 +55,9 @@ export const specification: Group[] = [
         meaning: "Undo and redo the layout, one global timeline.",
       },
       {
-        keys: "lode 0",
-        meaning: "Sweep every background window out of sight. Never dialogs.",
+        keys: "lode 0 · ⇧0",
+        meaning:
+          "The focused window fills the display and joins the layout. ⇧0 puts it beside instead.",
       },
     ],
   },
