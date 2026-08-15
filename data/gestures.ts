@@ -85,6 +85,35 @@ export const specification: Group[] = [
     ],
   },
   {
+    label: "What you copied",
+    gestures: [
+      {
+        keys: "⇧⌘V",
+        meaning:
+          "The clipboard. Recent clips run along the bottom under the home row, five pinned slots climb the left.",
+      },
+      {
+        keys: "a…l · ⇧a…l",
+        meaning:
+          "Paste that card. With ⇧ it pastes exactly as it was copied, formatting and all.",
+      },
+      {
+        keys: "1…5",
+        meaning:
+          "The pins. A slot means the same thing next week as it does today, so the paste needs no looking.",
+      },
+      {
+        keys: "⌘ on a card",
+        meaning:
+          "Its actions. Pin it, delete it, save an image, or never save from that app again.",
+      },
+      {
+        keys: "/",
+        meaning: "Search the history. Matches stay under the same letters.",
+      },
+    ],
+  },
+  {
     label: "Saved worlds",
     gestures: [
       {

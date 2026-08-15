@@ -10,16 +10,23 @@ const repo = "https://github.com/Vaccone-Software/lodestar";
 
 // Baked at build so the static page is right on deploy day; the client
 // re-reads the API so it stays right between deploys.
+//
+// no-store is load bearing. Next keeps a persistent data cache between
+// builds, and a cached answer here bakes whatever version was current the
+// last time the cache was written: a build during 0.9.16 shipped a page
+// advertising 0.9.5, and a download button pointing at it for anyone whose
+// client fetch does not land.
 async function latestTag(): Promise<string> {
   try {
     const response = await fetch(
       "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1",
+      { cache: "no-store" },
     );
     const data = await response.json();
     const tag = data?.[0]?.tag_name;
     if (typeof tag === "string" && tag.startsWith("v")) return tag;
   } catch {}
-  return "v0.9.15";
+  return "v0.9.16";
 }
 
 function SectionLabel({
@@ -109,8 +116,8 @@ export default async function Page() {
               you are in Slack. Not launching, not arranging. There.
             </p>
             <p>
-              One grammar spans launching, windows, the inside of apps, and the
-              web. Learn it once. Your hands know it everywhere.
+              One grammar spans launching, windows, the inside of apps, the web,
+              and what you copied. Learn it once. Your hands know it everywhere.
             </p>
           </div>
         </section>
@@ -234,9 +241,18 @@ export default async function Page() {
               </a>
               .
             </p>
+            <p>
+              The clipboard history stays on your machine and goes nowhere else.
+              A clip a password manager marks concealed is refused before it is
+              read, you can exclude an app or any phrase you name, and it lives
+              outside the directory people commit to dotfiles repositories.{" "}
+              <span className="text-faint">
+                lodestar clipboard clear erases it.
+              </span>
+            </p>
             <p className="text-faint">
               SIP stays on. Spaces stay untouched. One private API call,
-              documented. 270 tests.
+              documented. 328 tests.
             </p>
           </div>
         </section>
