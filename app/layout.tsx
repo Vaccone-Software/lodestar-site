@@ -15,7 +15,7 @@ const maple = localFont({
 export const metadata: Metadata = {
   title: "Lodestar · keyboard navigation for macOS",
   description:
-    "Destination over process. Every gesture names a destination, and the system takes you there: full screen, instantly, silently.",
+    "An opinionated way to navigate and operate your computer. Applications arrive maximized under letters you assign, with click hints, keyboard scrolling, browser routing and clipboard history in one grammar.",
 };
 
 export default function RootLayout({
