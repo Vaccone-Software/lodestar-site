@@ -200,7 +200,7 @@ export default async function Page() {
         }
       >
         <Item
-          shot="/shots/searcher.png"
+          shot="/shots/launcher.png"
           caption="the launcher, ordered by what you actually use"
           text={
             <p>
