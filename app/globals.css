@@ -1,19 +1,30 @@
 @import "tailwindcss";
 
+/* Three families, each with one job. The display cut carries the name and the
+   section heads. Prose is set in a text face, because a page set entirely in
+   mono is wearing a costume. Mono is kept for keys, where it means something:
+   a key on the page and a key under a hand should look like the same object.
+
+   One accent, and it is international orange. The sky behind the name is the
+   only other colour on the page, and it is real. */
 @theme {
   --color-ground: #0a0a0b;
   --color-ink: #f2f3f5;
-  --color-dim: rgba(242, 243, 245, 0.58);
-  --color-faint: rgba(242, 243, 245, 0.32);
+  --color-dim: rgba(242, 243, 245, 0.6);
+  --color-faint: rgba(242, 243, 245, 0.34);
   --color-accent: #ff4f00;
   --color-hairline: rgba(242, 243, 245, 0.12);
   --font-mono: var(--font-maple), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display:
+    ui-sans-serif, -apple-system, "SF Pro Display", "Helvetica Neue",
+    sans-serif;
+  --font-prose: ui-serif, "New York", Charter, Georgia, serif;
 }
 
 html {
   background: var(--color-ground);
   color: var(--color-ink);
-  font-family: var(--font-mono);
+  font-family: var(--font-prose);
   -webkit-font-smoothing: antialiased;
 }
 

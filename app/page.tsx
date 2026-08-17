@@ -2,9 +2,7 @@ import CopyCommand from "@/components/CopyCommand";
 import DownloadButton from "@/components/DownloadButton";
 import LatestVersion from "@/components/LatestVersion";
 import Mark from "@/components/Mark";
-import ScrollCue from "@/components/ScrollCue";
 import Starfield from "@/components/Starfield";
-import { specification } from "@/data/gestures";
 
 const repo = "https://github.com/Vaccone-Software/lodestar";
 
@@ -13,9 +11,7 @@ const repo = "https://github.com/Vaccone-Software/lodestar";
 //
 // no-store is load bearing. Next keeps a persistent data cache between
 // builds, and a cached answer here bakes whatever version was current the
-// last time the cache was written: a build during 0.9.16 shipped a page
-// advertising 0.9.5, and a download button pointing at it for anyone whose
-// client fetch does not land.
+// last time the cache was written.
 async function latestTag(): Promise<string> {
   try {
     const response = await fetch(
@@ -26,36 +22,127 @@ async function latestTag(): Promise<string> {
     const tag = data?.[0]?.tag_name;
     if (typeof tag === "string" && tag.startsWith("v")) return tag;
   } catch {}
-  return "v0.9.16";
+  return "v0.11.5";
 }
 
-function SectionLabel({
-  index,
-  title,
-  href,
+/** The shots are photographed against the page's own ground, so their edges
+    must not announce themselves. Inline rather than a class: a utility layer
+    that also touches mask-image beats a plain rule and the frame comes back. */
+const feather = {
+  WebkitMaskImage:
+    "radial-gradient(100% 100% at 50% 50%, #000 40%, transparent 90%)",
+  maskImage: "radial-gradient(100% 100% at 50% 50%, #000 40%, transparent 90%)",
+} as const;
+
+/** A gesture, the name of what it opens, and what that thing actually is.
+    A keycap with no name beside it is a crossword clue. */
+function KeyRow({
+  keys,
+  name,
+  children,
 }: {
-  index: string;
-  title: string;
-  href: string;
+  keys: string[];
+  name?: string;
+  children: React.ReactNode;
 }) {
   return (
-    <a
-      href={href}
-      className="group border-hairline mb-8 flex items-baseline gap-3 border-b pb-3"
-    >
-      <span className="text-accent text-xs tracking-[0.25em]">{index}</span>
-      <h2 className="text-dim group-hover:text-ink text-xs tracking-[0.25em] uppercase transition-colors">
-        {title}
-      </h2>
-    </a>
+    <div className="border-hairline flex items-baseline gap-x-4 border-t py-3">
+      <span className="flex shrink-0 items-center gap-1.5">
+        {keys.map((key) => (
+          <span
+            key={key}
+            className="border-hairline text-ink/90 inline-flex items-center rounded-[5px] border bg-white/[0.06] px-2 py-1 font-mono text-[11.5px] leading-none"
+          >
+            {key}
+          </span>
+        ))}
+      </span>
+      <span className="text-dim text-[15px] leading-snug">
+        {name ? <span className="text-ink">{name}: </span> : null}
+        {children}
+      </span>
+    </div>
   );
 }
 
-function Keys({ children }: { children: string }) {
+function Section({
+  title,
+  intro,
+  children,
+}: {
+  title: string;
+  intro?: React.ReactNode;
+  children?: React.ReactNode;
+}) {
   return (
-    <kbd className="group-hover/row:border-accent/40 inline-block rounded-[5px] border border-white/15 bg-white/[0.04] px-1.5 py-0.5 text-[12px] whitespace-nowrap transition-colors">
-      {children}
-    </kbd>
+    <section className="border-hairline border-t py-[9vh]">
+      <div className="mx-auto max-w-[1180px] px-[6vw] lg:px-10">
+        <h2 className="font-display text-ink text-[clamp(1.7rem,3.4vw,2.5rem)] leading-[1.05] font-semibold tracking-[-0.02em]">
+          {title}
+        </h2>
+        {intro ? (
+          <div className="text-dim mt-6 max-w-[54ch] space-y-4 text-[clamp(1rem,1.3vw,1.12rem)] leading-[1.62]">
+            {intro}
+          </div>
+        ) : null}
+        {children ? <div className="mt-14 space-y-14">{children}</div> : null}
+      </div>
+    </section>
+  );
+}
+
+/** One thing inside a section: what it is, the gesture, and a photograph of
+    it. Two of these give a section its visual separation without inventing a
+    layout for every case. */
+function Item({
+  text,
+  rows,
+  shot,
+  caption,
+  flip,
+  framed,
+}: {
+  text?: React.ReactNode;
+  rows: React.ReactNode;
+  shot?: string;
+  caption?: string;
+  flip?: boolean;
+  /** A whole window rather than a panel: it gets an edge on purpose, because
+      feathering a browser screenshot into the page only makes it look like a
+      mistake. */
+  framed?: boolean;
+}) {
+  return (
+    <div
+      className={`grid items-center gap-x-14 gap-y-8 ${shot ? "lg:grid-cols-2" : ""}`}
+    >
+      <div className={flip ? "lg:order-2" : ""}>
+        {text ? (
+          <div className="text-dim max-w-[48ch] space-y-4 text-[clamp(1rem,1.3vw,1.12rem)] leading-[1.62]">
+            {text}
+          </div>
+        ) : null}
+        <div className={`max-w-[48ch] ${text ? "mt-7" : ""}`}>{rows}</div>
+      </div>
+      {shot ? (
+        <figure className={flip ? "lg:order-1" : ""}>
+          {framed ? (
+            <img
+              src={shot}
+              alt=""
+              className="border-hairline w-full rounded-lg border"
+            />
+          ) : (
+            <img src={shot} alt="" style={feather} className="w-full" />
+          )}
+          {caption ? (
+            <figcaption className="text-faint mt-3 text-center font-mono text-[11px]">
+              {caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      ) : null}
+    </div>
   );
 }
 
@@ -63,212 +150,231 @@ export default async function Page() {
   const baked = await latestTag();
   return (
     <main>
-      {/* The hero escapes the column so the sky can run full bleed; the
-          constellations need the whole viewport to land on screen. */}
-      <section className="relative flex min-h-svh flex-col items-center justify-center px-6 text-center">
+      {/* The real northern sky, and the product in it. The first screen shows
+          the thing rather than announcing its name at 19vw. */}
+      <section className="relative flex min-h-svh flex-col justify-between overflow-hidden px-[5vw] py-[3.5vh]">
         <Starfield />
-        <div className="to-ground pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent" />
-        <div className="relative flex flex-col items-center">
-          <Mark size={104} />
-          <h1 className="mt-8 text-4xl font-bold tracking-tight sm:text-5xl">
-            Lodestar
-          </h1>
-          <p className="text-dim mt-4 max-w-md text-balance">
-            Keyboard navigation for macOS. Destination over process.
-          </p>
-          <div className="mt-10 w-full max-w-xl">
+        <div className="to-ground pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-b from-transparent" />
+
+        <div className="text-faint relative flex items-baseline justify-between font-mono text-[11px] tracking-[0.08em] uppercase">
+          <span>Vaccone Software</span>
+          <span>macOS 13 or later</span>
+        </div>
+
+        <div className="flex-1" />
+
+        <div className="relative flex flex-col gap-10 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <Mark size={44} />
+            <h1 className="font-display text-ink mt-6 text-[clamp(2.4rem,5vw,4.2rem)] leading-[0.95] font-semibold tracking-[-0.035em]">
+              Lodestar
+            </h1>
+            <p className="mt-4 max-w-[26ch] text-[clamp(1.05rem,1.5vw,1.3rem)] leading-[1.4]">
+              An opinionated way to navigate and operate your computer.
+            </p>
+          </div>
+          <div className="w-full max-w-[330px] shrink-0">
             <DownloadButton fallback={baked} />
-            <div className="mt-3">
-              <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
-            </div>
-            <p className="text-faint mt-3 text-xs">
-              notarized ·{" "}
-              <a
-                href={`${repo}/releases`}
-                className="text-dim hover:text-ink underline decoration-white/25 underline-offset-4"
-              >
-                all releases
-              </a>
-              {" · "}
-              <LatestVersion fallback={baked} /> · macOS 13 or later · Fair
-              Source
+            <p className="text-faint mt-2 font-mono text-[11px]">
+              notarized · <LatestVersion fallback={baked} /> · Fair Source
             </p>
           </div>
         </div>
-        <ScrollCue />
       </section>
 
-      <div className="mx-auto max-w-2xl px-6">
-        <section id="premise" className="py-20">
-          <SectionLabel index="01" title="The premise" href="#premise" />
-          <div className="text-dim space-y-5 leading-relaxed">
+      <Section
+        title="Applications"
+        intro={
+          <>
             <p>
-              Most window tools ask you to manage windows. Arrange them, resize
-              them, cycle through them.{" "}
-              <span className="text-ink">
-                Lodestar starts from a different premise: you never wanted to
-                manage windows. You wanted to be somewhere.
-              </span>
+              Lodestar navigates to the application you want without
+              distraction. Anything you open or focus through it becomes
+              maximized and hides the others. Everything else about your windows
+              keeps working the way you are used to.
             </p>
             <p>
-              So every gesture names a destination, and the system takes you
-              there. Full screen, instantly, silently. <Keys>lode S</Keys> and
-              you are in Slack. Not launching, not arranging. There.
+              Applications you use constantly can be assigned a letter, or a
+              short set of letters, and opened directly without a list.
             </p>
+          </>
+        }
+      >
+        <Item
+          shot="/shots/searcher.png"
+          caption="the launcher, ordered by what you actually use"
+          text={
             <p>
-              One grammar spans launching, windows, the inside of apps, the web,
-              and what you copied. Learn it once. Your hands know it everywhere.
+              The launcher is a list of your applications. Type part of a name
+              to narrow it, and the one you choose comes to the front.
             </p>
-          </div>
-        </section>
+          }
+          rows={
+            <>
+              <KeyRow keys={["lode", "space"]} name="Launcher">
+                a list of your applications, narrowed as you type
+              </KeyRow>
+              <KeyRow keys={["⇧"]} name="Beside">
+                arrive next to the current window instead of in front of it
+              </KeyRow>
+            </>
+          }
+        />
+        <Item
+          shot="/shots/graph.png"
+          caption="the graph, drawn while the key is held"
+          flip
+          text={
+            <p>
+              The graph is the set of letters you assign to the applications you
+              use most. Hold the key and it draws itself, so nothing has to be
+              remembered before it is learned, and a letter can lead to another
+              letter when one is not enough.
+            </p>
+          }
+          rows={
+            <>
+              <KeyRow keys={["lode", "<letter>"]} name="Graph">
+                a set of letters you assign, to navigate to the applications you
+                use most
+              </KeyRow>
+              <KeyRow keys={["⇧"]} name="Beside">
+                arrive next to the current window instead of in front of it
+              </KeyRow>
+            </>
+          }
+        />
+      </Section>
 
-        <section id="specification" className="py-20">
-          <SectionLabel
-            index="02"
-            title="The specification"
-            href="#specification"
-          />
-          <p className="text-dim border-hairline mb-12 border-l pl-5 text-[13px] leading-relaxed sm:text-sm">
-            <span className="text-ink">
-              The lode key is the one key everything hangs from.
-            </span>{" "}
-            A lodestar is the star you steer by, and the lode is the way itself:
-            hold it, and every destination below is a keystroke away. It is the
-            right command key by default, so nothing you already press changes
-            meaning, and you can point it at another modifier in the config.
-            Hold it alone and the system draws you its map.
-          </p>
-          <div className="space-y-12">
-            {specification.map((group) => (
-              <div key={group.label}>
-                <h3 className="text-ink mb-4 text-sm">{group.label}</h3>
-                <table className="w-full border-collapse">
-                  <tbody>
-                    {group.gestures.map((gesture) => (
-                      <tr
-                        key={gesture.keys}
-                        className="border-hairline group/row border-t transition-colors last:border-b hover:bg-white/[0.02]"
-                      >
-                        <td className="w-36 py-2.5 pr-4 align-top sm:w-44">
-                          <Keys>{gesture.keys}</Keys>
-                        </td>
-                        <td className="text-dim group-hover/row:text-ink py-2.5 text-[13px] leading-relaxed transition-colors sm:text-sm">
-                          {gesture.meaning}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ))}
-          </div>
-        </section>
+      <Section title="Interactions">
+        <Item
+          shot="/shots/hints.png"
+          caption="hints on a page, one label per link and button"
+          framed
+          text={
+            <p>
+              Hints put a letter on every button, link and field in the window
+              you are in. Type the letter and it is clicked.
+            </p>
+          }
+          rows={
+            <KeyRow keys={["lode", ";"]} name="Hints">
+              a letter on everything clickable in the window
+            </KeyRow>
+          }
+        />
+        <Item
+          shot="/shots/scroll.png"
+          caption="scroll, and the keys it answers to"
+          flip
+          text={
+            <p>
+              Scroll moves the content inside the window, with no mouse and no
+              trackpad.
+            </p>
+          }
+          rows={
+            <KeyRow keys={["lode", ","]} name="Scroll">
+              move the content inside the window from the keyboard
+            </KeyRow>
+          }
+        />
+      </Section>
 
-        <section id="philosophy" className="py-20">
-          <SectionLabel index="03" title="The philosophy" href="#philosophy" />
-          <div className="text-dim space-y-5 leading-relaxed">
+      <Section
+        title="Ask"
+        intro={
+          <>
             <p>
-              Every feature faces one test before it ships:{" "}
-              <span className="text-ink">
-                does it become a fixed gesture the hand owns, or does it force a
-                fresh decision every time?
-              </span>{" "}
-              If it forces decisions, it gets cut.
+              Ask opens a name you saved, a domain, or a search in your
+              browser.
             </p>
             <p>
-              That is why chains wait indefinitely instead of timing out. Why
-              successful navigation is silent: the screen changing is the
-              feedback. Why windows you did not summon are left alone. And why
-              the system teaches its own map: hold lode, and every destination
-              shows itself.
+              Destinations can also be assigned to a browser profile. Work
+              opens in your work profile and personal in your personal one,
+              without choosing each time, and links you click in other
+              applications can follow the same rules.
             </p>
-            <p>
-              The full reasoning is written down:{" "}
-              <a
-                href={`${repo}/blob/main/DESIGN.md`}
-                className="text-ink underline decoration-white/25 underline-offset-4"
-              >
-                the design
-              </a>
-              ,{" "}
-              <a
-                href={`${repo}/blob/main/GUIDE.md`}
-                className="text-ink underline decoration-white/25 underline-offset-4"
-              >
-                the reference
-              </a>
-              , and{" "}
-              <a
-                href={`${repo}/blob/main/FINDINGS.md`}
-                className="text-ink underline decoration-white/25 underline-offset-4"
-              >
-                the engineering ledger
-              </a>
-              , where every platform assumption was probed before it was
-              trusted.
-            </p>
-          </div>
-        </section>
+          </>
+        }
+      >
+        <Item
+          shot="/shots/ask.png"
+          caption="a destination, and the profile it will open in"
+          rows={
+            <KeyRow keys={["lode", "⏎"]} name="Ask">
+              names, domains and searches, opened in your browser
+            </KeyRow>
+          }
+        />
+      </Section>
 
-        <section id="install" className="py-20">
-          <SectionLabel index="04" title="Install" href="#install" />
-          <div className="text-dim space-y-5 leading-relaxed">
-            <DownloadButton fallback={baked} />
+      <Section
+        title="Clipboard history"
+        intro={
+          <>
+            <p>
+              Everything you copy is kept. Opening the history lays the recent
+              entries out in the same places every time, each under the same
+              letter, so pasting something from earlier is one keystroke.
+            </p>
+            <p>
+              Entries you reach for constantly can be pinned to a numbered slot
+              that never changes. The history stays on your machine and never
+              leaves it.
+            </p>
+          </>
+        }
+      >
+        <Item
+          shot="/shots/clipboard.png"
+          caption="pinned entries on the left, recent ones along the bottom"
+          rows={
+            <>
+              <KeyRow keys={["⇧⌘V"]} name="Clipboard history">
+                everything you have copied
+              </KeyRow>
+              <KeyRow keys={["<number>"]} name="Pins">
+                entries you keep, in a slot that never moves
+              </KeyRow>
+              <KeyRow keys={["<letter>"]}>
+                pastes that entry as plain text, ⇧ keeps its formatting
+              </KeyRow>
+            </>
+          }
+        />
+      </Section>
+
+      <Section
+        title="Optimization"
+        intro={
+          <>
+            <p>
+              Lodestar&apos;s commands are designed to become muscle memory.
+              Navigation that begins as a deliberate sequence turns into a single
+              practised gesture, and it gets faster the longer you use it.
+            </p>
+            <p>
+              What that changes is where your attention goes. You choose a
+              destination rather than the steps that lead to it.
+            </p>
+          </>
+        }
+      />
+
+      <section className="border-hairline border-t px-[6vw] py-[11vh] lg:px-10">
+        <div className="mx-auto max-w-[520px]">
+          <DownloadButton fallback={baked} />
+          <div className="mt-3">
             <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
-            <p>
-              The download is a notarized DMG: drag Lodestar to Applications.
-              Homebrew lands the same app. From there Lodestar keeps itself
-              current: updates verify against the same Developer ID and apply
-              silently in idle moments.{" "}
-              <span className="text-faint">app.auto-update turns it off.</span>
-            </p>
-            <p>
-              Open it, grant Accessibility, and Lodestar wakes on its own. Lode
-              is right ⌘, which stops being a command key. That is the trade,
-              and it is configurable.
-            </p>
-            <p>
-              Your config is one sparse JSON file: only what you changed, the
-              schema documenting every option, every write validated against
-              your machine. A global CLI comes along:{" "}
-              <Keys>lodestar config</Keys> <Keys>lodestar check</Keys>{" "}
-              <Keys>lodestar diagnose</Keys>. Agents get a stable contract in{" "}
-              <a
-                href={`${repo}/blob/main/AGENTS.md`}
-                className="text-ink underline decoration-white/25 underline-offset-4"
-              >
-                AGENTS.md
-              </a>
-              .
-            </p>
-            <p>
-              The clipboard history stays on your machine and goes nowhere else.
-              A clip a password manager marks concealed is refused before it is
-              read, you can exclude an app or any phrase you name, and it lives
-              outside the directory people commit to dotfiles repositories.{" "}
-              <span className="text-faint">
-                lodestar clipboard clear erases it.
-              </span>
-            </p>
-            <p className="text-faint">
-              SIP stays on. Spaces stay untouched. One private API call,
-              documented. 328 tests.
-            </p>
           </div>
-        </section>
-
-        <footer className="border-hairline text-faint flex flex-col items-center gap-4 border-t py-16 text-center text-xs">
-          <Mark size={40} />
-          <p>Built and maintained by one person at Vaccone.</p>
-          <p>
-            <a href={repo} className="text-dim hover:text-ink">
-              GitHub
+          <p className="text-faint mt-4 font-mono text-[11px] leading-relaxed">
+            macOS 13 or later · notarized · Fair Source ·{" "}
+            <a href={repo} className="text-dim underline underline-offset-4">
+              source
             </a>
-            {" · "}FSL 1.1 with an MIT future grant{" · "}© 2026 Vaccone
-            Software Company
           </p>
-        </footer>
-      </div>
+        </div>
+      </section>
     </main>
   );
 }
