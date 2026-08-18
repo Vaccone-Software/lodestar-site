@@ -41,7 +41,7 @@ export const specification: Group[] = [
         keys: "⇧ on a summon",
         meaning: "Beside me. An equal split instead of full screen.",
       },
-      { keys: "lode O", meaning: "Flip the split, horizontal to vertical." },
+      { keys: "lode \\", meaning: "Flip the split, horizontal to vertical." },
       {
         keys: "lode ⇧1…9",
         meaning: "Slide the focused window to that position.",
@@ -81,6 +81,11 @@ export const specification: Group[] = [
       {
         keys: "lode ⇧;",
         meaning: "Chain clicks. Each click relabels the window. esc leaves.",
+      },
+      {
+        keys: "lode /",
+        meaning:
+          "Select. Type a few characters of any text on screen, pick the start, pick the end. The span is selected.",
       },
     ],
   },
