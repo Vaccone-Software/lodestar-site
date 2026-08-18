@@ -280,25 +280,15 @@ export default async function Page() {
         />
         <Item
           shot="/shots/select.png"
-          caption="type star, and every star on screen wears a label"
+          caption="type lode, and every match on screen wears a label"
           framed
           text={
-            <>
-              <p>
-                Select ends the last job the mouse still had. Type a few
-                characters of any text you can see, anywhere on the display,
-                and every match wears a label. Pick one to anchor the start,
-                type and pick again for the end, and the span between them is
-                selected.
-              </p>
-              <p>
-                It reads the screen itself, so it works the same in a
-                terminal, a browser, and a chat. Editable text becomes a real
-                selection. Everything else stays highlighted and ⌘C copies
-                it, checked against what the app could read so an identifier
-                comes out exact.
-              </p>
-            </>
+            <p>
+              Select takes the mouse&apos;s last job. Type a few characters of
+              any text on screen, pick the start, pick the end, and the span
+              is selected. It reads the screen itself, so it works the same
+              in a terminal, a browser, and a chat.
+            </p>
           }
           rows={
             <KeyRow keys={["lode", "/"]} name="Select">
