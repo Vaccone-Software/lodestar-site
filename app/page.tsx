@@ -273,7 +273,7 @@ export default async function Page() {
             </p>
           }
           rows={
-            <KeyRow keys={["lode", ","]} name="Scroll">
+            <KeyRow keys={["lode", "`"]} name="Scroll">
               move the content inside the window from the keyboard
             </KeyRow>
           }
@@ -293,6 +293,22 @@ export default async function Page() {
           rows={
             <KeyRow keys={["lode", "/"]} name="Select">
               type what you see, pick the start, pick the end
+            </KeyRow>
+          }
+        />
+        <Item
+          flip
+          text={
+            <p>
+              Commands searches the frontmost application&apos;s entire menu
+              bar. Type part of a command and run it, without hunting through
+              submenus. Each row wears the application&apos;s own shortcut, so
+              the faster path teaches itself as you go.
+            </p>
+          }
+          rows={
+            <KeyRow keys={["lode", "."]} name="Commands">
+              the frontmost app&apos;s menu items, searched and run
             </KeyRow>
           }
         />
