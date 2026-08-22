@@ -16,8 +16,7 @@
   --color-hairline: rgba(242, 243, 245, 0.12);
   --font-mono: var(--font-maple), ui-monospace, "SF Mono", Menlo, monospace;
   --font-display:
-    ui-sans-serif, -apple-system, "SF Pro Display", "Helvetica Neue",
-    sans-serif;
+    ui-sans-serif, -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
   --font-prose: ui-serif, "New York", Charter, Georgia, serif;
 }
 

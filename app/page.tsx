@@ -103,7 +103,7 @@ function Item({
   framed,
 }: {
   text?: React.ReactNode;
-  rows: React.ReactNode;
+  rows?: React.ReactNode;
   shot?: string;
   caption?: string;
   flip?: boolean;
@@ -122,7 +122,9 @@ function Item({
             {text}
           </div>
         ) : null}
-        <div className={`max-w-[48ch] ${text ? "mt-7" : ""}`}>{rows}</div>
+        {rows ? (
+          <div className={`max-w-[48ch] ${text ? "mt-7" : ""}`}>{rows}</div>
+        ) : null}
       </div>
       {shot ? (
         <figure className={flip ? "lg:order-1" : ""}>
@@ -200,7 +202,7 @@ export default async function Page() {
         }
       >
         <Item
-          shot="/shots/launcher.png"
+          shot="/shots/launcher.webp"
           caption="the launcher, ordered by what you actually use"
           text={
             <p>
@@ -220,7 +222,7 @@ export default async function Page() {
           }
         />
         <Item
-          shot="/shots/graph.png"
+          shot="/shots/graph.webp"
           caption="the graph, drawn while the key is held"
           flip
           text={
@@ -247,7 +249,7 @@ export default async function Page() {
 
       <Section title="Interactions">
         <Item
-          shot="/shots/hints.png"
+          shot="/shots/hints.webp"
           caption="hints on a page, one label per link and button"
           framed
           text={
@@ -263,7 +265,7 @@ export default async function Page() {
           }
         />
         <Item
-          shot="/shots/scroll.png"
+          shot="/shots/scroll.webp"
           caption="scroll, and the keys it answers to"
           flip
           text={
@@ -279,15 +281,15 @@ export default async function Page() {
           }
         />
         <Item
-          shot="/shots/select.png"
+          shot="/shots/select.webp"
           caption="type lode, and every match on screen wears a label"
           framed
           text={
             <p>
               Select takes the mouse&apos;s last job. Type a few characters of
-              any text on screen, pick the start, pick the end, and the span
-              is selected. It reads the screen itself, so it works the same
-              in a terminal, a browser, and a chat.
+              any text on screen, pick the start, pick the end, and the span is
+              selected. It reads the screen itself, so it works the same in a
+              terminal, a browser, and a chat.
             </p>
           }
           rows={
@@ -298,6 +300,8 @@ export default async function Page() {
         />
         <Item
           flip
+          shot="/shots/commands.webp"
+          caption="the commands bar, an app's menus under search"
           text={
             <p>
               Commands searches the frontmost application&apos;s entire menu
@@ -319,20 +323,19 @@ export default async function Page() {
         intro={
           <>
             <p>
-              Ask opens a name you saved, a domain, or a search in your
-              browser.
+              Ask opens a name you saved, a domain, or a search in your browser.
             </p>
             <p>
-              Destinations can also be assigned to a browser profile. Work
-              opens in your work profile and personal in your personal one,
-              without choosing each time, and links you click in other
-              applications can follow the same rules.
+              Destinations can also be assigned to a browser profile. Work opens
+              in your work profile and personal in your personal one, without
+              choosing each time, and links you click in other applications can
+              follow the same rules.
             </p>
           </>
         }
       >
         <Item
-          shot="/shots/ask.png"
+          shot="/shots/ask.webp"
           caption="a destination, and the profile it will open in"
           rows={
             <KeyRow keys={["lode", "⏎"]} name="Ask">
@@ -360,7 +363,7 @@ export default async function Page() {
         }
       >
         <Item
-          shot="/shots/clipboard.png"
+          shot="/shots/clipboard.webp"
           caption="pinned entries on the left, recent ones along the bottom"
           rows={
             <>
@@ -379,17 +382,73 @@ export default async function Page() {
       </Section>
 
       <Section
-        title="Optimization"
+        title="Meetings"
+        intro={
+          <p>
+            A few minutes before a meeting begins, a chip appears with the join
+            link behind a single key. You arrive on time without keeping a
+            calendar tab open in the corner of your attention.
+          </p>
+        }
+      >
+        <Item
+          shot="/shots/meeting.webp"
+          caption="the meeting chip, a few minutes before the start"
+          text={
+            <p>
+              Meeting links follow the same profile rules as everything else, so
+              a work call opens in your work profile. Meetings are off by
+              default, and Lodestar asks for calendar access only when you turn
+              them on.
+            </p>
+          }
+        />
+      </Section>
+
+      <Section
+        title="The coach"
+        intro={
+          <p>
+            Lodestar&apos;s gestures are designed to become muscle memory, and
+            the coach is how they become it sooner. It watches how you actually
+            navigate and offers the faster path you have not taken yet: an
+            application you keep finding through the launcher earns the offer of
+            its own letter.
+          </p>
+        }
+      >
+        <Item
+          flip
+          shot="/shots/coach.webp"
+          caption="one offer at a time, priced from your own use"
+          text={
+            <p>
+              One suggestion at a time, as a quiet chip, never a stream of
+              notifications. Offers you are not ready for wait in the menu, and
+              everything the coach learns about how you work stays on your
+              machine.
+            </p>
+          }
+        />
+      </Section>
+
+      <Section
+        title="Permissions"
         intro={
           <>
             <p>
-              Lodestar&apos;s commands are designed to become muscle memory.
-              Navigation that begins as a deliberate sequence turns into a single
-              practised gesture, and it gets faster the longer you use it.
+              Lodestar asks for what it needs and nothing more. Accessibility
+              moves windows, reads menus, and clicks what you aim at. Screen
+              Recording lets select and hints read the text on the screen.
+              Calendar access exists for meetings and is requested only if you
+              turn them on.
             </p>
             <p>
-              What that changes is where your attention goes. You choose a
-              destination rather than the steps that lead to it.
+              Nothing leaves your machine. There is no account and no server.
+              What Lodestar observes about your navigation stays in local files
+              you can read, and its only request of the network is asking GitHub
+              for a newer version. The source is public, so none of this is
+              taken on faith.
             </p>
           </>
         }
@@ -405,6 +464,13 @@ export default async function Page() {
             macOS 13 or later · notarized · Fair Source ·{" "}
             <a href={repo} className="text-dim underline underline-offset-4">
               source
+            </a>{" "}
+            ·{" "}
+            <a
+              href="/changelog"
+              className="text-dim underline underline-offset-4"
+            >
+              changelog
             </a>
           </p>
         </div>

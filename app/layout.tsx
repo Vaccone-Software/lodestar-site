@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -12,10 +13,25 @@ const maple = localFont({
   display: "swap",
 });
 
+const description =
+  "An opinionated way to navigate and operate your computer. Applications arrive maximized under letters you assign, with click hints, text selection, app commands, keyboard scrolling, browser routing and clipboard history in one grammar.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://lodestar.vaccone.software"),
   title: "Lodestar · keyboard navigation for macOS",
-  description:
-    "An opinionated way to navigate and operate your computer. Applications arrive maximized under letters you assign, with click hints, on-screen text selection, app commands, keyboard scrolling, browser routing and clipboard history in one grammar.",
+  description,
+  openGraph: {
+    title: "Lodestar · keyboard navigation for macOS",
+    description,
+    url: "/",
+    siteName: "Lodestar",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lodestar · keyboard navigation for macOS",
+    description,
+  },
 };
 
 export default function RootLayout({
@@ -25,7 +41,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={maple.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
