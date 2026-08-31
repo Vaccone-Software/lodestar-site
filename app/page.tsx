@@ -311,7 +311,7 @@ export default async function Page() {
             </p>
           }
           rows={
-            <KeyRow keys={["lode", "."]} name="Commands">
+            <KeyRow keys={["lode", "-"]} name="Commands">
               the frontmost app&apos;s menu items, searched and run
             </KeyRow>
           }
@@ -341,6 +341,42 @@ export default async function Page() {
             <KeyRow keys={["lode", "⏎"]} name="Ask">
               names, domains and searches, opened in your browser
             </KeyRow>
+          }
+        />
+      </Section>
+
+      <Section title="Draft">
+        <Item
+          shot="/shots/draft.webp"
+          caption="dictation with vim motions · Ecclesiastes 1:3–5 (ESV)"
+          text={
+            <>
+              <p>
+                The draft takes dictation. Speak, and the words appear in a
+                panel at the foot of the screen while the application you were
+                in keeps its cursor. Typed characters land in the same
+                sentence, so a spoken thought and a typed identifier read as
+                one line. Return pastes it exactly where your cursor was.
+              </p>
+              <p>
+                Escape is vim, the whole grammar, for fixing a word without
+                reaching for anything. Recognition runs on your Mac, and
+                nothing you say leaves it.
+              </p>
+            </>
+          }
+          rows={
+            <>
+              <KeyRow keys={["lode", "."]} name="Speak">
+                dictate into the application you were in
+              </KeyRow>
+              <KeyRow keys={["lode", "⇧."]} name="Edit">
+                the field&apos;s text pulled in, silent
+              </KeyRow>
+              <KeyRow keys={["esc"]} name="Vim">
+                the whole grammar, one escape away
+              </KeyRow>
+            </>
           }
         />
       </Section>
