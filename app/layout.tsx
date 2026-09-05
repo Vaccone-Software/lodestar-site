@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   description,
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Lodestar · everything on your Mac, under one key",
+    title: "Lodestar · your Mac, under one key",
     description,
     url: "/",
     siteName: "Lodestar",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lodestar · everything on your Mac, under one key",
+    title: "Lodestar · your Mac, under one key",
     description,
   },
   robots: { index: true, follow: true },

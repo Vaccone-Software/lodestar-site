@@ -13,9 +13,9 @@ import Key from "@/components/Key";
 
 // ---------------------------------------------------------------- engine
 
-type Step<T> = [number, Partial<T>];
+export type Step<T> = [number, Partial<T>];
 
-function useInView(threshold = 0.4) {
+export function useInView(threshold = 0.4) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   useEffect(() => {
@@ -33,7 +33,7 @@ function useInView(threshold = 0.4) {
 
 /** Runs a script from `rest` while active, looping; resets to `rest` when
     the scene leaves the screen; shows `still` under reduced motion. */
-function useScript<T extends object>(
+export function useScript<T extends object>(
   rest: T,
   still: T,
   script: Step<T>[],
@@ -75,7 +75,7 @@ function useScript<T extends object>(
 
 // ------------------------------------------------------------ primitives
 
-function Display({
+export function Display({
   title,
   children,
 }: {
@@ -106,7 +106,7 @@ function Display({
   );
 }
 
-const full: React.CSSProperties = {
+export const full: React.CSSProperties = {
   left: "1.2%",
   top: "9%",
   width: "97.6%",
@@ -116,7 +116,7 @@ const full: React.CSSProperties = {
   transform: "scale(1)",
 };
 
-function Win({
+export function Win({
   name,
   tone,
   style,
@@ -146,7 +146,7 @@ function Win({
 }
 
 /** A sidebar and a list, the shape most applications share. */
-function Body({ tone, rows = [80, 55, 68, 74, 42, 63, 58] }: { tone: string; rows?: number[] }) {
+export function Body({ tone, rows = [80, 55, 68, 74, 42, 63, 58] }: { tone: string; rows?: number[] }) {
   return (
     <div className="flex h-[calc(100%-16px)]">
       <Sidebar tone={tone} />
@@ -163,7 +163,7 @@ function Body({ tone, rows = [80, 55, 68, 74, 42, 63, 58] }: { tone: string; row
   );
 }
 
-function Sidebar({ tone }: { tone: string }) {
+export function Sidebar({ tone }: { tone: string }) {
   return (
     <div className="w-[22%] shrink-0 space-y-[6px] border-r border-white/[0.06] bg-white/[0.02] p-[7px]">
       <div className="h-[5px] w-[70%] rounded-full" style={{ background: tone, opacity: 0.7 }} />
@@ -176,7 +176,7 @@ function Sidebar({ tone }: { tone: string }) {
 }
 
 /** A glass bar or chip inside the display. */
-function Glass({
+export function Glass({
   show,
   className = "",
   children,
@@ -200,7 +200,7 @@ function Glass({
 }
 
 /** A hint label, the kind hints and highlighting put on the screen. */
-function Label({
+export function Label({
   children,
   show,
   lit,
@@ -228,7 +228,7 @@ function Label({
 }
 
 /** The keys lit for lode plus the key it is waiting on. */
-function lodeLit(held: boolean, key: string | null): string[] {
+export function lodeLit(held: boolean, key: string | null): string[] {
   return [...(held ? ["lode"] : []), ...(key ? [key] : [])];
 }
 
@@ -291,7 +291,7 @@ export function Keyboard({ lit }: { lit: string[] }) {
 }
 
 /** Under every scene: the keyboard, then what the keys did. */
-function Foot({ lit, caption }: { lit: string[]; caption: string }) {
+export function Foot({ lit, caption }: { lit: string[]; caption: string }) {
   return (
     <>
       <Keyboard lit={lit} />
@@ -312,7 +312,7 @@ type App = {
   rest: React.CSSProperties;
 };
 
-const apps: App[] = [
+export const apps: App[] = [
   { id: "notes", name: "Notes", letter: "N", tone: "#d8c98f", rest: { left: "6%", top: "10%", width: "46%", height: "58%", zIndex: 1 } },
   { id: "browser", name: "Browser", letter: "B", tone: "#8fb6d8", rest: { left: "30%", top: "22%", width: "52%", height: "62%", zIndex: 2 } },
   { id: "terminal", name: "Terminal", letter: "T", tone: "#a7d3a1", rest: { left: "52%", top: "6%", width: "42%", height: "46%", zIndex: 3 } },
@@ -320,7 +320,7 @@ const apps: App[] = [
   { id: "mail", name: "Mail", letter: "M", tone: "#c9c9d1", rest: { left: "40%", top: "34%", width: "40%", height: "50%", zIndex: 5 } },
 ];
 
-function pile(focus: string | null) {
+export function pile(focus: string | null) {
   return apps.map((app) => {
     const isFocus = focus === app.id;
     const hidden = focus !== null && !isFocus;
@@ -335,7 +335,7 @@ function pile(focus: string | null) {
   });
 }
 
-function nameOf(id: string | null) {
+export function nameOf(id: string | null) {
   return apps.find((a) => a.id === id)?.name ?? "Finder";
 }
 
@@ -415,7 +415,7 @@ export function SceneMoment() {
   );
 }
 
-function PageBody({ tone }: { tone: string }) {
+export function PageBody({ tone }: { tone: string }) {
   return (
     <div className="space-y-[7px] p-[8px]">
       <div className="h-[6px] w-[34%] rounded-full" style={{ background: tone, opacity: 0.7 }} />
@@ -432,7 +432,7 @@ function PageBody({ tone }: { tone: string }) {
   );
 }
 
-function AskBar({
+export function AskBar({
   text,
   hint,
   profile,

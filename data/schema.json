@@ -1,0 +1,439 @@
+{
+  "$schema" : "http:\/\/json-schema.org\/draft-07\/schema#",
+  "additionalProperties" : false,
+  "definitions" : {
+    "graphNode" : {
+      "oneOf" : [
+        {
+          "description" : "An app name, or a profile as browser:name (brave:Work)",
+          "type" : "string"
+        },
+        {
+          "additionalProperties" : {
+            "$ref" : "#\/definitions\/graphNode"
+          },
+          "type" : "object"
+        }
+      ]
+    }
+  },
+  "description" : "lodestar configuration",
+  "properties" : {
+    "$schema" : {
+      "description" : "Editor affordance — points at the emitted lodestar-schema.json so LSP-aware editors validate and complete.",
+      "type" : "string"
+    },
+    "app" : {
+      "additionalProperties" : false,
+      "description" : "App behavior.",
+      "properties" : {
+        "active-display" : {
+          "description" : "How the active display is chosen.",
+          "enum" : [
+            "pointer",
+            "focus"
+          ],
+          "type" : "string"
+        },
+        "auto-update" : {
+          "description" : "Keep Lodestar current: check daily, verify the download, apply quietly when idle (installed app only).",
+          "type" : "boolean"
+        },
+        "show-menu-bar" : {
+          "description" : "Show the status item permanently; false hides it until lodestar is picked in the launcher.",
+          "type" : "boolean"
+        },
+        "start-at-login" : {
+          "description" : "Keep the login LaunchAgent installed (installed app only).",
+          "type" : "boolean"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "appearance" : {
+      "additionalProperties" : false,
+      "description" : "How Lodestar looks. Never what it asks of you.",
+      "properties" : {
+        "accent" : {
+          "description" : "The colour of the cursor, lit letters, and the echoed query: the Mac's accent, or Lodestar's International Orange, set deeper in light mode so it stays readable.",
+          "enum" : [
+            "system",
+            "orange"
+          ],
+          "type" : "string"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "clipboard" : {
+      "additionalProperties" : false,
+      "description" : "Clipboard history.",
+      "properties" : {
+        "enabled" : {
+          "description" : "⇧⌘V opens the clipboard strip. The one Lodestar binding outside the lode key, so it is also the one that can collide with an app; false gives ⇧⌘V back.",
+          "type" : "boolean"
+        },
+        "exclude" : {
+          "additionalProperties" : {
+            "description" : "true to never record clips containing this text.",
+            "type" : "boolean"
+          },
+          "description" : "Substring → true, matched case-insensitively against the clip. The same shape web.routes uses.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        },
+        "exclude-apps" : {
+          "additionalProperties" : {
+            "description" : "true to never record clips copied from this app.",
+            "type" : "boolean"
+          },
+          "description" : "Bundle id → true. Nothing copied in these apps is ever written to disk.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        },
+        "max-size-mb" : {
+          "description" : "Disk the clipboard history may claim; the oldest clips are dropped to stay under it. Pins are never dropped.",
+          "maximum" : 20000,
+          "minimum" : 10,
+          "type" : "number"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "coach" : {
+      "additionalProperties" : false,
+      "description" : "The coach: rare, evidence-backed suggestions drawn from the observations.",
+      "properties" : {
+        "enabled" : {
+          "description" : "Let Lodestar offer one improvement at a time, in quiet moments, priced in seconds.",
+          "type" : "boolean"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "draft" : {
+      "additionalProperties" : false,
+      "description" : "The draft: lode . speaks, lode ⇧. edits.",
+      "properties" : {
+        "input" : {
+          "description" : "The microphone the draft listens to, by its name in Sound settings. Empty follows the system default input.",
+          "type" : "string"
+        },
+        "words" : {
+          "additionalProperties" : {
+            "description" : "true to keep this word in the draft's vocabulary.",
+            "type" : "boolean"
+          },
+          "description" : "Word → true. Names and terms speech gets wrong; a settled result within a letter or two of one is repaired to it, case and all.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "gestures" : {
+      "additionalProperties" : false,
+      "description" : "Every gesture, one switch each; false frees its keys to the app.",
+      "properties" : {
+        "breaths" : {
+          "description" : "lode ', saved layouts",
+          "type" : "boolean"
+        },
+        "commands" : {
+          "description" : "lode - the commands bar, the focused app's verbs",
+          "type" : "boolean"
+        },
+        "display-move" : {
+          "description" : "lode [ and ], move across displays",
+          "type" : "boolean"
+        },
+        "draft" : {
+          "description" : "lode . speak into the draft, ⇧. edit the field in it",
+          "type" : "boolean"
+        },
+        "flip-orientation" : {
+          "description" : "lode \\, flip the layout axis",
+          "type" : "boolean"
+        },
+        "graph" : {
+          "description" : "lode letter chains to your apps",
+          "type" : "boolean"
+        },
+        "hints" : {
+          "description" : "lode ; click hints, ⇧; sticky",
+          "type" : "boolean"
+        },
+        "index-jump" : {
+          "description" : "lode 1…9 jump, ⇧1…9 slide",
+          "type" : "boolean"
+        },
+        "launcher" : {
+          "description" : "lode space, the app launcher",
+          "type" : "boolean"
+        },
+        "layout-undo" : {
+          "description" : "lode ← undo, lode → redo",
+          "type" : "boolean"
+        },
+        "maximize" : {
+          "description" : "lode 0 fill the display with the focused window, ⇧0 beside",
+          "type" : "boolean"
+        },
+        "scroll" : {
+          "description" : "lode ` , keyboard scrolling",
+          "type" : "boolean"
+        },
+        "select" : {
+          "description" : "lode \/, select text by typing it",
+          "type" : "boolean"
+        },
+        "settings" : {
+          "description" : "lode , , the settings window",
+          "type" : "boolean"
+        },
+        "web-bar" : {
+          "description" : "lode ⏎, links and search",
+          "type" : "boolean"
+        },
+        "window-chooser" : {
+          "description" : "lode tab, the focused app's windows",
+          "type" : "boolean"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "graph" : {
+      "additionalProperties" : {
+        "$ref" : "#\/definitions\/graphNode"
+      },
+      "description" : "lode + letter chains → apps. Values: app name or <browser>:<profile name>.",
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "keys" : {
+      "additionalProperties" : {
+        "description" : "The key name this keycode produces.",
+        "type" : "string"
+      },
+      "description" : "Keycode → key-name overrides for non-ANSI layouts.",
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "lode" : {
+      "additionalProperties" : false,
+      "description" : "The lode key.",
+      "properties" : {
+        "trigger" : {
+          "description" : "The physical trigger for every gesture.",
+          "enum" : [
+            "right-command",
+            "left-command"
+          ],
+          "type" : "string"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "meetings" : {
+      "additionalProperties" : false,
+      "description" : "Meetings at the door.",
+      "properties" : {
+        "calendars" : {
+          "additionalProperties" : {
+            "description" : "The browser:name profile this calendar's meetings join in.",
+            "type" : "string"
+          },
+          "description" : "Calendar or account name → profile. Outranks web.routes for meetings.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        },
+        "enabled" : {
+          "description" : "Offer the calendar's next meeting as a chip.",
+          "type" : "boolean"
+        },
+        "lead-minutes" : {
+          "description" : "Minutes before the start the chip appears.",
+          "maximum" : 120,
+          "minimum" : 0,
+          "type" : "number"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "observations" : {
+      "additionalProperties" : false,
+      "description" : "Local observations. How you got places, never what you were doing there; nothing leaves the machine.",
+      "properties" : {
+        "enabled" : {
+          "description" : "Watch how you reach things, on this machine only, to suggest improvements later.",
+          "type" : "boolean"
+        },
+        "health" : {
+          "description" : "Also keep the hands' pulse: input counts, typing rhythm moments, active minutes. Counts only, never which keys or what was typed.",
+          "type" : "boolean"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "scroll" : {
+      "additionalProperties" : false,
+      "description" : "Scroll mode.",
+      "properties" : {
+        "smooth" : {
+          "description" : "Constant velocity while held; instant stop on release.",
+          "type" : "boolean"
+        },
+        "speed" : {
+          "description" : "Smooth velocity, pixels per second.",
+          "maximum" : 4000,
+          "minimum" : 200,
+          "type" : "number"
+        },
+        "step" : {
+          "description" : "Pixels per press when smooth is off.",
+          "maximum" : 400,
+          "minimum" : 10,
+          "type" : "number"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "select" : {
+      "additionalProperties" : false,
+      "description" : "Select mode.",
+      "properties" : {
+        "copy-on-complete" : {
+          "description" : "Copy a completed span to the clipboard the moment its second anchor lands.",
+          "type" : "boolean"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "version" : {
+      "description" : "The Lodestar release this config was written for.",
+      "type" : "string"
+    },
+    "web" : {
+      "additionalProperties" : false,
+      "description" : "The web bar.",
+      "properties" : {
+        "clicks" : {
+          "additionalProperties" : false,
+          "description" : "Links clicked in other apps.",
+          "properties" : {
+            "browser" : {
+              "description" : "Bundle id links go to when no route matches (your previous default browser).",
+              "type" : "string"
+            },
+            "enabled" : {
+              "description" : "Route links clicked in other apps. Set by the menu-bar flow.",
+              "type" : "boolean"
+            }
+          },
+          "type" : [
+            "object",
+            "null"
+          ]
+        },
+        "fallback" : {
+          "description" : "most-recent, or a profile as browser:name (brave:Work).",
+          "type" : "string"
+        },
+        "links" : {
+          "additionalProperties" : {
+            "additionalProperties" : false,
+            "description" : "A named link.",
+            "properties" : {
+              "profile" : {
+                "description" : "A profile as browser:name (omit to route).",
+                "type" : "string"
+              },
+              "url" : {
+                "description" : "The site.",
+                "type" : "string"
+              }
+            },
+            "type" : [
+              "object",
+              "null"
+            ]
+          },
+          "description" : "Named links.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        },
+        "routes" : {
+          "additionalProperties" : {
+            "description" : "A profile as browser:name (brave:Work).",
+            "type" : "string"
+          },
+          "description" : "Substring pattern → profile; longest match wins.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        },
+        "search-url" : {
+          "description" : "Search template; %s becomes the encoded query.",
+          "type" : "string"
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "title" : "lodestar configuration",
+  "type" : [
+    "object",
+    "null"
+  ]
+}
