@@ -93,7 +93,21 @@ function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
         </p>
       </div>
       <div>
-        <GuideScene scene={lesson.scene} lit={litFor(lesson)} caption={spoken(lesson.keys)} />
+        {lesson.table ? (
+          <dl className="border-hairline border-t">
+            {lesson.table.map(([keys, meaning]) => (
+              <div
+                key={keys}
+                className="border-hairline grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b py-3"
+              >
+                <dt className="font-mono text-[13px] text-white/90">{keys}</dt>
+                <dd className="text-dim text-[15px] leading-[1.55]">{meaning}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <GuideScene scene={lesson.scene} lit={litFor(lesson)} caption={spoken(lesson.keys)} />
+        )}
       </div>
     </Reveal>
   );

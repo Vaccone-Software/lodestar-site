@@ -16,6 +16,8 @@ export type Lesson = {
   scene?: string;
   /** Marks a part of Lodestar nobody finds by pressing keys. */
   hidden?: boolean;
+  /** Keys and what they do, when a lesson is a table rather than a line. */
+  table?: [string, string][];
 };
 
 export type GuidePage = {
@@ -369,8 +371,22 @@ export const guide: GuidePage[] = [
         title: "The dozen moves",
         keys: [],
         lit: [],
-        rule: "h j k l move. w and b jump by word. f and F jump to a letter ahead or behind, t and T to just before it. c changes, d deletes, y copies, each with a motion: cw, dw, d$. iw is the word under the cursor, q any quoted thing, b any bracketed thing. u undoes. The period repeats. Return commits from any mode; ⇧return is a new line.",
+        rule: "The draft's editor is vim, and a draft needs about a dozen of its moves. Each is a verb, or a verb and an object.",
         hidden: true,
+        table: [
+          ["h j k l", "Move by a character, and by the lines you see."],
+          ["w · b", "Forward and back by a word."],
+          ["f x · F x", "To the next or the previous x. Every letter you can reach lights while the move is pending."],
+          ["t x · T x", "To just before it."],
+          ["c motion", "Change what the motion covers, then type. cw changes the word."],
+          ["d motion", "Delete it. dw, d$ to the end of the line."],
+          ["y motion · p", "Copy it, and paste. The only two keys that touch the system clipboard."],
+          ["iw · aw", "The word under the cursor, without or with the space beside it."],
+          ["q · b", "Any quoted thing, any bracketed thing. ciq changes what is inside the quotes."],
+          ["u", "Undo."],
+          [".", "Repeat the last change."],
+          ["⏎ · ⇧⏎", "Commit from any mode. Shift return is a new line."],
+        ],
       },
       {
         title: "Wrap and unwrap",
