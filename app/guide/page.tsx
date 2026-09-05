@@ -58,7 +58,7 @@ export default function GuidePage() {
                     </span>
                     <span className="text-faint mt-2 block font-mono text-[11px]">
                       {count} lessons
-                      {secrets ? ` · ${secrets} few know` : ""}
+                      {secrets ? ` · ${secrets} ${secrets === 1 ? "thing" : "things"} few know` : ""}
                       {` · ${page.options.length} lines`}
                     </span>
                   </span>

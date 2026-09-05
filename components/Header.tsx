@@ -42,7 +42,7 @@ export default function Header() {
             Changelog
           </a>
           <a
-            href="#download"
+            href="/#download"
             className="text-accent hover:text-[#ff7a3d] transition-colors"
           >
             Download
