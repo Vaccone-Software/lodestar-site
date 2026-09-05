@@ -17,7 +17,6 @@ import {
 } from "@/components/Scenes";
 import Reveal from "@/components/Reveal";
 import Sidereal from "@/components/Sidereal";
-import Starfield from "@/components/Starfield";
 import { specification } from "@/data/gestures";
 
 const repo = "https://github.com/Vaccone-Software/lodestar";
@@ -164,8 +163,6 @@ export default async function Page() {
       {/* 00 · The moment. The real northern sky, the product in it, and one
           press shown before it is described. */}
       <section className="relative flex min-h-svh flex-col overflow-hidden px-[5vw] pt-24 pb-14 lg:px-8">
-        <Starfield />
-        <div className="to-ground pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent" />
 
         <div className="relative mx-auto grid w-full max-w-[1240px] flex-1 items-center gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,10fr)_minmax(0,11fr)]">
           <div>
@@ -210,7 +207,7 @@ export default async function Page() {
       </section>
 
       {/* Everything below the hero shares the still field. */}
-      <div className="dust">
+      <div>
         {/* 01 · The premise */}
         <section
           id="premise"
@@ -468,8 +465,6 @@ export default async function Page() {
           id="download"
           className="border-hairline relative scroll-mt-16 overflow-hidden border-t py-[14vh]"
         >
-          <Starfield />
-          <div className="from-deep pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b to-transparent" />
           <div className="relative mx-auto max-w-[1240px] px-[5vw] lg:px-8">
             <div className="grid items-end gap-x-16 gap-y-12 lg:grid-cols-2">
               <Reveal>

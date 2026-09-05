@@ -1,6 +1,7 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Sky from "@/components/Sky";
 import "./globals.css";
 
 const maple = localFont({
@@ -69,6 +70,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${maple.variable} ${newsreader.variable}`}>
       <body>
+        <Sky />
         {children}
         <Analytics />
       </body>

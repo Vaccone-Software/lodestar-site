@@ -127,7 +127,7 @@ const results: Result[] = [
 
 export default function EvidencePage() {
   return (
-    <main className="dust min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
+    <main className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
       <Header />
       <div className="mx-auto max-w-[880px]">
         <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">

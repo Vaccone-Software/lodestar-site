@@ -25,7 +25,7 @@ async function baked(): Promise<Release[]> {
 export default async function Page() {
   const releases = await baked();
   return (
-    <main className="dust mx-auto max-w-[840px] px-[6vw] pt-28 pb-24 lg:px-8">
+    <main className="mx-auto max-w-[840px] px-[6vw] pt-28 pb-24 lg:px-8">
       <Header />
       <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
         Changelog
