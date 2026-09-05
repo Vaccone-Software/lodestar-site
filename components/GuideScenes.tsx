@@ -89,7 +89,7 @@ export function SceneLauncher() {
           </ul>
         </Glass>
       </Display>
-      <Foot lit={f.held || f.key ? [...(f.held ? ["lode"] : []), ...(f.key ? [f.key === "space" ? "" : f.key] : [])].filter((k) => k !== "") : []} caption={f.caption} />
+      <Foot lit={lodeLit(f.held, f.key)} caption={f.caption} />
     </div>
   );
 }

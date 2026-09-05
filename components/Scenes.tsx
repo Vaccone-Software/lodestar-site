@@ -76,10 +76,11 @@ export function useScript<T extends object>(
 // ------------------------------------------------------------ primitives
 
 export function Display({
-  title,
   children,
 }: {
-  title: string;
+  /** Kept so scenes can name what is in front; the display itself draws
+      no bar, because every window already wears its own name. */
+  title?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -97,10 +98,6 @@ export function Display({
             "radial-gradient(120% 90% at 30% 0%, rgba(58,64,92,0.45), transparent 60%), radial-gradient(90% 70% at 90% 100%, rgba(255,79,0,0.10), transparent 60%)",
         }}
       />
-      <div className="border-hairline absolute inset-x-0 top-0 flex h-[7%] items-center gap-3 border-b bg-white/[0.03] px-3 font-mono text-[9px] tracking-wide text-white/40">
-        <span className="text-white/70">✦</span>
-        <span>{title}</span>
-      </div>
       {children}
     </div>
   );
@@ -108,9 +105,9 @@ export function Display({
 
 export const full: React.CSSProperties = {
   left: "1.2%",
-  top: "9%",
+  top: "2%",
   width: "97.6%",
-  height: "89%",
+  height: "96%",
   zIndex: 20,
   opacity: 1,
   transform: "scale(1)",
@@ -243,11 +240,11 @@ export function lodeLit(held: boolean, key: string | null): string[] {
 // is lode.
 type KeyDef = [string, number, string?];
 const keyboardRows: KeyDef[][] = [
-  [["esc", 1], ["1", 1], ["2", 1], ["3", 1], ["4", 1], ["5", 1], ["6", 1], ["7", 1], ["8", 1], ["9", 1], ["0", 1], ["-", 1], ["=", 1], ["⌫", 1.6]],
+  [["esc", 1], ["`", 1], ["1", 1], ["2", 1], ["3", 1], ["4", 1], ["5", 1], ["6", 1], ["7", 1], ["8", 1], ["9", 1], ["0", 1], ["-", 1], ["=", 1], ["⌫", 1.6]],
   [["⇥", 1.6], ["q", 1], ["w", 1], ["e", 1], ["r", 1], ["t", 1], ["y", 1], ["u", 1], ["i", 1], ["o", 1], ["p", 1], ["[", 1], ["]", 1], ["\\", 1]],
   [["⇪", 1.9], ["a", 1], ["s", 1], ["d", 1], ["f", 1], ["g", 1], ["h", 1], ["j", 1], ["k", 1], ["l", 1], [";", 1], ["'", 1], ["⏎", 1.9]],
   [["⇧", 2.5, "⇧L"], ["z", 1], ["x", 1], ["c", 1], ["v", 1], ["b", 1], ["n", 1], ["m", 1], [",", 1], [".", 1], ["/", 1], ["⇧", 2.5, "⇧R"]],
-  [["fn", 1], ["⌃", 1], ["⌥", 1, "⌥L"], ["⌘", 1.25, "⌘L"], ["", 5.6], ["lode", 1.25], ["⌥", 1, "⌥R"], ["◀", 1], ["▲▼", 1], ["▶", 1]],
+  [["fn", 1], ["⌃", 1], ["⌥", 1, "⌥L"], ["⌘", 1.25, "⌘L"], ["", 5.6, "space"], ["lode", 1.25], ["⌥", 1, "⌥R"], ["◀", 1], ["▲▼", 1], ["▶", 1]],
 ];
 const leftHand = /^[qwertasdfgzxcvb12345`]$/i;
 
@@ -313,9 +310,9 @@ type App = {
 };
 
 export const apps: App[] = [
-  { id: "notes", name: "Notes", letter: "N", tone: "#d8c98f", rest: { left: "6%", top: "10%", width: "46%", height: "58%", zIndex: 1 } },
+  { id: "notes", name: "Notes", letter: "N", tone: "#d8c98f", rest: { left: "6%", top: "6%", width: "46%", height: "58%", zIndex: 1 } },
   { id: "browser", name: "Browser", letter: "B", tone: "#8fb6d8", rest: { left: "30%", top: "22%", width: "52%", height: "62%", zIndex: 2 } },
-  { id: "terminal", name: "Terminal", letter: "T", tone: "#a7d3a1", rest: { left: "52%", top: "6%", width: "42%", height: "46%", zIndex: 3 } },
+  { id: "terminal", name: "Terminal", letter: "T", tone: "#a7d3a1", rest: { left: "52%", top: "3%", width: "42%", height: "46%", zIndex: 3 } },
   { id: "calendar", name: "Calendar", letter: "C", tone: "#e0a6a6", rest: { left: "14%", top: "40%", width: "44%", height: "52%", zIndex: 4 } },
   { id: "mail", name: "Mail", letter: "M", tone: "#c9c9d1", rest: { left: "40%", top: "34%", width: "40%", height: "50%", zIndex: 5 } },
 ];
