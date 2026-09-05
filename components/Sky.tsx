@@ -9,10 +9,10 @@ import { northernSky } from "@/data/northern-sky";
 // sixty times over. The pole sits behind the hero's mark at the top of the
 // page; the page scrolls over the sky the way a room scrolls under one.
 //
-// Three layers give it depth. The catalogue stars and the Milky Way are
-// far and hold still. An anonymous near field drifts a little with the
-// scroll. Hairline figures join the Dippers and Cassiopeia, so the claim
-// that the sky is real can be checked by anyone who knows the shapes.
+// Two layers give it depth. The catalogue stars are far and hold still.
+// An anonymous near field drifts a little with the scroll. Hairline
+// figures join the Dippers and Cassiopeia, so the claim that the sky is
+// real can be checked by anyone who knows the shapes.
 // Reduced motion renders the same sky, still.
 
 type Star = {
@@ -58,20 +58,6 @@ const figures: [number, number][][] = [
   // Cassiopeia: Caph, Schedar, Gamma, Ruchbah, Segin
   [[0.153, 59.15], [0.675, 56.54], [0.945, 60.72], [1.430, 60.24], [1.907, 63.67]],
 ];
-
-// Galactic to equatorial (J2000), the transpose of the standard matrix,
-// so the Milky Way can be drawn where it actually runs.
-function galacticToEquatorial(l: number, b: number): [number, number] {
-  const cl = Math.cos(l), sl = Math.sin(l), cb = Math.cos(b), sb = Math.sin(b);
-  const gx = cb * cl, gy = cb * sl, gz = sb;
-  const ex = -0.0548755604 * gx + 0.4941094279 * gy - 0.867666149 * gz;
-  const ey = -0.8734370902 * gx - 0.44482963 * gy - 0.1980763734 * gz;
-  const ez = -0.4838350155 * gx + 0.7469822445 * gy + 0.4559837762 * gz;
-  const dec = Math.asin(ez);
-  let ra = Math.atan2(ey, ex);
-  if (ra < 0) ra += Math.PI * 2;
-  return [(ra / (Math.PI * 2)) * 24, (dec * 180) / Math.PI];
-}
 
 export default function Sky() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -164,7 +150,7 @@ export default function Sky() {
       band = paintBand();
     };
 
-    // The Milky Way, painted once in the sky's own frame (pole at the
+    // The figures, painted once in the sky's own frame (pole at the
     // centre, sidereal angle zero) and turned with the sky each frame.
     const paintBand = (): HTMLCanvasElement => {
       const off = document.createElement("canvas");
@@ -179,34 +165,6 @@ export default function Sky() {
         const a = -raH * (Math.PI / 12);
         return [cx - r * Math.sin(a), cy - r * Math.cos(a)] as const;
       };
-      // Haze along the galactic equator, only where it is within the drawn cap.
-      for (let deg = 0; deg < 360; deg += 1.5) {
-        const [ra, dec] = galacticToEquatorial((deg * Math.PI) / 180, 0);
-        if (dec < 28) continue;
-        const [x, y] = place(ra, dec);
-        const reach = 26 * (pxPerDeg / 12) + 14;
-        const g = c.createRadialGradient(x, y, 0, x, y, reach);
-        g.addColorStop(0, "rgba(236,238,246,0.028)");
-        g.addColorStop(1, "rgba(236,238,246,0)");
-        c.fillStyle = g;
-        c.beginPath();
-        c.arc(x, y, reach, 0, Math.PI * 2);
-        c.fill();
-      }
-      // Dense faint stars within a few degrees of the band.
-      for (let i = 0; i < 900; i++) {
-        const l = Math.random() * Math.PI * 2;
-        const b = ((Math.random() - 0.5) * 2 * 6 * Math.PI) / 180;
-        const [ra, dec] = galacticToEquatorial(l, b);
-        if (dec < 28) continue;
-        const [x, y] = place(ra, dec);
-        c.globalAlpha = 0.18 + Math.random() * 0.3;
-        c.fillStyle = "rgb(240,242,248)";
-        c.beginPath();
-        c.arc(x, y, 0.35 + Math.random() * 0.5, 0, Math.PI * 2);
-        c.fill();
-      }
-      c.globalAlpha = 1;
       // The figures: hairlines between named stars.
       c.strokeStyle = "rgba(242,243,245,0.11)";
       c.lineWidth = 0.8;

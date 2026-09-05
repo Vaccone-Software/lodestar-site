@@ -21,11 +21,11 @@ export default function Header() {
           : "border-b border-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-[1240px] items-center justify-between px-[5vw] py-3.5 font-mono text-[11.5px] tracking-[0.06em] lg:px-8">
+      <nav className="mx-auto flex max-w-[1240px] items-center justify-between px-[5vw] py-4 font-mono text-[13.5px] tracking-[0.05em] lg:px-8">
         <a href="/" className="text-ink/90 hover:text-ink">
           Lodestar
         </a>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-7">
           <a href="/guide" className="text-dim hover:text-ink transition-colors">
             Guide
           </a>
