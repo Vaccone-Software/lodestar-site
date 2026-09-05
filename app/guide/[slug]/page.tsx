@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import GuideScene from "@/components/GuideScene";
 import { Keys as KeyCaps } from "@/components/Key";
 import Options from "@/components/Options";
+import Permalink from "@/components/Permalink";
 import Reveal from "@/components/Reveal";
 import { guide, type Lesson } from "@/data/guide";
 
@@ -54,6 +55,7 @@ function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
           {lesson.hidden ? (
             <span className="glint ml-3 normal-case tracking-normal">few know this</span>
           ) : null}
+          <Permalink anchor={anchor(lesson.title)} />
         </p>
         <h3 className="font-display text-ink mt-3 text-[clamp(1.6rem,2.8vw,2.2rem)] leading-[1.08] tracking-[-0.02em]">
           {lesson.title}

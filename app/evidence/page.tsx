@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
+import Permalink from "@/components/Permalink";
 
 export const metadata: Metadata = {
   title: "Evidence",
@@ -172,10 +173,12 @@ export default function EvidencePage() {
           {results.map((r) => (
             <li
               key={r.n}
-              className="border-hairline grid gap-x-12 gap-y-4 border-b py-10 lg:grid-cols-[10rem_1fr]"
+              id={`result-${r.n}`}
+              className="border-hairline grid scroll-mt-24 gap-x-12 gap-y-4 border-b py-10 lg:grid-cols-[10rem_1fr]"
             >
               <span className="text-faint font-mono text-[11px] tracking-[0.2em]">
                 <span className="glint">✦</span> {r.n}
+                <Permalink anchor={`result-${r.n}`} />
               </span>
               <div className="max-w-[62ch]">
                 <h3 className="font-display text-ink text-[clamp(1.4rem,2.4vw,1.85rem)] leading-[1.15] tracking-[-0.01em]">
