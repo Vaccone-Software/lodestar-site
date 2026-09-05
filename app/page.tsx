@@ -134,8 +134,31 @@ const destinations: {
 export default async function Page() {
   const release = await latest();
   const baked = release.tag;
+  const version = baked.replace(/^v/, "");
+  // What a search engine is told, in its own vocabulary: a free macOS
+  // application, its version, and where the build lives.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Lodestar",
+    operatingSystem: "macOS 13 or later",
+    applicationCategory: "UtilitiesApplication",
+    description:
+      "Keyboard navigation for macOS: an app launcher, window management, click-by-letter, text selection by typing, clipboard history, and on-device dictation under one key.",
+    url: "https://lodestar.vaccone.software/",
+    softwareVersion: version,
+    downloadUrl: `${repo}/releases/download/${baked}/lodestar-${version}.dmg`,
+    releaseNotes: "https://lodestar.vaccone.software/changelog",
+    license: `${repo}/blob/main/LICENSE.md`,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    author: { "@type": "Organization", name: "Vaccone Software" },
+  };
   return (
     <main id="top" className="relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       {/* 00 · The moment. The real northern sky, the product in it, and one
@@ -261,7 +284,18 @@ export default async function Page() {
                 >
                   <div className="relative">
                     <span className="text-faint absolute -top-9 left-0 font-mono text-[11px] tracking-[0.2em]">
-                      <span className="glint star">✦</span>{" "}
+                      <svg
+                        className="star"
+                        width="11"
+                        height="11"
+                        viewBox="-6 -6 12 12"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M0,-6 L1.2,-1.2 L6,0 L1.2,1.2 L0,6 L-1.2,1.2 L-6,0 L-1.2,-1.2 Z"
+                          fill="#ff4f00"
+                        />
+                      </svg>
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <h3 className="font-display text-ink text-[clamp(1.8rem,3.2vw,2.6rem)] leading-[1.05] tracking-[-0.02em]">

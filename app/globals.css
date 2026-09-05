@@ -144,6 +144,9 @@ body {
 .meridian {
   --drawn: 0%;
 }
+.meridian .star {
+  display: none;
+}
 @media (min-width: 1024px) {
   .meridian::before {
     content: "";
@@ -159,9 +162,14 @@ body {
     );
     transition: height 120ms linear;
   }
+  /* The star sits on the line: a drawn glyph, not a character, so its
+     centre is its centre. */
   .meridian .star {
+    display: block;
     position: absolute;
     left: -2.5rem;
+    top: 0.25em;
     transform: translateX(-50%);
+    filter: drop-shadow(0 0 6px rgba(255, 79, 0, 0.6));
   }
 }

@@ -4,8 +4,9 @@ import Releases from "@/components/Releases";
 import { parseReleases, releasesUrl, type Release } from "@/lib/releases";
 
 export const metadata: Metadata = {
-  title: "Lodestar · changelog",
+  title: "Changelog",
   description: "Every Lodestar release, in the words it shipped with.",
+  alternates: { canonical: "/changelog" },
 };
 
 // Baked at build so the page is right on deploy day; the client re-reads

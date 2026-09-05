@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "Evidence · Lodestar",
+  title: "Evidence",
   description:
-    "Every claim on the front page, and the measurement behind it. One hand, fourteen days, seventy thousand events, read at the source.",
+    "Every claim on the Lodestar front page, and the measurement behind it: keyboard navigation timing, practice versus re-encoding, misfire rates, and the research behind the coach. One hand, fourteen days, seventy thousand events.",
+  alternates: { canonical: "/evidence" },
 };
 
 // The results section to the front page's abstract. Every number here

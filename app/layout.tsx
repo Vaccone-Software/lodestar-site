@@ -7,7 +7,6 @@ const maple = localFont({
   src: [
     { path: "../public/fonts/MapleMono-Regular.woff2", weight: "400" },
     { path: "../public/fonts/MapleMono-Medium.woff2", weight: "500" },
-    { path: "../public/fonts/MapleMono-Bold.woff2", weight: "700" },
   ],
   variable: "--font-maple",
   display: "swap",
@@ -33,25 +32,33 @@ const newsreader = localFont({
   display: "swap",
 });
 
+// The page speaks in its own voice; the title and description speak in
+// the words a search is typed in. Both are true, and they meet here.
 const description =
-  "Lodestar turns every place you go on your Mac into a destination you can name from the keyboard: applications, pages, buttons, text on screen, what you copied, what you say. It learns which ones you reach for. Nothing leaves your Mac.";
+  "Keyboard navigation for macOS: an app launcher, window management, click-by-letter, text selection by typing, clipboard history, and on-device dictation, in one grammar under one key. Lodestar learns which destinations you reach for and offers the next shortcut. Nothing leaves your Mac.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lodestar.vaccone.software"),
-  title: "Lodestar · name where you want to be, and you are there",
+  title: {
+    default: "Lodestar · keyboard navigation for macOS",
+    template: "%s · Lodestar",
+  },
   description,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Lodestar",
+    title: "Lodestar · name it, and you are there",
     description,
     url: "/",
     siteName: "Lodestar",
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lodestar",
+    title: "Lodestar · name it, and you are there",
     description,
   },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({

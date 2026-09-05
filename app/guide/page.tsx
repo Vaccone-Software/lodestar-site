@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "Guide · Lodestar",
+  title: "Guide",
   description:
     "Every destination Lodestar reaches, one page each, written for a hand that has never held a key as a mode.",
+  alternates: { canonical: "/guide" },
+  // A door, not yet a guide. Out of the index until the pages exist.
+  robots: { index: false, follow: true },
 };
 
 // The guide's door, ahead of the guide. One page per destination, under the
