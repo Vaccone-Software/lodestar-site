@@ -732,7 +732,7 @@ const fixedText = heardText.replace(wrong, right);
 
 /** The draft's find rule: with F pending, the first instance of each
     character reachable backward from the cursor lights. */
-function findLights(text: string, cursor: number): Set<number> {
+export function findLights(text: string, cursor: number): Set<number> {
   const seen = new Set<string>();
   const lit = new Set<number>();
   for (let i = cursor - 1; i >= 0; i--) {
@@ -785,7 +785,7 @@ export function SceneSpeech() {
   else if (st === "changed" || st === "typed")
     shown = heardText.slice(0, wrongAt) + f.typed + heardText.slice(wrongAt + wrong.length);
   const insertAt = st === "changed" || st === "typed" ? wrongAt + f.typed.length : shown.length;
-  const block = st === "normal" ? shown.length - 1 : st === "jumped" ? wrongAt : -1;
+  const block = st === "normal" || st === "find" ? shown.length - 1 : st === "jumped" ? wrongAt : -1;
   const caret = (
     <span key="caret" className="bg-accent inline-block h-[1em] w-[2px] translate-y-[1px]" />
   );

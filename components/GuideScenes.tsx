@@ -12,6 +12,7 @@ import {
   pile,
   Sidebar,
   full,
+  findLights,
   useInView,
   useScript,
   type Step,
@@ -366,37 +367,50 @@ export function SceneScroll() {
   );
 }
 
-// The draft, editing: the field's own text pulled in, silent.
-type EditFrame = { held: boolean; keys: string[]; draft: boolean; text: string; placed: boolean; caption: string };
+// The draft, editing: the field's own text pulled in, silent. It opens in
+// insert mode with the cursor at the end; esc makes it an editor, F and a
+// letter fly back with every reachable letter lit, c w changes the word,
+// and ⏎ puts the sentence back where it was.
 const original = "Meeting moved to Thursday, bring the budget.";
-const edited = "Meeting moved to Friday, bring the budget.";
-const editRest: EditFrame = { held: false, keys: [], draft: false, text: original, placed: false, caption: "A sentence already in the field" };
-const editStill: EditFrame = { ...editRest, draft: true, caption: "The field's text, pulled into the draft" };
+const wrongWord = "Thursday";
+const rightWord = "Friday";
+const wrongAt = original.indexOf(wrongWord);
+const edited = original.replace(wrongWord, rightWord);
+type EditStage = "rest" | "insert" | "normal" | "find" | "jumped" | "changed" | "placed";
+type EditFrame = { held: boolean; keys: string[]; stage: EditStage; typed: string; caption: string };
+const editRest: EditFrame = { held: false, keys: [], stage: "rest", typed: "", caption: "A sentence already in the field" };
+const editStill: EditFrame = { ...editRest, stage: "insert", caption: "The field's text, pulled into the draft" };
+const editTyping: Step<EditFrame>[] = rightWord.split("").map((c, i): Step<EditFrame> => [i === 0 ? 600 : 140, { keys: [c.toLowerCase()], typed: rightWord.slice(0, i + 1) }]);
 const editScript: Step<EditFrame>[] = [
   [1200, { held: true, caption: "Hold lode" }],
   [700, { keys: ["⇧", "."] }],
-  [150, { held: false, keys: [], draft: true, caption: "The field's text, pulled into the draft. Silent" }],
-  [1200, { keys: ["⇧", "f"], caption: "F, then the letter: jump back" }],
+  [150, { held: false, keys: [], stage: "insert", caption: "The field's text, pulled into the draft. Silent" }],
+  [1400, { keys: ["esc"], stage: "normal", caption: "esc. The draft becomes an editor" }],
+  [350, { keys: [] }],
+  [900, { keys: ["⇧", "f"], stage: "find", caption: "F. Every letter you can jump back to lights up" }],
   [400, { keys: [] }],
-  [700, { keys: ["T"], caption: "T lands on Thursday" }],
-  [400, { keys: [] }],
-  [700, { keys: ["c"] }],
-  [300, { keys: ["w"], caption: "c w changes the word" }],
-  [400, { keys: [] }],
-  [500, { keys: ["F"], text: "Meeting moved to F, bring the budget." }],
-  [120, { keys: ["r"], text: "Meeting moved to Fr, bring the budget." }],
-  [120, { keys: ["i"], text: "Meeting moved to Fri, bring the budget." }],
-  [120, { keys: ["d"], text: "Meeting moved to Frid, bring the budget." }],
-  [120, { keys: ["a"], text: "Meeting moved to Frida, bring the budget." }],
-  [120, { keys: ["y"], text: edited }],
-  [400, { keys: [] }],
-  [900, { keys: ["⏎"] }],
-  [150, { keys: [], draft: false, placed: true, caption: "Put back in the field, exactly there" }],
+  [1200, { keys: ["⇧", "t"], stage: "jumped", caption: "T. The cursor is on Thursday" }],
+  [350, { keys: [] }],
+  [900, { keys: ["c"], caption: "c, then w. Change the word" }],
+  [350, { keys: [] }],
+  [300, { keys: ["w"], stage: "changed" }],
+  [350, { keys: [] }],
+  ...editTyping,
+  [300, { keys: [] }],
+  [1000, { keys: ["⏎"] }],
+  [150, { keys: [], stage: "placed", caption: "Put back in the field, exactly there" }],
   [3200, { ...editRest }],
 ];
 export function SceneEdit() {
   const { ref, active } = useInView();
   const f = useScript(editRest, editStill, editScript, active);
+  const st = f.stage;
+  const draft = st !== "rest" && st !== "placed";
+  const shown = st === "changed" ? original.slice(0, wrongAt) + f.typed + original.slice(wrongAt + wrongWord.length) : original;
+  const lights = st === "find" ? findLights(original, original.length) : new Set<number>();
+  const block = st === "normal" || st === "find" ? original.length - 1 : st === "jumped" ? wrongAt : -1;
+  const insertAt = st === "changed" ? wrongAt + f.typed.length : shown.length;
+  const caret = <span key="caret" className="bg-accent inline-block h-[1em] w-[2px] translate-y-[1px]" />;
   return (
     <div ref={ref} className="select-none">
       <Display title="Notes">
@@ -410,18 +424,28 @@ export function SceneEdit() {
           <div className="flex h-[calc(100%-16px)]">
             <Sidebar tone="#d8c98f" />
             <div className="flex-1 p-[10px] font-mono text-[9.5px] leading-[1.9] text-white/70">
-              <p className={f.draft ? "text-white/30" : "text-white/85"}>{f.placed ? edited : original}</p>
+              <p className={draft ? "text-white/30" : "text-white/85"}>{st === "placed" ? edited : original}</p>
             </div>
           </div>
         </div>
-        <Glass show={f.draft} className="inset-x-[6%] bottom-[5%] px-[3%] py-[2.4%] text-[10px]">
+        <Glass show={draft} className="inset-x-[6%] bottom-[5%] px-[3%] py-[2.4%] text-[10px]">
           <div className="flex items-center justify-between">
             <span className="text-white/40">draft</span>
-            <span className="text-[8px] text-white/40">{f.keys.includes("w") || /Fr/.test(f.text) && !f.text.endsWith("Friday, bring the budget.") ? "insert" : "normal"}</span>
+            <span className="text-[8px] text-white/40">{st === "insert" || st === "changed" ? "insert" : "normal"}</span>
           </div>
           <p className="mt-[1.5%] leading-[1.6] text-white/90">
-            {f.text}
-            <span className="bg-accent ml-[1px] inline-block h-[1em] w-[2px] translate-y-[1px]" />
+            {shown.split("").flatMap((c, i) => {
+              const node = (
+                <span
+                  key={i}
+                  className={i === block ? "bg-white/90 text-[#17171b]" : lights.has(i) ? "text-accent font-medium" : ""}
+                >
+                  {c}
+                </span>
+              );
+              return block < 0 && i === insertAt ? [caret, node] : [node];
+            })}
+            {block < 0 && insertAt >= shown.length ? caret : null}
           </p>
           <div className="mt-[1.5%] text-[8px] text-white/40">⏎ put it back · esc close</div>
         </Glass>
