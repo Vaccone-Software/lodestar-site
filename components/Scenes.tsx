@@ -244,7 +244,7 @@ const keyboardRows: KeyDef[][] = [
   [["⇥", 1.6], ["q", 1], ["w", 1], ["e", 1], ["r", 1], ["t", 1], ["y", 1], ["u", 1], ["i", 1], ["o", 1], ["p", 1], ["[", 1], ["]", 1], ["\\", 1]],
   [["⇪", 1.9], ["a", 1], ["s", 1], ["d", 1], ["f", 1], ["g", 1], ["h", 1], ["j", 1], ["k", 1], ["l", 1], [";", 1], ["'", 1], ["⏎", 1.9]],
   [["⇧", 2.5, "⇧L"], ["z", 1], ["x", 1], ["c", 1], ["v", 1], ["b", 1], ["n", 1], ["m", 1], [",", 1], [".", 1], ["/", 1], ["⇧", 2.5, "⇧R"]],
-  [["fn", 1], ["⌃", 1], ["⌥", 1, "⌥L"], ["⌘", 1.25, "⌘L"], ["", 5.6, "space"], ["lode", 1.25], ["⌥", 1, "⌥R"], ["◀", 1], ["▲▼", 1], ["▶", 1]],
+  [["fn", 1], ["⌃", 1], ["⌥", 1, "⌥L"], ["⌘", 1.25, "⌘L"], ["", 5.6, "space"], ["lode", 1.25], ["⌥", 1, "⌥R"], ["◀", 1], ["▲▼", 1, "arrows"], ["▶", 1]],
 ];
 const leftHand = /^[qwertasdfgzxcvb12345`]$/i;
 
@@ -261,6 +261,23 @@ export function Keyboard({ lit }: { lit: string[] }) {
       {keyboardRows.map((row, r) => (
         <div key={r} className="flex gap-[3px]">
           {row.map(([label, w, id], i) => {
+            if (id === "arrows") {
+              // Up over down, half height each, the way a Mac cuts them.
+              return (
+                <div key={`${r}-${i}`} className="flex flex-col gap-[2px]" style={{ flex: `${w} ${w} 0%` }}>
+                  {(["▲", "▼"] as const).map((arrow) => (
+                    <div
+                      key={arrow}
+                      className={`flex h-[calc((clamp(14px,2.4vw,22px)-2px)/2)] items-center justify-center rounded-[3px] border font-mono text-[clamp(5px,0.7vw,7px)] leading-none transition-colors duration-100 ${
+                        set.has(arrow) ? "border-accent/80 bg-accent/25 text-[#ffd9c2]" : "border-white/[0.08] bg-white/[0.035] text-white/45"
+                      }`}
+                    >
+                      {arrow}
+                    </div>
+                  ))}
+                </div>
+              );
+            }
             const isLode = label === "lode";
             const on = id
               ? set.has(id.toLowerCase())

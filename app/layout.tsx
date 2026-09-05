@@ -70,6 +70,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${maple.variable} ${newsreader.variable}`}>
       <body>
+        <a
+          href="#main"
+          className="bg-ground text-ink border-hairline sr-only fixed top-3 left-3 z-[60] border px-4 py-2 font-mono text-[12px] focus:not-sr-only"
+        >
+          Skip to content
+        </a>
         <Sky />
         {children}
         <Analytics />

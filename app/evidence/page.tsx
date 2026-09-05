@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import FootLine from "@/components/FootLine";
 import Header from "@/components/Header";
 import Permalink from "@/components/Permalink";
 
@@ -128,7 +129,7 @@ const results: Result[] = [
 
 export default function EvidencePage() {
   return (
-    <main className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
+    <main id="main" className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
       <Header />
       <div className="mx-auto max-w-[880px]">
         <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
@@ -243,6 +244,7 @@ export default function EvidencePage() {
             </li>
           </ul>
         </section>
+        <FootLine />
       </div>
     </main>
   );

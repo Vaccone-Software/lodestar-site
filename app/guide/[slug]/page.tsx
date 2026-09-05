@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import FootLine from "@/components/FootLine";
 import Header from "@/components/Header";
 import GuideScene from "@/components/GuideScene";
 import { Keys as KeyCaps } from "@/components/Key";
@@ -43,6 +44,28 @@ function litFor(lesson: Lesson): string[] {
   });
 }
 
+/** The keys, said aloud, for a lesson with nothing to animate. */
+const names: Record<string, string> = {
+  "⇧": "shift", "⌘": "command", "⌃": "control", "⌥": "option",
+  "⏎": "return", "⌫": "delete", "⇥": "tab", "←": "left arrow", "→": "right arrow",
+  space: "space", esc: "esc", lode: "lode",
+};
+function say(key: string): string {
+  if (names[key]) return names[key];
+  if (key.length > 1 && /^[⇧⌘⌃⌥]+/.test(key)) {
+    const mods = key.match(/^[⇧⌘⌃⌥]+/)![0].split("").map((m) => names[m]);
+    return [...mods, key.slice(mods.length)].join(" ");
+  }
+  return key;
+}
+function spoken(keys: string[]): string {
+  if (keys.length === 0) return "";
+  const parts = keys.map((k, i) => (k === "lode" && i === 0 ? "hold lode" : say(k)));
+  if (parts.length === 1) return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+  const [first, ...rest] = parts;
+  return `${first.charAt(0).toUpperCase() + first.slice(1)}, then ${rest.join(", then ")}`;
+}
+
 function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
   return (
     <Reveal
@@ -70,7 +93,7 @@ function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
         </p>
       </div>
       <div>
-        <GuideScene scene={lesson.scene} lit={litFor(lesson)} caption={lesson.title} />
+        <GuideScene scene={lesson.scene} lit={litFor(lesson)} caption={spoken(lesson.keys)} />
       </div>
     </Reveal>
   );
@@ -88,7 +111,7 @@ export default async function Page({
   const prev = guide[index - 1];
   const next = guide[index + 1];
   return (
-    <main className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
+    <main id="main" className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
       <Header />
       <div className="mx-auto max-w-[1240px]">
         <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
@@ -207,6 +230,7 @@ export default async function Page({
             <a href="/" className="text-accent">Download →</a>
           )}
         </nav>
+        <FootLine />
       </div>
     </main>
   );

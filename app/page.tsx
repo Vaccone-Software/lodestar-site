@@ -153,7 +153,7 @@ export default async function Page() {
     author: { "@type": "Organization", name: "Vaccone Software" },
   };
   return (
-    <main id="top" className="relative">
+    <main id="main" className="relative">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

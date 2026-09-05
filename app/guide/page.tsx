@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import FootLine from "@/components/FootLine";
 import Header from "@/components/Header";
 import GuideSearch from "@/components/GuideSearch";
 import { guide } from "@/data/guide";
@@ -16,7 +17,7 @@ export default function GuidePage() {
     0,
   );
   return (
-    <main className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
+    <main id="main" className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
       <Header />
       <div className="mx-auto max-w-[880px]">
         <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
@@ -77,6 +78,7 @@ export default function GuidePage() {
           </a>{" "}
           in the repository, for the hand that wants it all on one screen
         </p>
+        <FootLine />
       </div>
     </main>
   );

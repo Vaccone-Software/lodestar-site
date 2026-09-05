@@ -5,7 +5,7 @@ import { Keyboard } from "@/components/Scenes";
 // the answer is the same one every surface in Lodestar gives: esc.
 export default function NotFound() {
   return (
-    <main className="flex min-h-svh flex-col px-[5vw] pt-28 pb-16 lg:px-8">
+    <main id="main" className="flex min-h-svh flex-col px-[5vw] pt-28 pb-16 lg:px-8">
       <Header />
       <div className="mx-auto w-full max-w-[720px] flex-1">
         <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">

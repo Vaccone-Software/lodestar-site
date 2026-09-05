@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import FootLine from "@/components/FootLine";
 import Header from "@/components/Header";
 import Releases from "@/components/Releases";
 import { parseReleases, releasesUrl, type Release } from "@/lib/releases";
@@ -25,7 +26,7 @@ async function baked(): Promise<Release[]> {
 export default async function Page() {
   const releases = await baked();
   return (
-    <main className="mx-auto max-w-[840px] px-[6vw] pt-28 pb-24 lg:px-8">
+    <main id="main" className="mx-auto max-w-[840px] px-[6vw] pt-28 pb-24 lg:px-8">
       <Header />
       <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
         Changelog
@@ -41,6 +42,7 @@ export default async function Page() {
       <div className="border-hairline mt-12 border-t pt-12">
         <Releases fallback={releases} />
       </div>
+      <FootLine />
     </main>
   );
 }
