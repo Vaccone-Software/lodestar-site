@@ -91,42 +91,42 @@ const destinations: {
     what: "An application",
     keys: ["lode", "M"],
     sentence:
-      "Mail arrives maximized, with the others out of the way, launching first if it has to. A letter you chose, or a short chain of them, for every application you use constantly.",
+      "A letter you chose. Mail arrives maximized, the rest out of the way, launched if it has to be.",
     scene: <SceneApp />,
   },
   {
     what: "A page",
     keys: ["lode", "⏎"],
     sentence:
-      "A name you saved, a site, or a search, opened in the browser profile it belongs to. Work in work, personal in personal, without choosing each time. Links clicked in other applications follow the same rules.",
+      "A name, a site, or a search, opened in the browser profile it belongs to. Work in work, personal in personal.",
     scene: <ScenePage />,
   },
   {
     what: "A button",
     keys: ["lode", ";"],
     sentence:
-      "Every button, link, and field in the window wears a letter. Press it, and it is pressed. The mouse's first job, from the keys.",
+      "Every button, link, and field wears a letter. Press it, and it is pressed.",
     scene: <SceneButton />,
   },
   {
     what: "Text on screen",
     keys: ["lode", "/"],
     sentence:
-      "Type a few characters of any text you can see, mark where it starts and where it ends, and it is highlighted, ready to copy. Lodestar reads the screen itself, so a terminal, a browser, and a chat are the same.",
+      "Type a few characters of anything you can see, mark the start and the end, and it is highlighted. Any app, even a terminal.",
     scene: <SceneText />,
   },
   {
     what: "What you copied",
     keys: ["⇧⌘V", "S"],
     sentence:
-      "Every clip is kept, in the same place every time, each under a letter. Something from an hour ago is one press. Pinned slots never move.",
+      "Every clip, in the same place every time, each under a letter. Something from an hour ago is one press.",
     scene: <SceneClipboard />,
   },
   {
     what: "What you say",
     keys: ["lode", "."],
     sentence:
-      "Speak, and the words appear as you say them. Type into the same sentence, or press esc and edit it with vim's moves before it lands. Return puts it where your cursor was. Recognition runs on your Mac, and nothing you say leaves it.",
+      "Speak, and the words appear. Fix one from the keys, and return puts the sentence where your cursor was. Nothing you say leaves your Mac.",
     scene: <SceneSpeech />,
   },
 ];
@@ -170,15 +170,18 @@ export default async function Page() {
         <div className="relative mx-auto grid w-full max-w-[1240px] flex-1 items-center gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,10fr)_minmax(0,11fr)]">
           <div>
             <Mark size={52} />
-            <h1 className="font-display text-ink mt-8 max-w-[15ch] text-[clamp(2.7rem,5.6vw,4.9rem)] leading-[0.98] font-normal tracking-[-0.025em]">
+            <p className="text-faint mt-8 font-mono text-[11px] tracking-[0.2em] uppercase">
+              <span className="glint">✦</span>
+              <span className="mx-2">·</span>
+              Keyboard navigation for macOS
+            </p>
+            <h1 className="font-display text-ink mt-4 max-w-[15ch] text-[clamp(2.7rem,5.6vw,4.9rem)] leading-[0.98] font-normal tracking-[-0.025em]">
               Name it, and you are there
             </h1>
-            <p className="text-dim mt-7 max-w-[42ch] text-[clamp(1.1rem,1.45vw,1.3rem)] leading-[1.5]">
-              Lodestar turns every place you go on your Mac into a
-              destination you can name from the keyboard: applications,
-              pages, buttons, text on screen, what you copied, what you say.
-              It learns which ones you reach for, and offers the next when
-              you are ready.
+            <p className="text-dim mt-7 max-w-[40ch] text-[clamp(1.1rem,1.45vw,1.3rem)] leading-[1.5]">
+              Hold one key and press a letter. The app you want is in front,
+              maximized. The same gesture reaches a page, a button, a line of
+              text, something you copied, something you say.
             </p>
             <div className="mt-10 max-w-[380px]">
               <DownloadButton fallback={baked} />
@@ -218,43 +221,21 @@ export default async function Page() {
               <Eyebrow n="01">The premise</Eyebrow>
               <H2>Destination over process</H2>
             </Reveal>
-            <div className="mt-10 grid gap-x-16 gap-y-8 lg:grid-cols-2">
-              <Reveal delay={80}>
-                <Prose>
-                  <p>
-                    Most of what a computer asks of you is process. Find the
-                    window under the others. Find the tab. Find the button,
-                    the line you copied an hour ago, the profile a link should
-                    open in. Each is a small decision, made again every time,
-                    and the hand cannot learn a decision.
-                  </p>
-                  <p>
-                    Lodestar replaces the process with a destination: a place
-                    you name, and are at. An application is a letter. A page
-                    is its name. A button is the letter it wears. The gesture
-                    is the same today and in a year, so the hand learns it, and
-                    the decision disappears.
-                  </p>
-                </Prose>
-              </Reveal>
-              <Reveal delay={160}>
-                <Prose>
-                  <p>
-                    A destination has to be fixed to be learned. A button is
-                    somewhere different on every page, and a window is wherever
-                    the afternoon left it. The letter M is always Mail. That
-                    is the whole reason the gestures live on the keyboard: not
-                    because keys are faster than a mouse, but because a key
-                    can mean the same thing forever.
-                  </p>
-                  <p className="text-ink">
-                    Anything you reach through Lodestar arrives maximized, with
-                    the rest out of the way. Everything else about your Mac
-                    keeps working the way you are used to.
-                  </p>
-                </Prose>
-              </Reveal>
-            </div>
+            <Reveal delay={80} className="mt-8">
+              <Prose>
+                <p>
+                  Most of what a computer asks of you is process: find the
+                  window, find the tab, find the button, find the line you
+                  copied an hour ago. Lodestar replaces each with a
+                  destination, a place you name, and are at.
+                </p>
+                <p>
+                  A button is somewhere different on every page. The letter M
+                  is always Mail. A destination has to be fixed to be learned,
+                  and once it is learned the decision disappears.
+                </p>
+              </Prose>
+            </Reveal>
           </div>
         </section>
 
@@ -266,10 +247,8 @@ export default async function Page() {
               <H2>Everything is a destination</H2>
               <Prose className="mt-6">
                 <p>
-                  One grammar, held under one key. The same shape of gesture
-                  reaches an application, a page, a button, a span of text,
-                  something you copied, and something you say. Learn it once
-                  and your hands know it everywhere.
+                  One grammar under one key. Learn it once, and your hands
+                  know it everywhere.
                 </p>
               </Prose>
             </Reveal>
@@ -324,11 +303,9 @@ export default async function Page() {
                 <H2>It learns from you, and recommends improvements to your workflow</H2>
                 <Prose className="mt-6">
                   <p>
-                    There is nothing to learn up front. Lodestar notices what
-                    you keep reaching for and, when a shorter way would pay,
-                    offers exactly that one, with the seconds it will give
-                    back each week. One quiet chip at a time, never a stream
-                    of notifications.
+                    Nothing to learn up front. When a shorter way would pay,
+                    Lodestar offers it, with the seconds it will give back
+                    each week. One quiet chip at a time.
                   </p>
                 </Prose>
               </Reveal>
@@ -341,15 +318,15 @@ export default async function Page() {
               {[
                 [
                   "Measured, not guessed",
-                  "Every offer is fitted to your own record: how often, how long, and whether the last address you accepted is actually bending its curve. Kinds of suggestion are ranked by what past ones did for you, so a kind that keeps winning is offered sooner and one that keeps losing is offered less.",
+                  "Every offer is fitted to your own record, and ranked by what past offers actually did for you.",
                 ],
                 [
                   "A partner, not a reminder",
-                  "Accept, and Lodestar reshapes the road with you: the launcher answers with the letter until your hand has it, and a pair of applications that travel together becomes one layout. Research on shortcut adoption is clear that seeing a shortcut changes nothing; the old path has to cost something, and here it costs one deliberate confirm.",
+                  "Accept, and Lodestar reshapes the road with you, because seeing a shortcut changes nothing until the old path costs something.",
                 ],
                 [
                   "On your Mac, and only there",
-                  "Every observation stays on your Mac. None of it is content: no titles, no addresses, no text you typed or said. There is no account and no server, the files are yours to open, and one line in the configuration turns it off.",
+                  "Every observation stays on your Mac, and none of it is content: no titles, no addresses, no text. One line turns it off.",
                 ],
               ].map(([head, body], i) => (
                 <Reveal key={head} delay={i * 80} className="py-8 lg:pr-10">
@@ -367,10 +344,9 @@ export default async function Page() {
               <p className="text-dim max-w-[64ch] text-[15.5px] leading-[1.6]">
                 <span className="text-ink">One measurement, from a year on one hand.</span>{" "}
                 A bare letter under lode misfired at zero. A two-key chain
-                misfired between eight and forty-one percent of the time. That
-                is why Lodestar offers single letters first, and why it will
-                offer to flatten a chain that keeps stumbling. The rest of
-                the measurements, with their methods, are on the{" "}
+                misfired between eight and forty-one percent of the time.
+                That is why Lodestar offers single letters first. The rest of
+                the measurements are on the{" "}
                 <a
                   href="/evidence"
                   className="text-ink underline decoration-white/30 underline-offset-4 hover:decoration-white"
@@ -397,11 +373,11 @@ export default async function Page() {
                   items: [
                     [
                       "One key",
-                      "Lodestar lives on your right command key. Hold it and the keyboard speaks to Lodestar; release it and the keyboard is yours. Right ⌘ stops being a command key. That is the trade, and it is configurable.",
+                      "Lodestar lives on your right ⌘ key. Hold it and the keyboard speaks to Lodestar; release it and the keyboard is yours. Configurable.",
                     ],
                     [
                       "One permission, two if you want them",
-                      "Accessibility is required: it moves windows, reads menus, and presses what you aim at. Screen Recording is asked for only by the two gestures that read the screen, the button letters and highlighting. Calendar is asked for only if you turn meetings on.",
+                      "Accessibility, to move windows and press what you aim at. Screen Recording only for the two gestures that read the screen. Calendar only if you turn meetings on.",
                     ],
                   ],
                 },
@@ -410,11 +386,11 @@ export default async function Page() {
                   items: [
                     [
                       "Nothing leaves your Mac",
-                      "No account, no server. Dictation is recognised on the machine. The only request Lodestar makes of the network is asking GitHub whether a newer version exists.",
+                      "No account, no server. The only network request asks GitHub whether a newer version exists.",
                     ],
                     [
                       "Fair Source",
-                      "The source is public. Read it, audit it, change it for yourself. Each release becomes MIT two years after it ships. None of the above is taken on faith.",
+                      "The source is public. Read it, audit it, change it for yourself. Each release becomes MIT two years on.",
                     ],
                   ],
                 },
@@ -449,9 +425,7 @@ export default async function Page() {
               <H2>Everything it does</H2>
               <Prose className="mt-6">
                 <p>
-                  You do not need most of this today. It is here so the depth
-                  is visible, and so a hand that wants more knows where it is.
-                  The{" "}
+                  You do not need most of this today. The{" "}
                   <a
                     href="/guide"
                     className="text-ink underline decoration-white/30 underline-offset-4 hover:decoration-white"
@@ -508,19 +482,18 @@ export default async function Page() {
                   <p>
                     Aerospace is the one place where excellence is not a
                     preference. A suit that mostly works is a failure.
-                    Lodestar is built in that spirit, at a lower altitude: a
-                    gesture has to land every time, a claim has to carry its
-                    evidence, and a promise about your data has to be
-                    structural rather than a policy. That is the standard,
-                    and it is the promise.
+                    Lodestar is built in that spirit: a gesture has to land
+                    every time, a claim has to carry its evidence, and a
+                    promise about your data has to be structural. That is
+                    the standard, and it is the promise.
                   </p>
                 </Prose>
               </Reveal>
               <Reveal delay={100} className="w-full max-w-[520px] lg:justify-self-end">
                 <p className="text-dim mb-5 max-w-[44ch] text-[16px] leading-[1.6]">
                   The first minute is a short walk: grant Accessibility, hold
-                  the key, and take three letters for the applications you
-                  already have open. The rest arrives as you are ready for it.
+                  the key, take three letters. The rest arrives as you are
+                  ready.
                 </p>
                 <DownloadButton fallback={baked} />
                 <div className="mt-3">

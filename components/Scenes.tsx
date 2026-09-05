@@ -366,8 +366,8 @@ const momentStill: MomentFrame = {
   caption: "Mail, maximized, with nothing else in the way",
 };
 const momentScript: Step<MomentFrame>[] = [
-  [1400, { held: true, caption: "Hold lode" }],
-  [900, { key: "M" }],
+  [700, { held: true, caption: "Hold lode" }],
+  [600, { key: "M" }],
   [180, { focus: "mail", caption: "Mail, maximized, with nothing else in the way" }],
   [420, { held: false, key: null }],
   [2400, { held: true, caption: "Any letter you gave an application" }],
