@@ -134,7 +134,7 @@ export default function EvidencePage() {
           Evidence
         </p>
         <h1 className="font-display mt-4 max-w-[18ch] text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.02] font-normal tracking-[-0.02em]">
-          Every claim on the front page, and the measurement behind it
+          Every claim, and its measurement
         </h1>
 
         <section className="border-hairline mt-12 grid gap-x-12 gap-y-6 border-t pt-8 lg:grid-cols-[10rem_1fr]">

@@ -34,7 +34,7 @@ export default function GuidePage() {
           Guide
         </p>
         <h1 className="font-display mt-4 text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.02] font-normal tracking-[-0.02em]">
-          Every destination, one page each.
+          One page per destination
         </h1>
         <p className="text-dim mt-6 max-w-[56ch] text-[17px] leading-[1.6]">
           The guide is being written under the same names the front page

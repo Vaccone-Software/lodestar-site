@@ -176,7 +176,7 @@ export default async function Page() {
               Keyboard navigation for macOS
             </p>
             <h1 className="font-display text-ink mt-4 max-w-[15ch] text-[clamp(2.7rem,5.6vw,4.9rem)] leading-[0.98] font-normal tracking-[-0.025em]">
-              Name it, and you are there
+              Everything on your Mac, under one key
             </h1>
             <p className="text-dim mt-7 max-w-[40ch] text-[clamp(1.1rem,1.45vw,1.3rem)] leading-[1.5]">
               Hold one key and press a letter. The app you want is in front,
@@ -300,7 +300,7 @@ export default async function Page() {
             <div className="grid items-center gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
               <Reveal>
                 <Eyebrow n="03">The coach</Eyebrow>
-                <H2>It learns from you, and recommends improvements to your workflow</H2>
+                <H2>It recommends improvements to your workflow</H2>
                 <Prose className="mt-6">
                   <p>
                     Nothing to learn up front. When a shorter way would pay,

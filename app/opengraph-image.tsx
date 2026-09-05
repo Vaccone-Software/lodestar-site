@@ -8,7 +8,7 @@ import { join } from "node:path";
 // the mark, so the card and the page never drift apart. force-static
 // because the site exports statically and nothing here is dynamic.
 export const dynamic = "force-static";
-export const alt = "Lodestar. Name it, and you are there.";
+export const alt = "Lodestar. Everything on your Mac, under one key.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -132,7 +132,7 @@ export default async function Image() {
       <div style={{ display: "flex", flexDirection: "column", marginBottom: 12 }}>
         <div
           style={{
-            fontSize: 88,
+            fontSize: 80,
             lineHeight: 1,
             color: "#f2f3f5",
             fontFamily: "Newsreader",
@@ -140,7 +140,7 @@ export default async function Image() {
             maxWidth: 900,
           }}
         >
-          Name it, and you are there
+          Everything on your Mac, under one key
         </div>
         <div
           style={{
