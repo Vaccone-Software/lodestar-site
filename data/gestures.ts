@@ -1,3 +1,5 @@
+// Every gesture, grouped the way the guide groups them. Kept in step with
+// GUIDE.md in the product repository; that table is the truth.
 export type Gesture = { keys: string; meaning: string };
 export type Group = { label: string; gestures: Gesture[] };
 
@@ -7,30 +9,31 @@ export const specification: Group[] = [
     gestures: [
       {
         keys: "lode space",
-        meaning:
-          "The searcher. Type, land full screen. Ranks by what you actually use.",
+        meaning: "The launcher. Type, return, arrive maximized. Ranked by use.",
       },
       {
         keys: "lode A…Z",
-        meaning:
-          "Graph chains. Letters you chose, walked to any app or browser profile.",
-      },
-      {
-        keys: "lode ⇥",
-        meaning: "Window chooser for the focused app, most recent first.",
+        meaning: "The graph. A letter, or a short chain of them, to an app.",
       },
       {
         keys: "lode ⏎",
-        meaning:
-          "The web bar. Links, domains, and searches, each routed to the right profile.",
+        meaning: "Ask. A name, a domain, or a search, in the right profile.",
       },
       {
-        keys: "lode 1…9",
-        meaning: "Jump to a window by its position. 9 is always the last.",
+        keys: "lode ⇥",
+        meaning: "The window chooser for the app you are in.",
       },
       {
-        keys: "lode X · ⇧X",
-        meaning: "Back and forward through the attention timeline.",
+        keys: "lode 1…8 · 9",
+        meaning: "A window by its position. 9 is always the last.",
+      },
+      {
+        keys: "lode ' A…Z",
+        meaning: "Breaths. A saved layout restored, apps relaunched if needed.",
+      },
+      {
+        keys: "hold lode",
+        meaning: "The map. Your letters, drawn while the key is held.",
       },
     ],
   },
@@ -39,113 +42,75 @@ export const specification: Group[] = [
     gestures: [
       {
         keys: "⇧ on a summon",
-        meaning: "Beside me. An equal split instead of full screen.",
+        meaning: "Beside. An equal split instead of maximized.",
+      },
+      {
+        keys: "lode G B",
+        meaning: "The chord. Letters under one hold arrange side by side.",
       },
       { keys: "lode \\", meaning: "Flip the split, horizontal to vertical." },
+      {
+        keys: "lode ' ⇧A",
+        meaning: "Save the current layout at that letter.",
+      },
       {
         keys: "lode ⇧1…9",
         meaning: "Slide the focused window to that position.",
       },
       {
-        keys: "lode [ · ]",
-        meaning: "Throw the focused window to the previous or next display.",
-      },
-      {
-        keys: "lode Z · ⇧Z",
-        meaning: "Undo and redo the layout, one global timeline.",
-      },
-      {
         keys: "lode 0 · ⇧0",
-        meaning:
-          "The focused window fills the display and joins the layout. ⇧0 puts it beside instead.",
+        meaning: "The focused window fills the display. ⇧0 joins beside.",
       },
+      {
+        keys: "lode [ · ]",
+        meaning: "The focused window to the previous or next display.",
+      },
+      { keys: "lode ← · →", meaning: "Undo and redo the layout." },
     ],
   },
   {
-    label: "Inside the app",
+    label: "Inside the window",
     gestures: [
       {
-        keys: "lode ,",
-        meaning:
-          "Scroll mode. j k for lines, d u for half pages, gg and ⇧G for the ends.",
-      },
-      {
-        keys: "lode .",
-        meaning: "Menu search. The frontmost app's entire menu bar, fuzzy.",
-      },
-      {
         keys: "lode ;",
-        meaning:
-          "Click hints. Every pressable element wears a label. Type it to click.",
-      },
-      {
-        keys: "lode ⇧;",
-        meaning: "Chain clicks. Each click relabels the window. esc leaves.",
+        meaning: "Hints. A letter on every button, link and field.",
       },
       {
         keys: "lode /",
-        meaning:
-          "Select. Type a few characters of any text on screen, pick the start, pick the end. The span is selected.",
+        meaning: "Select. Type what you see, mark the start and the end.",
+      },
+      {
+        keys: "lode `",
+        meaning: "Scroll from the keyboard: j k, half pages, ends, panes.",
+      },
+      {
+        keys: "lode -",
+        meaning: "Commands. The app's whole menu bar, searched and run.",
+      },
+      {
+        keys: "lode .",
+        meaning: "The draft. Speak and type into one cursor, ⏎ pastes.",
+      },
+      {
+        keys: "lode ⇧.",
+        meaning: "The draft, editing the field's own text, silent.",
       },
     ],
   },
   {
-    label: "What you copied",
+    label: "Beside the keyboard",
     gestures: [
       {
         keys: "⇧⌘V",
-        meaning:
-          "The clipboard. Recent clips run along the bottom under the home row, five pinned slots climb the left.",
+        meaning: "The clipboard. Every clip in its place, a letter pastes.",
       },
       {
-        keys: "a…l · ⇧a…l",
-        meaning:
-          "Paste that card. With ⇧ it pastes exactly as it was copied, formatting and all.",
+        keys: "⌘K in a list",
+        meaning: "Add to the graph, save a link, route a host. Written to config.",
       },
-      {
-        keys: "1…5",
-        meaning:
-          "The pins. A slot means the same thing next week as it does today, so the paste needs no looking.",
-      },
-      {
-        keys: "⌘ on a card",
-        meaning:
-          "Its actions. Pin it, delete it, save an image, or never save from that app again.",
-      },
-      {
-        keys: "/",
-        meaning: "Search the history. Matches stay under the same letters.",
-      },
-    ],
-  },
-  {
-    label: "Saved worlds",
-    gestures: [
-      {
-        keys: "lode ' A…Z",
-        meaning:
-          "Breaths. Whole saved layouts, restored across restarts. Apps relaunch.",
-      },
-      {
-        keys: "lode ' '",
-        meaning: "Update the latest breath to the current world.",
-      },
-    ],
-  },
-  {
-    label: "The system teaches itself",
-    gestures: [
-      {
-        keys: "hold lode",
-        meaning:
-          "Peek the map. The graph and every window's index, while held.",
-      },
-      {
-        keys: "lode ?",
-        meaning:
-          "The cheat sheet. Every gesture and your live bindings, one sheet.",
-      },
-      { keys: "esc", meaning: "Clear anything." },
+      { keys: "lode ?", meaning: "The cheat sheet, generated from your config." },
+      { keys: "lode ,", meaning: "Settings." },
+      { keys: "esc", meaning: "Clear a chain, close a surface." },
     ],
   },
 ];

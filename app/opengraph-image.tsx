@@ -2,12 +2,13 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-// The link card: what an ad, a post, or a pasted URL unfurls into.
-// Generated at build from the same geometry as the mark, so the card and
-// the page never drift apart. force-static because the site exports
-// statically and this image has nothing dynamic in it.
+// The link card: what a post or a pasted URL unfurls into, and for most
+// people the first thing they see. The sky, the mark at the pole, and the
+// front page's first line. Generated at build from the same geometry as
+// the mark, so the card and the page never drift apart. force-static
+// because the site exports statically and nothing here is dynamic.
 export const dynamic = "force-static";
-export const alt = "Lodestar, keyboard navigation for macOS";
+export const alt = "Lodestar. Name it, and you are there.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,9 +31,28 @@ function starPoints(cx: number, cy: number, cardinal: number): string {
   return points.join(" ");
 }
 
+// A still field, seeded so the card is the same on every build.
+function stars(count: number): { x: number; y: number; r: number; a: number }[] {
+  let seed = 7;
+  const next = () => {
+    seed = (seed * 16807) % 2147483647;
+    return seed / 2147483647;
+  };
+  const out = [];
+  for (let i = 0; i < count; i++) {
+    out.push({
+      x: next() * 1200,
+      y: next() * 630,
+      r: 0.6 + next() * 1.4,
+      a: 0.25 + next() * 0.6,
+    });
+  }
+  return out;
+}
+
 export default async function Image() {
-  const [medium, regular] = await Promise.all([
-    readFile(join(process.cwd(), "assets/fonts/MapleMono-Medium.ttf")),
+  const [serif, mono] = await Promise.all([
+    readFile(join(process.cwd(), "assets/fonts/Newsreader-Regular.ttf")),
     readFile(join(process.cwd(), "assets/fonts/MapleMono-Regular.ttf")),
   ]);
   const c = 60;
@@ -55,6 +75,7 @@ export default async function Image() {
       />,
     );
   }
+  const field = stars(140);
   return new ImageResponse(
     <div
       style={{
@@ -63,11 +84,40 @@ export default async function Image() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#0a0a0b",
+        background:
+          "linear-gradient(180deg, #0a0a0c 0%, #050507 70%, #030305 100%)",
         padding: 88,
+        position: "relative",
       }}
     >
-      <svg width={140} height={140} viewBox="0 0 120 120">
+      <svg
+        width={1200}
+        height={630}
+        viewBox="0 0 1200 630"
+        style={{ position: "absolute", top: 0, left: 0 }}
+      >
+        {field.map((s, i) => (
+          <circle
+            key={i}
+            cx={s.x}
+            cy={s.y}
+            r={s.r}
+            fill={`rgba(242,243,245,${s.a.toFixed(2)})`}
+          />
+        ))}
+        {[
+          [980, 120],
+          [1090, 300],
+          [860, 520],
+        ].map(([x, y], i) => (
+          <g key={`g${i}`} stroke="rgba(242,243,245,0.5)" strokeWidth="1">
+            <line x1={x - 10} y1={y} x2={x + 10} y2={y} />
+            <line x1={x} y1={y - 10} x2={x} y2={y + 10} />
+            <circle cx={x} cy={y} r={2.2} fill="#f2f3f5" stroke="none" />
+          </g>
+        ))}
+      </svg>
+      <svg width={120} height={120} viewBox="0 0 120 120">
         <circle
           cx={c}
           cy={c}
@@ -79,44 +129,49 @@ export default async function Image() {
         {ticks}
         <polygon points={starPoints(c, c, 34)} fill="#f2f3f5" />
       </svg>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", flexDirection: "column", marginBottom: 12 }}>
         <div
           style={{
-            fontSize: 92,
+            fontSize: 88,
+            lineHeight: 1,
             color: "#f2f3f5",
-            fontFamily: "Maple Medium",
-            letterSpacing: -3,
-          }}
-        >
-          Lodestar
-        </div>
-        <div
-          style={{
-            fontSize: 32,
-            color: "rgba(242,243,245,0.6)",
-            fontFamily: "Maple",
-            marginTop: 18,
+            fontFamily: "Newsreader",
+            letterSpacing: -2.5,
             maxWidth: 900,
           }}
         >
-          An opinionated way to navigate and operate your computer.
+          Name it, and you are there
+        </div>
+        <div
+          style={{
+            fontSize: 28,
+            color: "rgba(242,243,245,0.62)",
+            fontFamily: "Newsreader",
+            marginTop: 26,
+            maxWidth: 860,
+            lineHeight: 1.35,
+          }}
+        >
+          Every place you go on your Mac, named from the keyboard. Lodestar
+          learns which ones you reach for.
         </div>
       </div>
       <div
         style={{
-          fontSize: 21,
-          color: "rgba(242,243,245,0.34)",
+          fontSize: 19,
+          color: "rgba(242,243,245,0.36)",
           fontFamily: "Maple",
+          letterSpacing: 1,
         }}
       >
-        macOS 13 or later · notarized · Fair Source · lodestar.vaccone.software
+        LODESTAR · MACOS 13 OR LATER · NOTARIZED · NOTHING LEAVES YOUR MAC
       </div>
     </div>,
     {
       ...size,
       fonts: [
-        { name: "Maple Medium", data: medium, weight: 500 },
-        { name: "Maple", data: regular, weight: 400 },
+        { name: "Newsreader", data: serif, weight: 400, style: "normal" },
+        { name: "Maple", data: mono, weight: 400, style: "normal" },
       ],
     },
   );

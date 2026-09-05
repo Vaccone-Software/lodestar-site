@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Header from "@/components/Header";
 import Releases from "@/components/Releases";
 import { parseReleases, releasesUrl, type Release } from "@/lib/releases";
 
@@ -23,19 +24,14 @@ async function baked(): Promise<Release[]> {
 export default async function Page() {
   const releases = await baked();
   return (
-    <main className="mx-auto max-w-[780px] px-[6vw] py-[9vh] lg:px-8">
-      <a
-        href="/"
-        className="text-faint hover:text-dim font-mono text-[11px] tracking-[0.08em] uppercase"
-      >
-        ← Lodestar
-      </a>
-      <h1 className="font-display text-ink mt-8 text-[clamp(2rem,4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.03em]">
+    <main className="dust mx-auto max-w-[780px] px-[6vw] pt-28 pb-24 lg:px-8">
+      <Header />
+      <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
         Changelog
-      </h1>
-      <p className="text-dim mt-4 max-w-[54ch] text-[clamp(1rem,1.3vw,1.12rem)] leading-[1.62]">
-        Every release, in the words it shipped with.
       </p>
+      <h1 className="font-display text-ink mt-4 text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.02] font-normal tracking-[-0.02em]">
+        Every release, in the words it shipped with
+      </h1>
       <div className="border-hairline mt-12 border-t pt-12">
         <Releases fallback={releases} />
       </div>

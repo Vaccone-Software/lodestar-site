@@ -1,8 +1,24 @@
 import CopyCommand from "@/components/CopyCommand";
 import DownloadButton from "@/components/DownloadButton";
+import Header from "@/components/Header";
+import { Keys } from "@/components/Key";
 import LatestVersion from "@/components/LatestVersion";
+import Meridian from "@/components/Meridian";
 import Mark from "@/components/Mark";
+import {
+  SceneApp,
+  SceneButton,
+  SceneClipboard,
+  SceneCoach,
+  SceneMoment,
+  ScenePage,
+  SceneSpeech,
+  SceneText,
+} from "@/components/Scenes";
+import Reveal from "@/components/Reveal";
+import Sidereal from "@/components/Sidereal";
 import Starfield from "@/components/Starfield";
+import { specification } from "@/data/gestures";
 
 const repo = "https://github.com/Vaccone-Software/lodestar";
 
@@ -12,7 +28,7 @@ const repo = "https://github.com/Vaccone-Software/lodestar";
 // no-store is load bearing. Next keeps a persistent data cache between
 // builds, and a cached answer here bakes whatever version was current the
 // last time the cache was written.
-async function latestTag(): Promise<string> {
+async function latest(): Promise<{ tag: string; date: string }> {
   try {
     const response = await fetch(
       "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1",
@@ -20,497 +36,502 @@ async function latestTag(): Promise<string> {
     );
     const data = await response.json();
     const tag = data?.[0]?.tag_name;
-    if (typeof tag === "string" && tag.startsWith("v")) return tag;
+    const date = data?.[0]?.published_at;
+    if (typeof tag === "string" && tag.startsWith("v"))
+      return { tag, date: typeof date === "string" ? date : "" };
   } catch {}
-  return "v0.11.5";
+  return { tag: "v0.30.14", date: "" };
 }
 
-/** The shots are photographed against the page's own ground, so their edges
-    must not announce themselves. Inline rather than a class: a utility layer
-    that also touches mask-image beats a plain rule and the frame comes back. */
-const feather = {
-  WebkitMaskImage:
-    "radial-gradient(100% 100% at 50% 50%, #000 40%, transparent 90%)",
-  maskImage: "radial-gradient(100% 100% at 50% 50%, #000 40%, transparent 90%)",
-} as const;
+/** A numbered marker in the margin, the way the sky is charted. */
+function Eyebrow({ n, children }: { n: string; children: React.ReactNode }) {
+  return (
+    <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+      <span className="glint">{n}</span>
+      <span className="mx-2">·</span>
+      {children}
+    </p>
+  );
+}
 
-/** A gesture, the name of what it opens, and what that thing actually is.
-    A keycap with no name beside it is a crossword clue. */
-function KeyRow({
-  keys,
-  name,
+function H2({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="font-display text-ink mt-5 max-w-[22ch] text-[clamp(2rem,4.2vw,3.4rem)] leading-[1.02] font-normal tracking-[-0.02em]">
+      {children}
+    </h2>
+  );
+}
+
+function Prose({
   children,
+  className = "",
 }: {
-  keys: string[];
-  name?: string;
   children: React.ReactNode;
-}) {
-  return (
-    <div className="border-hairline flex items-baseline gap-x-4 border-t py-3">
-      <span className="flex shrink-0 items-center gap-1.5">
-        {keys.map((key) => (
-          <span
-            key={key}
-            className="border-hairline text-ink/90 inline-flex items-center rounded-[5px] border bg-white/[0.06] px-2 py-1 font-mono text-[11.5px] leading-none"
-          >
-            {key}
-          </span>
-        ))}
-      </span>
-      <span className="text-dim text-[15px] leading-snug">
-        {name ? <span className="text-ink">{name}: </span> : null}
-        {children}
-      </span>
-    </div>
-  );
-}
-
-function Section({
-  title,
-  intro,
-  children,
-}: {
-  title: string;
-  intro?: React.ReactNode;
-  children?: React.ReactNode;
-}) {
-  return (
-    <section className="border-hairline border-t py-[9vh]">
-      <div className="mx-auto max-w-[1180px] px-[6vw] lg:px-10">
-        <h2 className="font-display text-ink text-[clamp(1.7rem,3.4vw,2.5rem)] leading-[1.05] font-semibold tracking-[-0.02em]">
-          {title}
-        </h2>
-        {intro ? (
-          <div className="text-dim mt-6 max-w-[54ch] space-y-4 text-[clamp(1rem,1.3vw,1.12rem)] leading-[1.62]">
-            {intro}
-          </div>
-        ) : null}
-        {children ? <div className="mt-14 space-y-14">{children}</div> : null}
-      </div>
-    </section>
-  );
-}
-
-/** One thing inside a section: what it is, the gesture, and a photograph of
-    it. Two of these give a section its visual separation without inventing a
-    layout for every case. */
-function Item({
-  text,
-  rows,
-  shot,
-  caption,
-  flip,
-  framed,
-}: {
-  text?: React.ReactNode;
-  rows?: React.ReactNode;
-  shot?: string;
-  caption?: string;
-  flip?: boolean;
-  /** A whole window rather than a panel: it gets an edge on purpose, because
-      feathering a browser screenshot into the page only makes it look like a
-      mistake. */
-  framed?: boolean;
+  className?: string;
 }) {
   return (
     <div
-      className={`grid items-center gap-x-14 gap-y-8 ${shot ? "lg:grid-cols-2" : ""}`}
+      className={`text-dim max-w-[58ch] space-y-5 text-[clamp(1.05rem,1.25vw,1.2rem)] leading-[1.6] ${className}`.trim()}
     >
-      <div className={flip ? "lg:order-2" : ""}>
-        {text ? (
-          <div className="text-dim max-w-[48ch] space-y-4 text-[clamp(1rem,1.3vw,1.12rem)] leading-[1.62]">
-            {text}
-          </div>
-        ) : null}
-        {rows ? (
-          <div className={`max-w-[48ch] ${text ? "mt-7" : ""}`}>{rows}</div>
-        ) : null}
-      </div>
-      {shot ? (
-        <figure className={flip ? "lg:order-1" : ""}>
-          {framed ? (
-            <img
-              src={shot}
-              alt=""
-              className="border-hairline w-full rounded-lg border"
-            />
-          ) : (
-            <img src={shot} alt="" style={feather} className="w-full" />
-          )}
-          {caption ? (
-            <figcaption className="text-faint mt-3 text-center font-mono text-[11px]">
-              {caption}
-            </figcaption>
-          ) : null}
-        </figure>
-      ) : null}
+      {children}
     </div>
   );
 }
 
+// One destination. The same three parts every time: what it is, the keys,
+// and one sentence, with a drawn demonstration of the behaviour. The
+// repetition is the argument.
+const destinations: {
+  what: string;
+  keys: string[];
+  sentence: string;
+  scene: React.ReactNode;
+}[] = [
+  {
+    what: "An application",
+    keys: ["lode", "M"],
+    sentence:
+      "Mail arrives maximized, with the others out of the way, launching first if it has to. A letter you chose, or a short chain of them, for every application you use constantly.",
+    scene: <SceneApp />,
+  },
+  {
+    what: "A page",
+    keys: ["lode", "⏎"],
+    sentence:
+      "A name you saved, a site, or a search, opened in the browser profile it belongs to. Work in work, personal in personal, without choosing each time. Links clicked in other applications follow the same rules.",
+    scene: <ScenePage />,
+  },
+  {
+    what: "A button",
+    keys: ["lode", ";"],
+    sentence:
+      "Every button, link, and field in the window wears a letter. Press it, and it is pressed. The mouse's first job, from the keys.",
+    scene: <SceneButton />,
+  },
+  {
+    what: "Text on screen",
+    keys: ["lode", "/"],
+    sentence:
+      "Type a few characters of any text you can see, mark where it starts and where it ends, and it is highlighted, ready to copy. Lodestar reads the screen itself, so a terminal, a browser, and a chat are the same.",
+    scene: <SceneText />,
+  },
+  {
+    what: "What you copied",
+    keys: ["⇧⌘V", "S"],
+    sentence:
+      "Every clip is kept, in the same place every time, each under a letter. Something from an hour ago is one press. Pinned slots never move.",
+    scene: <SceneClipboard />,
+  },
+  {
+    what: "What you say",
+    keys: ["lode", "."],
+    sentence:
+      "Speak, and the words appear as you say them. Type into the same sentence, or press esc and edit it with vim's moves before it lands. Return puts it where your cursor was. Recognition runs on your Mac, and nothing you say leaves it.",
+    scene: <SceneSpeech />,
+  },
+];
+
 export default async function Page() {
-  const baked = await latestTag();
+  const release = await latest();
+  const baked = release.tag;
   return (
-    <main>
-      {/* The real northern sky, and the product in it. The first screen shows
-          the thing rather than announcing its name at 19vw. */}
-      <section className="relative flex min-h-svh flex-col justify-between overflow-hidden px-[5vw] py-[3.5vh]">
+    <main id="top" className="relative">
+      <Header />
+
+      {/* 00 · The moment. The real northern sky, the product in it, and one
+          press shown before it is described. */}
+      <section className="relative flex min-h-svh flex-col overflow-hidden px-[5vw] pt-24 pb-14 lg:px-8">
         <Starfield />
-        <div className="to-ground pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-b from-transparent" />
+        <div className="to-ground pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent" />
 
-        <div className="text-faint relative flex items-baseline justify-between font-mono text-[11px] tracking-[0.08em] uppercase">
-          <span>Vaccone Software</span>
-          <span>macOS 13 or later</span>
-        </div>
-
-        <div className="flex-1" />
-
-        <div className="relative flex flex-col gap-10 sm:flex-row sm:items-end sm:justify-between">
+        <div className="relative mx-auto grid w-full max-w-[1240px] flex-1 items-center gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,10fr)_minmax(0,11fr)]">
           <div>
-            <Mark size={44} />
-            <h1 className="font-display text-ink mt-6 text-[clamp(2.4rem,5vw,4.2rem)] leading-[0.95] font-semibold tracking-[-0.035em]">
-              Lodestar
+            <Mark size={52} />
+            <h1 className="font-display text-ink mt-8 max-w-[15ch] text-[clamp(2.7rem,5.6vw,4.9rem)] leading-[0.98] font-normal tracking-[-0.025em]">
+              Name it, and you are there
             </h1>
-            <p className="mt-4 max-w-[26ch] text-[clamp(1.05rem,1.5vw,1.3rem)] leading-[1.4]">
-              An opinionated way to navigate and operate your computer.
+            <p className="text-dim mt-7 max-w-[42ch] text-[clamp(1.1rem,1.45vw,1.3rem)] leading-[1.5]">
+              Lodestar turns every place you go on your Mac into a
+              destination you can name from the keyboard: applications,
+              pages, buttons, text on screen, what you copied, what you say.
+              It learns which ones you reach for, and offers the next when
+              you are ready.
             </p>
+            <div className="mt-10 max-w-[380px]">
+              <DownloadButton fallback={baked} />
+              <p className="text-faint mt-2.5 font-mono text-[11px] leading-relaxed">
+                macOS 13 or later ·{" "}
+                <LatestVersion fallback={baked} fallbackDate={release.date} /> ·
+                nothing leaves your Mac
+              </p>
+            </div>
           </div>
-          <div className="w-full max-w-[330px] shrink-0">
-            <DownloadButton fallback={baked} />
-            <p className="text-faint mt-2 font-mono text-[11px]">
-              notarized · <LatestVersion fallback={baked} /> · Fair Source
-            </p>
+          <div className="lg:pl-2">
+            <SceneMoment />
           </div>
+        </div>
+
+        <div className="relative mx-auto mt-14 flex w-full max-w-[1240px] items-baseline justify-between font-mono text-[11px] tracking-[0.08em] uppercase">
+          <span className="text-faint normal-case tracking-normal">
+            The sky is the real northern sky, turned to your clock. The mark
+            sits at the pole.
+            <Sidereal />
+          </span>
+          <a href="#premise" className="text-faint hover:text-dim shrink-0">
+            <span className="glint">01</span> · the premise ↓
+          </a>
         </div>
       </section>
 
-      <Section
-        title="Applications"
-        intro={
-          <>
-            <p>
-              Lodestar navigates to the application you want without
-              distraction. Anything you open or focus through it becomes
-              maximized and hides the others. Everything else about your windows
-              keeps working the way you are used to.
-            </p>
-            <p>
-              Applications you use constantly can be assigned a letter, or a
-              short set of letters, and opened directly without a list.
-            </p>
-          </>
-        }
-      >
-        <Item
-          shot="/shots/launcher.webp"
-          caption="the launcher, ordered by what you actually use"
-          text={
-            <p>
-              The launcher is a list of your applications. Type part of a name
-              to narrow it, and the one you choose comes to the front.
-            </p>
-          }
-          rows={
-            <>
-              <KeyRow keys={["lode", "space"]} name="Launcher">
-                a list of your applications, narrowed as you type
-              </KeyRow>
-              <KeyRow keys={["⇧"]} name="Beside">
-                arrive next to the current window instead of in front of it
-              </KeyRow>
-            </>
-          }
-        />
-        <Item
-          shot="/shots/graph.webp"
-          caption="the graph, drawn while the key is held"
-          flip
-          text={
-            <p>
-              The graph is the set of letters you assign to the applications you
-              use most. Hold the key and it draws itself, so nothing has to be
-              remembered before it is learned, and a letter can lead to another
-              letter when one is not enough.
-            </p>
-          }
-          rows={
-            <>
-              <KeyRow keys={["lode", "<letter>"]} name="Graph">
-                a set of letters you assign, to navigate to the applications you
-                use most
-              </KeyRow>
-              <KeyRow keys={["⇧"]} name="Beside">
-                arrive next to the current window instead of in front of it
-              </KeyRow>
-            </>
-          }
-        />
-      </Section>
-
-      <Section title="Interactions">
-        <Item
-          shot="/shots/hints.webp"
-          caption="hints on a page, one label per link and button"
-          framed
-          text={
-            <p>
-              Hints put a letter on every button, link and field in the window
-              you are in. Type the letter and it is clicked.
-            </p>
-          }
-          rows={
-            <KeyRow keys={["lode", ";"]} name="Hints">
-              a letter on everything clickable in the window
-            </KeyRow>
-          }
-        />
-        <Item
-          shot="/shots/scroll.webp"
-          caption="scroll, and the keys it answers to"
-          flip
-          text={
-            <p>
-              Scroll moves the content inside the window, with no mouse and no
-              trackpad.
-            </p>
-          }
-          rows={
-            <KeyRow keys={["lode", "`"]} name="Scroll">
-              move the content inside the window from the keyboard
-            </KeyRow>
-          }
-        />
-        <Item
-          shot="/shots/select.webp"
-          caption="type lode, and every match on screen wears a label"
-          framed
-          text={
-            <p>
-              Select takes the mouse&apos;s last job. Type a few characters of
-              any text on screen, pick the start, pick the end, and the span is
-              selected. It reads the screen itself, so it works the same in a
-              terminal, a browser, and a chat.
-            </p>
-          }
-          rows={
-            <KeyRow keys={["lode", "/"]} name="Select">
-              type what you see, pick the start, pick the end
-            </KeyRow>
-          }
-        />
-        <Item
-          flip
-          shot="/shots/commands.webp"
-          caption="the commands bar, an app's menus under search"
-          text={
-            <p>
-              Commands searches the frontmost application&apos;s entire menu
-              bar. Type part of a command and run it, without hunting through
-              submenus. Each row wears the application&apos;s own shortcut, so
-              the faster path teaches itself as you go.
-            </p>
-          }
-          rows={
-            <KeyRow keys={["lode", "-"]} name="Commands">
-              the frontmost app&apos;s menu items, searched and run
-            </KeyRow>
-          }
-        />
-      </Section>
-
-      <Section
-        title="Ask"
-        intro={
-          <>
-            <p>
-              Ask opens a name you saved, a domain, or a search in your browser.
-            </p>
-            <p>
-              Destinations can also be assigned to a browser profile. Work opens
-              in your work profile and personal in your personal one, without
-              choosing each time, and links you click in other applications can
-              follow the same rules.
-            </p>
-          </>
-        }
-      >
-        <Item
-          shot="/shots/ask.webp"
-          caption="a destination, and the profile it will open in"
-          rows={
-            <KeyRow keys={["lode", "⏎"]} name="Ask">
-              names, domains and searches, opened in your browser
-            </KeyRow>
-          }
-        />
-      </Section>
-
-      <Section title="Draft">
-        <Item
-          shot="/shots/draft.webp"
-          caption="dictation with vim motions · Ecclesiastes 1:3–5 (ESV)"
-          text={
-            <>
-              <p>
-                The draft takes dictation. Speak, and the words appear in a
-                panel at the foot of the screen while the application you were
-                in keeps its cursor. Typed characters land in the same
-                sentence, so a spoken thought and a typed identifier read as
-                one line. Return pastes it exactly where your cursor was.
-              </p>
-              <p>
-                Escape is vim, the whole grammar, for fixing a word without
-                reaching for anything. Recognition runs on your Mac, and
-                nothing you say leaves it.
-              </p>
-            </>
-          }
-          rows={
-            <>
-              <KeyRow keys={["lode", "."]} name="Speak">
-                dictate into the application you were in
-              </KeyRow>
-              <KeyRow keys={["lode", "⇧."]} name="Edit">
-                the field&apos;s text pulled in, silent
-              </KeyRow>
-              <KeyRow keys={["esc"]} name="Vim">
-                the whole grammar, one escape away
-              </KeyRow>
-            </>
-          }
-        />
-      </Section>
-
-      <Section
-        title="Clipboard history"
-        intro={
-          <>
-            <p>
-              Everything you copy is kept. Opening the history lays the recent
-              entries out in the same places every time, each under the same
-              letter, so pasting something from earlier is one keystroke.
-            </p>
-            <p>
-              Entries you reach for constantly can be pinned to a numbered slot
-              that never changes. The history stays on your machine and never
-              leaves it.
-            </p>
-          </>
-        }
-      >
-        <Item
-          shot="/shots/clipboard.webp"
-          caption="pinned entries on the left, recent ones along the bottom"
-          rows={
-            <>
-              <KeyRow keys={["⇧⌘V"]} name="Clipboard history">
-                everything you have copied
-              </KeyRow>
-              <KeyRow keys={["<number>"]} name="Pins">
-                entries you keep, in a slot that never moves
-              </KeyRow>
-              <KeyRow keys={["<letter>"]}>
-                pastes that entry as plain text, ⇧ keeps its formatting
-              </KeyRow>
-            </>
-          }
-        />
-      </Section>
-
-      <Section
-        title="Meetings"
-        intro={
-          <p>
-            A few minutes before a meeting begins, a chip appears with the join
-            link behind a single key. You arrive on time without keeping a
-            calendar tab open in the corner of your attention.
-          </p>
-        }
-      >
-        <Item
-          shot="/shots/meeting.webp"
-          caption="the meeting chip, a few minutes before the start"
-          text={
-            <p>
-              Meeting links follow the same profile rules as everything else, so
-              a work call opens in your work profile. Meetings are off by
-              default, and Lodestar asks for calendar access only when you turn
-              them on.
-            </p>
-          }
-        />
-      </Section>
-
-      <Section
-        title="The coach"
-        intro={
-          <p>
-            Lodestar&apos;s gestures are designed to become muscle memory, and
-            the coach is how they become it sooner. It watches how you actually
-            navigate and offers the faster path you have not taken yet: an
-            application you keep finding through the launcher earns the offer of
-            its own letter.
-          </p>
-        }
-      >
-        <Item
-          flip
-          shot="/shots/coach.webp"
-          caption="one offer at a time, priced from your own use"
-          text={
-            <p>
-              One suggestion at a time, as a quiet chip, never a stream of
-              notifications. Offers you are not ready for wait in the menu, and
-              everything the coach learns about how you work stays on your
-              machine.
-            </p>
-          }
-        />
-      </Section>
-
-      <Section
-        title="Permissions"
-        intro={
-          <>
-            <p>
-              Lodestar asks for what it needs and nothing more. Accessibility
-              moves windows, reads menus, and clicks what you aim at. Screen
-              Recording lets select and hints read the text on the screen.
-              Calendar access exists for meetings and is requested only if you
-              turn them on.
-            </p>
-            <p>
-              Nothing leaves your machine. There is no account and no server.
-              What Lodestar observes about your navigation stays in local files
-              you can read, and its only request of the network is asking GitHub
-              for a newer version. The source is public, so none of this is
-              taken on faith.
-            </p>
-          </>
-        }
-      />
-
-      <section className="border-hairline border-t px-[6vw] py-[11vh] lg:px-10">
-        <div className="mx-auto max-w-[520px]">
-          <DownloadButton fallback={baked} />
-          <div className="mt-3">
-            <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
+      {/* Everything below the hero shares the still field. */}
+      <div className="dust">
+        {/* 01 · The premise */}
+        <section
+          id="premise"
+          className="border-hairline scroll-mt-16 border-t py-[12vh]"
+        >
+          <div className="mx-auto max-w-[1240px] px-[5vw] lg:px-8">
+            <Reveal>
+              <Eyebrow n="01">The premise</Eyebrow>
+              <H2>Destination over process</H2>
+            </Reveal>
+            <div className="mt-10 grid gap-x-16 gap-y-8 lg:grid-cols-2">
+              <Reveal delay={80}>
+                <Prose>
+                  <p>
+                    Most of what a computer asks of you is process. Find the
+                    window under the others. Find the tab. Find the button,
+                    the line you copied an hour ago, the profile a link should
+                    open in. Each is a small decision, made again every time,
+                    and the hand cannot learn a decision.
+                  </p>
+                  <p>
+                    Lodestar replaces the process with a destination: a place
+                    you name, and are at. An application is a letter. A page
+                    is its name. A button is the letter it wears. The gesture
+                    is the same today and in a year, so the hand learns it, and
+                    the decision disappears.
+                  </p>
+                </Prose>
+              </Reveal>
+              <Reveal delay={160}>
+                <Prose>
+                  <p>
+                    A destination has to be fixed to be learned. A button is
+                    somewhere different on every page, and a window is wherever
+                    the afternoon left it. The letter M is always Mail. That
+                    is the whole reason the gestures live on the keyboard: not
+                    because keys are faster than a mouse, but because a key
+                    can mean the same thing forever.
+                  </p>
+                  <p className="text-ink">
+                    Anything you reach through Lodestar arrives maximized, with
+                    the rest out of the way. Everything else about your Mac
+                    keeps working the way you are used to.
+                  </p>
+                </Prose>
+              </Reveal>
+            </div>
           </div>
-          <p className="text-faint mt-4 font-mono text-[11px] leading-relaxed">
-            macOS 13 or later · notarized · Fair Source ·{" "}
-            <a href={repo} className="text-dim underline underline-offset-4">
-              source
-            </a>{" "}
-            ·{" "}
-            <a
-              href="/changelog"
-              className="text-dim underline underline-offset-4"
-            >
-              changelog
-            </a>
-          </p>
-        </div>
-      </section>
+        </section>
+
+        {/* 02 · Everything is a destination */}
+        <section className="border-hairline border-t py-[12vh]">
+          <div className="mx-auto max-w-[1240px] px-[5vw] lg:px-8">
+            <Reveal>
+              <Eyebrow n="02">The pattern</Eyebrow>
+              <H2>Everything is a destination</H2>
+              <Prose className="mt-6">
+                <p>
+                  One grammar, held under one key. The same shape of gesture
+                  reaches an application, a page, a button, a span of text,
+                  something you copied, and something you say. Learn it once
+                  and your hands know it everywhere.
+                </p>
+              </Prose>
+            </Reveal>
+
+            <Meridian />
+            <ol className="meridian relative mt-16 lg:pl-10">
+              {destinations.map((d, i) => (
+                <Reveal
+                  as="li"
+                  key={d.what}
+                  className="border-hairline grid items-center gap-x-14 gap-y-8 border-t py-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+                >
+                  <div className="relative">
+                    <span className="text-faint absolute -top-9 left-0 font-mono text-[11px] tracking-[0.2em]">
+                      <span className="glint star">✦</span>{" "}
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-display text-ink text-[clamp(1.8rem,3.2vw,2.6rem)] leading-[1.05] tracking-[-0.02em]">
+                      {d.what}
+                    </h3>
+                    <div className="mt-5 text-[17px]">
+                      <Keys keys={d.keys} />
+                    </div>
+                    <p className="text-dim mt-5 max-w-[46ch] text-[clamp(1rem,1.2vw,1.12rem)] leading-[1.6]">
+                      {d.sentence}
+                    </p>
+                  </div>
+                  <div>{d.scene}</div>
+                </Reveal>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* 03 · The coach */}
+        <section className="border-hairline border-t py-[12vh]">
+          <div className="mx-auto max-w-[1240px] px-[5vw] lg:px-8">
+            <div className="grid items-center gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+              <Reveal>
+                <Eyebrow n="03">The coach</Eyebrow>
+                <H2>It learns from you, and recommends improvements to your workflow</H2>
+                <Prose className="mt-6">
+                  <p>
+                    There is nothing to learn up front. Lodestar notices what
+                    you keep reaching for and, when a shorter way would pay,
+                    offers exactly that one, with the seconds it will give
+                    back each week. One quiet chip at a time, never a stream
+                    of notifications.
+                  </p>
+                </Prose>
+              </Reveal>
+              <Reveal delay={120}>
+                <SceneCoach />
+              </Reveal>
+            </div>
+
+            <div className="border-hairline mt-16 grid gap-px border-t lg:grid-cols-3">
+              {[
+                [
+                  "Measured, not guessed",
+                  "Every offer is fitted to your own record: how often, how long, and whether the last address you accepted is actually bending its curve. Kinds of suggestion are ranked by what past ones did for you, so a kind that keeps winning is offered sooner and one that keeps losing is offered less.",
+                ],
+                [
+                  "A partner, not a reminder",
+                  "Accept, and Lodestar reshapes the road with you: the launcher answers with the letter until your hand has it, and a pair of applications that travel together becomes one layout. Research on shortcut adoption is clear that seeing a shortcut changes nothing; the old path has to cost something, and here it costs one deliberate confirm.",
+                ],
+                [
+                  "On your Mac, and only there",
+                  "Every observation stays on your Mac. None of it is content: no titles, no addresses, no text you typed or said. There is no account and no server, the files are yours to open, and one line in the configuration turns it off.",
+                ],
+              ].map(([head, body], i) => (
+                <Reveal key={head} delay={i * 80} className="py-8 lg:pr-10">
+                  <h3 className="font-display text-ink text-[22px] leading-tight">
+                    {head}
+                  </h3>
+                  <p className="text-dim mt-3 text-[15.5px] leading-[1.6]">
+                    {body}
+                  </p>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal className="border-hairline mt-4 border-t pt-8">
+              <p className="text-dim max-w-[64ch] text-[15.5px] leading-[1.6]">
+                <span className="text-ink">One measurement, from a year on one hand.</span>{" "}
+                A bare letter under lode misfired at zero. A two-key chain
+                misfired between eight and forty-one percent of the time. That
+                is why Lodestar offers single letters first, and why it will
+                offer to flatten a chain that keeps stumbling. The rest of
+                the measurements, with their methods, are on the{" "}
+                <a
+                  href="/evidence"
+                  className="text-ink underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                >
+                  evidence
+                </a>{" "}
+                page.
+              </p>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* 04 · The trade */}
+        <section className="border-hairline border-t py-[12vh]">
+          <div className="mx-auto max-w-[1240px] px-[5vw] lg:px-8">
+            <Reveal>
+              <Eyebrow n="04">The trade</Eyebrow>
+              <H2>What you give, and what you get</H2>
+            </Reveal>
+            <div className="mt-12 grid gap-x-16 gap-y-14 lg:grid-cols-2">
+              {[
+                {
+                  side: "You give",
+                  items: [
+                    [
+                      "One key",
+                      "Lodestar lives on your right command key. Hold it and the keyboard speaks to Lodestar; release it and the keyboard is yours. Right ⌘ stops being a command key. That is the trade, and it is configurable.",
+                    ],
+                    [
+                      "One permission, two if you want them",
+                      "Accessibility is required: it moves windows, reads menus, and presses what you aim at. Screen Recording is asked for only by the two gestures that read the screen, the button letters and highlighting. Calendar is asked for only if you turn meetings on.",
+                    ],
+                  ],
+                },
+                {
+                  side: "You get",
+                  items: [
+                    [
+                      "Nothing leaves your Mac",
+                      "No account, no server. Dictation is recognised on the machine. The only request Lodestar makes of the network is asking GitHub whether a newer version exists.",
+                    ],
+                    [
+                      "Fair Source",
+                      "The source is public. Read it, audit it, change it for yourself. Each release becomes MIT two years after it ships. None of the above is taken on faith.",
+                    ],
+                  ],
+                },
+              ].map((group, gi) => (
+                <Reveal key={group.side} delay={gi * 80}>
+                  <h3 className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+                    {group.side}
+                  </h3>
+                  <div className="border-hairline mt-4 space-y-10 border-t pt-8">
+                    {group.items.map(([head, body]) => (
+                      <div key={head}>
+                        <h4 className="font-display text-ink text-[24px] leading-tight">
+                          {head}
+                        </h4>
+                        <p className="text-dim mt-3 max-w-[52ch] text-[16px] leading-[1.6]">
+                          {body}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 05 · Everything it does */}
+        <section className="border-hairline border-t py-[12vh]">
+          <div className="mx-auto max-w-[1240px] px-[5vw] lg:px-8">
+            <Reveal>
+              <Eyebrow n="05">The chart</Eyebrow>
+              <H2>Everything it does</H2>
+              <Prose className="mt-6">
+                <p>
+                  You do not need most of this today. It is here so the depth
+                  is visible, and so a hand that wants more knows where it is.
+                  The{" "}
+                  <a
+                    href="/guide"
+                    className="text-ink underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                  >
+                    guide
+                  </a>{" "}
+                  takes each one further.
+                </p>
+              </Prose>
+            </Reveal>
+            <div className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
+              {specification.map((group, gi) => (
+                <Reveal key={group.label} delay={gi * 60}>
+                  <h3 className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+                    {group.label}
+                  </h3>
+                  <ul className="border-hairline mt-3 border-t">
+                    {group.gestures.map((g) => (
+                      <li
+                        key={g.keys}
+                        className="border-hairline grid grid-cols-[9.5rem_1fr] items-baseline gap-4 border-b py-2.5"
+                      >
+                        <span className="font-mono text-[12.5px] text-white/85">
+                          {g.keys}
+                        </span>
+                        <span className="text-dim text-[14.5px] leading-snug">
+                          {g.meaning}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* The promise, under the sky again, and the download. */}
+        <section
+          id="download"
+          className="border-hairline relative scroll-mt-16 overflow-hidden border-t py-[14vh]"
+        >
+          <Starfield />
+          <div className="from-deep pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b to-transparent" />
+          <div className="relative mx-auto max-w-[1240px] px-[5vw] lg:px-8">
+            <div className="grid items-end gap-x-16 gap-y-12 lg:grid-cols-2">
+              <Reveal>
+                <Mark size={52} />
+                <Eyebrow n="06">The promise</Eyebrow>
+                <h2 className="font-display text-ink mt-5 max-w-[18ch] text-[clamp(2rem,4.2vw,3.4rem)] leading-[1.02] font-normal tracking-[-0.02em]">
+                  Built to the standard space demands
+                </h2>
+                <Prose className="mt-6">
+                  <p>
+                    Aerospace is the one place where excellence is not a
+                    preference. A suit that mostly works is a failure.
+                    Lodestar is built in that spirit, at a lower altitude: a
+                    gesture has to land every time, a claim has to carry its
+                    evidence, and a promise about your data has to be
+                    structural rather than a policy. That is the standard,
+                    and it is the promise.
+                  </p>
+                </Prose>
+              </Reveal>
+              <Reveal delay={100} className="w-full max-w-[520px] lg:justify-self-end">
+                <p className="text-dim mb-5 max-w-[44ch] text-[16px] leading-[1.6]">
+                  The first minute is a short walk: grant Accessibility, hold
+                  the key, and take three letters for the applications you
+                  already have open. The rest arrives as you are ready for it.
+                </p>
+                <DownloadButton fallback={baked} />
+                <div className="mt-3">
+                  <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
+                </div>
+                <p className="text-faint mt-4 font-mono text-[11px] leading-relaxed">
+                  macOS 13 or later ·{" "}
+                  <LatestVersion fallback={baked} fallbackDate={release.date} />{" "}
+                  · Fair Source ·{" "}
+                  <a
+                    href={repo}
+                    className="text-dim underline underline-offset-4"
+                  >
+                    source
+                  </a>{" "}
+                  ·{" "}
+                  <a
+                    href="/guide"
+                    className="text-dim underline underline-offset-4"
+                  >
+                    guide
+                  </a>{" "}
+                  ·{" "}
+                  <a
+                    href="/evidence"
+                    className="text-dim underline underline-offset-4"
+                  >
+                    evidence
+                  </a>{" "}
+                  ·{" "}
+                  <a
+                    href="/changelog"
+                    className="text-dim underline underline-offset-4"
+                  >
+                    changelog
+                  </a>
+                </p>
+              </Reveal>
+            </div>
+            <p className="text-faint mt-20 font-mono text-[11px] tracking-[0.08em] uppercase">
+              Vaccone Software
+            </p>
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

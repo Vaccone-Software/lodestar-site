@@ -81,8 +81,8 @@ export default function Starfield() {
     const make = (r: number, a0: number, mag: number, bv: number): Star => ({
       r,
       a0,
-      size: Math.max(0.5, 2.5 - 0.36 * mag),
-      alpha: Math.min(0.95, Math.max(0.24, 1.04 - 0.1 * mag)),
+      size: Math.max(0.55, 2.8 - 0.36 * mag),
+      alpha: Math.min(0.95, Math.max(0.3, 1.08 - 0.1 * mag)),
       color: tint(bv),
       glow: mag <= 2.1,
       spike: mag <= 2.55,
@@ -132,7 +132,7 @@ export default function Starfield() {
       // An anonymous background field, faint and magnitude-weighted, seeded
       // over the whole turning disk so the corners never empty out.
       const rMax = corner + 24;
-      const count = Math.round((Math.PI * rMax * rMax) / 13000);
+      const count = Math.round((Math.PI * rMax * rMax) / 8000);
       for (let i = 0; i < count; i++) {
         const mag = 4.1 + 2.4 * Math.sqrt(Math.random());
         const bv = Math.random() < 0.72 ? 0.3 : Math.random() < 0.5 ? 0.8 : 1.3;
@@ -258,13 +258,21 @@ export default function Starfield() {
       raf = requestAnimationFrame(tick);
     };
 
-    const visibility = () => {
-      if (document.hidden) {
-        cancelAnimationFrame(raf);
-      } else if (!still) {
-        raf = requestAnimationFrame(tick);
-      }
+    // The sky turns only while it can be seen: the tab in front, and the
+    // canvas within the viewport. A second sky lower on the page costs
+    // nothing until the reader reaches it.
+    let onScreen = true;
+    const running = () => !still && !document.hidden && onScreen;
+    const restart = () => {
+      cancelAnimationFrame(raf);
+      if (running()) raf = requestAnimationFrame(tick);
     };
+    const visibility = () => restart();
+    const watcher = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      restart();
+    });
+    watcher.observe(canvas);
 
     seed();
     draw(performance.now());
@@ -282,6 +290,7 @@ export default function Starfield() {
     return () => {
       disposed = true;
       cancelAnimationFrame(raf);
+      watcher.disconnect();
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", visibility);
     };

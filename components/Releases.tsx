@@ -58,11 +58,12 @@ export default function Releases({ fallback }: { fallback: Release[] }) {
     <div className="space-y-16">
       {items.map((release) => (
         <article key={release.tag}>
-          <h2 className="font-display text-ink text-[clamp(1.3rem,2.4vw,1.7rem)] leading-tight font-semibold tracking-[-0.015em]">
+          <h2 className="font-display text-ink text-[clamp(1.3rem,2.4vw,1.7rem)] leading-tight font-normal tracking-[-0.015em]">
             {heading(release)}
           </h2>
-          <p className="text-faint mt-2 font-mono text-[11px]">
-            {release.tag} · {shown(release.date)}
+          <p className="text-faint mt-3 flex items-center gap-3 font-mono text-[11px]">
+            <span className="key text-[13px]">{release.tag}</span>
+            <span>{shown(release.date)}</span>
           </p>
           <div className="text-dim mt-5 max-w-[58ch] space-y-4 text-[clamp(1rem,1.25vw,1.08rem)] leading-[1.62]">
             {paragraphs(release.body).map((paragraph, index) => (

@@ -13,15 +13,35 @@ const maple = localFont({
   display: "swap",
 });
 
+// One serif for everything that is read. Newsreader carries an optical
+// size axis, so the same family sets a headline at 72 and a paragraph at
+// 17 with the right cut for each, and the page reads as one voice.
+const newsreader = localFont({
+  src: [
+    {
+      path: "../public/fonts/Newsreader-normal.woff2",
+      weight: "300 700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Newsreader-italic.woff2",
+      weight: "300 700",
+      style: "italic",
+    },
+  ],
+  variable: "--font-newsreader",
+  display: "swap",
+});
+
 const description =
-  "An opinionated way to navigate and operate your computer. Applications arrive maximized under letters you assign, with click hints, text selection, app commands, keyboard scrolling, browser routing and clipboard history in one grammar.";
+  "Lodestar turns every place you go on your Mac into a destination you can name from the keyboard: applications, pages, buttons, text on screen, what you copied, what you say. It learns which ones you reach for. Nothing leaves your Mac.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lodestar.vaccone.software"),
-  title: "Lodestar · keyboard navigation for macOS",
+  title: "Lodestar · name where you want to be, and you are there",
   description,
   openGraph: {
-    title: "Lodestar · keyboard navigation for macOS",
+    title: "Lodestar",
     description,
     url: "/",
     siteName: "Lodestar",
@@ -29,7 +49,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lodestar · keyboard navigation for macOS",
+    title: "Lodestar",
     description,
   },
 };
@@ -40,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={maple.variable}>
+    <html lang="en" className={`${maple.variable} ${newsreader.variable}`}>
       <body>
         {children}
         <Analytics />
