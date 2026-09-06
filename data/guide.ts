@@ -311,7 +311,13 @@ export const guide: GuidePage[] = [
         title: "Pin what you paste constantly",
         keys: ["⇧⌘V", "⌘S", "p"],
         lit: ["⌘", "s"],
-        rule: "⌘ with a card's letter opens its actions: pin, delete, save an image, or never save from that app again. Pins climb the left edge under 1 to 5 and never move.",
+        rule: "⌘ with a card's letter opens its actions: pin, delete, or never save from that app again. A text card offers E to edit it; an image offers E to view it and S to save it. Pins climb the left edge under 1 to 5 and never move.",
+      },
+      {
+        title: "See an image large, or save it by name",
+        keys: ["⇧⌘V", "⌘A", "E"],
+        lit: ["e"],
+        rule: "On an image card, E opens it above the strip as large as the display allows, and esc steps back. S turns the band into a file name: return alone saves it under a name made from where it came from and when, a slash in the name is a subfolder, and .jpg writes a JPEG.",
       },
       {
         title: "Paste as copied",
@@ -342,7 +348,7 @@ export const guide: GuidePage[] = [
       "⌘V inside the search pastes the clipboard's text into the query. The same works in the launcher, commands, Ask, and hints.",
     ],
     why: "The two things you are most likely to want, a pin or what you just copied, sit at the same corner, so there is one place to look. This is the one gesture outside lode, because pasting happens in the middle of typing.",
-    options: ["clipboard.enabled", "clipboard.exclude", "clipboard.exclude-apps", "clipboard.max-size-mb"],
+    options: ["clipboard.enabled", "clipboard.save-to", "clipboard.exclude", "clipboard.exclude-apps", "clipboard.max-size-mb"],
   },
   {
     slug: "say",

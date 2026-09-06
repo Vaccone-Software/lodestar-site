@@ -106,6 +106,10 @@
           "maximum" : 20000,
           "minimum" : 10,
           "type" : "number"
+        },
+        "save-to" : {
+          "description" : "The folder an image saved from the clipboard strip lands in. A name typed with a slash in it, or starting with \/ or ~, chooses another place for that save.",
+          "type" : "string"
         }
       },
       "type" : [
