@@ -317,7 +317,7 @@ export const guide: GuidePage[] = [
         title: "See an image large, or save it by name",
         keys: ["⇧⌘V", "⌘A", "E"],
         lit: ["e"],
-        rule: "On an image card, E opens it above the strip as large as the display allows, and esc steps back. S turns the band into a file name: return alone saves it under a name made from where it came from and when, a slash in the name is a subfolder, and .jpg writes a JPEG.",
+        rule: "On an image card, E opens it across the display, fitted whole; pinch to zoom and pan with two fingers, and esc steps back. S turns the band into a file name, already filled with where it came from and when: return alone saves it, or edit the name, where a slash is a subfolder and .jpg writes a JPEG.",
       },
       {
         title: "Paste as copied",
