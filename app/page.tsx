@@ -39,7 +39,7 @@ async function latest(): Promise<{ tag: string; date: string }> {
     if (typeof tag === "string" && tag.startsWith("v"))
       return { tag, date: typeof date === "string" ? date : "" };
   } catch {}
-  return { tag: "v0.33.1", date: "" };
+  return { tag: "v0.33.2", date: "" };
 }
 
 /** A numbered marker in the margin, the way the sky is charted. */
