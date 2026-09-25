@@ -150,7 +150,7 @@ export async function card({
         </div>
       </div>
       <div style={{ fontSize: 19, color: "rgba(242,243,245,0.36)", fontFamily: "Maple", letterSpacing: 1 }}>
-        LODESTAR · MACOS 13 OR LATER · NOTARIZED · NOTHING LEAVES YOUR MAC
+        LODESTAR · APPLE SILICON · MACOS 14 OR LATER · NOTARIZED · NOTHING LEAVES YOUR MAC
       </div>
     </div>,
     {

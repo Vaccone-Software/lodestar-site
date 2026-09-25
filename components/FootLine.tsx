@@ -5,7 +5,7 @@ export default function FootLine() {
       <a href="/#download" className="text-accent hover:text-[#ff7a3d]">
         Download Lodestar for macOS
       </a>{" "}
-      · macOS 13 or later · notarized · nothing leaves your Mac
+      · Apple silicon · macOS 14 or later · notarized · nothing leaves your Mac
     </p>
   );
 }
