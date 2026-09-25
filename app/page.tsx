@@ -39,7 +39,7 @@ async function latest(): Promise<{ tag: string; date: string }> {
     if (typeof tag === "string" && tag.startsWith("v"))
       return { tag, date: typeof date === "string" ? date : "" };
   } catch {}
-  return { tag: "v0.36.3", date: "" };
+  return { tag: "v0.37.1", date: "" };
 }
 
 /** A numbered marker in the margin, the way the sky is charted. */
@@ -140,7 +140,7 @@ export default async function Page() {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: "Lodestar",
-    operatingSystem: "macOS 13 or later",
+    operatingSystem: "macOS 14 or later (Apple silicon)",
     applicationCategory: "UtilitiesApplication",
     description:
       "Keyboard navigation for macOS: an app launcher, window management, click-by-letter, text selection by typing, clipboard history, and on-device dictation under one key.",
@@ -183,7 +183,7 @@ export default async function Page() {
             <div className="mt-10 max-w-[380px]">
               <DownloadButton fallback={baked} />
               <p className="text-faint mt-2.5 font-mono text-[11px] leading-relaxed">
-                macOS 13 or later ·{" "}
+                Apple silicon · macOS 14 or later ·{" "}
                 <LatestVersion fallback={baked} fallbackDate={release.date} /> ·
                 nothing leaves your Mac
               </p>
@@ -495,7 +495,7 @@ export default async function Page() {
                   <CopyCommand command="brew install --cask vaccone-software/tap/lodestar" />
                 </div>
                 <p className="text-faint mt-4 font-mono text-[11px] leading-relaxed">
-                  macOS 13 or later ·{" "}
+                  Apple silicon · macOS 14 or later ·{" "}
                   <LatestVersion fallback={baked} fallbackDate={release.date} />{" "}
                   · Fair Source ·{" "}
                   <a
