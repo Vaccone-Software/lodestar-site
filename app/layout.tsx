@@ -36,7 +36,7 @@ const newsreader = localFont({
 // The page speaks in its own voice; the title and description speak in
 // the words a search is typed in. Both are true, and they meet here.
 const description =
-  "Keyboard navigation for macOS: an app launcher, window management, click-by-letter, text selection by typing, clipboard history, and on-device dictation, in one grammar under one key. Lodestar learns which destinations you reach for and offers the next shortcut. Nothing leaves your Mac.";
+  "Keyboard navigation for macOS: an app launcher, window management, click-by-letter, text selection by typing, clipboard history, on-device dictation, and a spelling and grammar editor, in one grammar under one key. Lodestar learns which destinations you reach for and offers the next shortcut. Nothing leaves your Mac.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lodestar.vaccone.software"),

@@ -5,6 +5,7 @@ import {
   SceneButton,
   SceneClipboard,
   SceneCoach,
+  SceneEditor,
   ScenePage,
   SceneSpeech,
   SceneText,
@@ -43,6 +44,7 @@ const scenes: Record<string, () => React.ReactElement> = {
   edit: SceneEdit,
   coach: SceneCoach,
   meeting: SceneMeeting,
+  editor: SceneEditor,
 };
 
 export default function GuideScene({

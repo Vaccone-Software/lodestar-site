@@ -43,9 +43,22 @@
           "description" : "Show the status item permanently; false hides it until lodestar is picked in the launcher.",
           "type" : "boolean"
         },
+        "sounds" : {
+          "description" : "Lodestar's own sounds, together: today the draft's note when the microphone is live and when the words land. The alert sound is the Mac's own setting.",
+          "type" : "boolean"
+        },
         "start-at-login" : {
           "description" : "Keep the login LaunchAgent installed (installed app only).",
           "type" : "boolean"
+        },
+        "units" : {
+          "description" : "The units a copied measurement is read into on its card. Empty follows your region.",
+          "enum" : [
+            "",
+            "metric",
+            "imperial"
+          ],
+          "type" : "string"
         }
       },
       "type" : [
@@ -110,6 +123,17 @@
         "save-to" : {
           "description" : "The folder an image saved from the clipboard strip lands in. A name typed with a slash in it, or starting with \/ or ~, chooses another place for that save.",
           "type" : "string"
+        },
+        "time-zones" : {
+          "additionalProperties" : {
+            "description" : "true to read timestamps into this zone too.",
+            "type" : "boolean"
+          },
+          "description" : "Zone identifier (Asia\/Tokyo) → true. A clip that is only a timestamp is read into your zone, UTC, and these.",
+          "type" : [
+            "object",
+            "null"
+          ]
         }
       },
       "type" : [
@@ -133,7 +157,7 @@
     },
     "draft" : {
       "additionalProperties" : false,
-      "description" : "The draft: lode . speaks, lode ⇧. edits.",
+      "description" : "The draft: lode . speaks, lode ⇧. revises.",
       "properties" : {
         "input" : {
           "description" : "The microphone the draft listens to, by its name in Sound settings. Empty follows the system default input.",
@@ -145,6 +169,57 @@
             "type" : "boolean"
           },
           "description" : "Word → true. Names and terms speech gets wrong; a settled result within a letter or two of one is repaired to it, case and all.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "editor" : {
+      "additionalProperties" : false,
+      "description" : "The editor: marks under mistakes, lode ⇥ to fix.",
+      "properties" : {
+        "enabled" : {
+          "description" : "Mark mistakes as you write, in every app; lode ⇥ letters the marks.",
+          "type" : "boolean"
+        },
+        "language" : {
+          "description" : "The spelling the editor holds you to. Empty follows the Mac's language and region.",
+          "enum" : [
+            "",
+            "en_US",
+            "en_GB",
+            "en_CA",
+            "en_AU",
+            "en_NZ",
+            "en_IN",
+            "en_ZA",
+            "en_SG"
+          ],
+          "type" : "string"
+        },
+        "model" : {
+          "description" : "How the editor reads: spelling (no model, any Mac), minimal (Apple's own model), standard (16 GB Macs and up) or full (64 GB and up). Empty picks the one this Mac suits; one this Mac cannot run falls back the same way.",
+          "enum" : [
+            "",
+            "spelling",
+            "minimal",
+            "standard",
+            "full"
+          ],
+          "type" : "string"
+        },
+        "skip-apps" : {
+          "additionalProperties" : {
+            "description" : "true to never read fields in this app.",
+            "type" : "boolean"
+          },
+          "description" : "App name → true. Fields in these apps are never read.",
           "type" : [
             "object",
             "null"
@@ -173,7 +248,7 @@
           "type" : "boolean"
         },
         "draft" : {
-          "description" : "lode . speak into the draft, ⇧. edit the field in it",
+          "description" : "lode . speak into the draft, ⇧. revise the field in it",
           "type" : "boolean"
         },
         "flip-orientation" : {
@@ -216,12 +291,12 @@
           "description" : "lode , , the settings window",
           "type" : "boolean"
         },
-        "web-bar" : {
-          "description" : "lode ⏎, links and search",
+        "tabs" : {
+          "description" : "lode tab, a letter on every tab of the window, ⇧tab its windows",
           "type" : "boolean"
         },
-        "window-chooser" : {
-          "description" : "lode tab, the focused app's windows",
+        "web-bar" : {
+          "description" : "lode ⏎, links and search",
           "type" : "boolean"
         }
       },
@@ -235,6 +310,47 @@
         "$ref" : "#\/definitions\/graphNode"
       },
       "description" : "lode + letter chains → apps. Values: app name or <browser>:<profile name>.",
+      "type" : [
+        "object",
+        "null"
+      ]
+    },
+    "health" : {
+      "additionalProperties" : false,
+      "description" : "About you, for the health record. Local, optional, never sent.",
+      "properties" : {
+        "born" : {
+          "description" : "The year you were born, four digits. Age is the first thing a reading of the hands is adjusted for. Optional.",
+          "type" : "string"
+        },
+        "hand" : {
+          "description" : "The hand you write with. Fine motor signs are often one sided and the record keeps each hand apart. Optional.",
+          "enum" : [
+            "left",
+            "right",
+            "either"
+          ],
+          "type" : "string"
+        },
+        "keyboards" : {
+          "additionalProperties" : {
+            "additionalProperties" : {
+              "description" : "Where the key sits on this keyboard, as a side and a finger: right thumb, either thumb, left pinky.",
+              "type" : "string"
+            },
+            "description" : "One keyboard's keys that sit somewhere other than standard, by name: left-shift, right-shift, left-control, right-control, left-option, right-option, left-command, right-command, fn, space, enter, backspace, tab, escape.",
+            "type" : [
+              "object",
+              "null"
+            ]
+          },
+          "description" : "Keyboard id (vendor:product:hash, as the Keyboards page shows it) → the keys a split or custom board moves. Letters keep their columns everywhere and are never here.",
+          "type" : [
+            "object",
+            "null"
+          ]
+        }
+      },
       "type" : [
         "object",
         "null"
@@ -255,6 +371,10 @@
       "additionalProperties" : false,
       "description" : "The lode key.",
       "properties" : {
+        "tap" : {
+          "description" : "A tap of lode arms the next key as a gesture, for one second, as if lode were held. Holding still works and is how the map appears.",
+          "type" : "boolean"
+        },
         "trigger" : {
           "description" : "The physical trigger for every gesture.",
           "enum" : [

@@ -910,3 +910,59 @@ export function SceneCoach() {
     </div>
   );
 }
+
+// What you write: a line under what reads wrong, a letter on each.
+type EditFrame = { held: boolean; key: string | null; labels: boolean; fixedA: boolean; fixedS: boolean; caption: string };
+const editRest: EditFrame = { held: false, key: null, labels: false, fixedA: false, fixedS: false, caption: "A line under what reads wrong, in any app" };
+const editStill: EditFrame = { ...editRest, caption: "A line under what reads wrong, in any app" };
+const editScript: Step<EditFrame>[] = [
+  [1800, { held: true, caption: "Hold lode" }],
+  [700, { key: "⇥" }],
+  [160, { held: false, key: null, labels: true, caption: "Every mark wears a letter and its fix" }],
+  [1300, { key: "a", caption: "A letter fixes it" }],
+  [160, { key: null, fixedA: true }],
+  [900, { key: "s" }],
+  [160, { key: null, fixedS: true, labels: false, caption: "No lines: the message was read, and it is right" }],
+  [3200, { ...editRest }],
+];
+function Marked({ word, fixed, fix, letter, labels, lit }: { word: string; fixed: boolean; fix: string; letter: string; labels: boolean; lit: boolean }) {
+  return (
+    <span className="relative">
+      <span className={fixed ? "text-white/85" : ""}>{fixed ? fix : word}</span>
+      <span
+        className="bg-accent absolute right-0 -bottom-[1px] left-0 h-[1.5px] rounded-full transition-opacity duration-200"
+        style={{ opacity: fixed ? 0 : 0.9 }}
+      />
+      <Label show={labels && !fixed} lit={lit} className="-top-[10px] -left-[2px] whitespace-nowrap">
+        {`${letter} · ${fix}`}
+      </Label>
+    </span>
+  );
+}
+export function SceneEditor() {
+  const { ref, active } = useInView();
+  const f = useScript(editRest, editStill, editScript, active);
+  return (
+    <div ref={ref} className="select-none">
+      <Display title="Mail">
+        <Win name="Mail" tone="#9fc3a0" style={full}>
+          <div className="flex h-[calc(100%-16px)]">
+            <Sidebar tone="#9fc3a0" />
+            <div className="relative flex-1 p-[10px] font-mono text-[9.5px] leading-[2.1] text-white/70">
+              <p className="text-white/40">To: Sam · Re: the vendor contract</p>
+              <p className="mt-[4px]">Hi Sam,</p>
+              <p>
+                <Marked word="Their" fix="They're" letter="A" fixed={f.fixedA} labels={f.labels} lit={f.key === "a"} />
+                {" going to "}
+                <Marked word="recieve" fix="receive" letter="S" fixed={f.fixedS} labels={f.labels} lit={f.key === "s"} />
+                {" the signed copy"}
+              </p>
+              <p>on Thursday. Let me know if that works.</p>
+            </div>
+          </div>
+        </Win>
+      </Display>
+      <Foot lit={lodeLit(f.held, f.key)} caption={f.caption} />
+    </div>
+  );
+}

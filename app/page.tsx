@@ -13,6 +13,7 @@ import {
   SceneMoment,
   ScenePage,
   SceneSpeech,
+  SceneEditor,
   SceneText,
 } from "@/components/Scenes";
 import Reveal from "@/components/Reveal";
@@ -39,7 +40,7 @@ async function latest(): Promise<{ tag: string; date: string }> {
     if (typeof tag === "string" && tag.startsWith("v"))
       return { tag, date: typeof date === "string" ? date : "" };
   } catch {}
-  return { tag: "v0.37.1", date: "" };
+  return { tag: "v0.38.0", date: "" };
 }
 
 /** A numbered marker in the margin, the way the sky is charted. */
@@ -128,6 +129,13 @@ const destinations: {
       "Speak, and the words appear. Fix one from the keys, and return puts the sentence where your cursor was. Nothing you say leaves your Mac.",
     scene: <SceneSpeech />,
   },
+  {
+    what: "What you write",
+    keys: ["lode", "⇥"],
+    sentence:
+      "A thin line under a misspelled word or a slip of grammar, in any app. A letter fixes it. A small model reads each sentence on your Mac, and what you write never leaves it.",
+    scene: <SceneEditor />,
+  },
 ];
 
 export default async function Page() {
@@ -143,7 +151,7 @@ export default async function Page() {
     operatingSystem: "macOS 14 or later (Apple silicon)",
     applicationCategory: "UtilitiesApplication",
     description:
-      "Keyboard navigation for macOS: an app launcher, window management, click-by-letter, text selection by typing, clipboard history, and on-device dictation under one key.",
+      "Keyboard navigation for macOS: an app launcher, window management, click-by-letter, text selection by typing, clipboard history, on-device dictation, and a spelling and grammar editor under one key.",
     url: "https://lodestar.vaccone.software/",
     softwareVersion: version,
     downloadUrl: `${repo}/releases/download/${baked}/lodestar-${version}.dmg`,
