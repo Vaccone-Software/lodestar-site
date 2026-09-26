@@ -1,53 +1,41 @@
 @import "tailwindcss";
 
-/* Two families, each with one job. Newsreader is everything that is read,
-   headline and paragraph alike, cut by its optical size axis. Mono is kept
-   for keys, where it means something: a key on the page and a key under a
-   hand should look like the same object.
+/* Two families, each with one job. Inter Tight is everything that is read,
+   headline and paragraph alike. Mono is kept for keys, where it means
+   something: a key on the page and a key under a hand should look like the
+   same object.
 
-   One accent, and it is international orange. The sky behind the name is
-   the only other colour on the page, and it is real. */
+   One accent, and it is International Orange. The stars behind the page
+   are the only other light. */
 @theme {
-  --color-ground: #0a0a0c;
-  --color-deep: #030305;
-  --color-ink: #f2f3f5;
-  --color-dim: rgba(242, 243, 245, 0.62);
-  --color-faint: rgba(242, 243, 245, 0.36);
+  --color-ground: #040406;
+  --color-deep: #040406;
+  --color-ink: #f1ede8;
+  --color-dim: #a39d96;
+  --color-faint: #7d7771;
   --color-accent: #ff4f00;
-  --color-hairline: rgba(242, 243, 245, 0.12);
-  --font-mono: var(--font-maple), ui-monospace, "SF Mono", Menlo, monospace;
-  --font-display:
-    var(--font-newsreader), ui-serif, "New York", Charter, Georgia, serif;
-  --font-prose:
-    var(--font-newsreader), ui-serif, "New York", Charter, Georgia, serif;
+  --color-hairline: rgba(255, 255, 255, 0.09);
+  --font-sans:
+    var(--font-inter-tight), -apple-system, "SF Pro Text", system-ui,
+    sans-serif;
+  --font-mono:
+    var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--font-sans);
+  --font-prose: var(--font-sans);
 }
 
 /* The ground is painted on the root, and the sky's canvas sits between it
    and the page: a negative z-index paints above the root's background and
-   below everything in flow, which a body background would not allow. */
+   below everything in flow, which a body background would not allow. The
+   colour is also what the rubber-band shows past either end of the page. */
 html {
-  /* The colour is what the rubber-band shows past either end of the
-     page, so both ends of the gradient meet it: the top eases up from the
-     deep field over the first hundred pixels, behind the header, and the
-     bottom rests on it. No seam when the page is pulled past its edge. */
-  background-color: var(--color-deep);
-  background-image: linear-gradient(
-    to bottom,
-    var(--color-deep) 0,
-    var(--color-ground) 110px,
-    #08080b 30%,
-    var(--color-deep) 100%
-  );
+  background-color: var(--color-ground);
   color: var(--color-ink);
-  font-family: var(--font-prose);
-  font-optical-sizing: auto;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* One sky, deepening. The hero is the night at dusk; by the download it is
-   the deep field. The gradient is sized to the document, so it deepens with
-   the scroll rather than with the viewport. */
 body {
   background: transparent;
   min-height: 100svh;
@@ -70,36 +58,70 @@ body {
   }
 }
 
-/* A key on the page. The same object in the hero demonstration, the rows,
-   and the catalog, so the eye learns it once. */
+/* The glass: nearly clear, a bright rim where the light meets the edge,
+   the page bending softly through it. Used only where a hand acts. */
+.glass {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 13px 24px;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15.5px;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(10px) saturate(170%);
+  backdrop-filter: blur(10px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0.5px rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 12px 26px -10px rgba(0, 0, 0, 0.9);
+  transition: background-color 150ms ease;
+}
+.glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.glass .arrow {
+  color: var(--color-accent);
+}
+.glass.small {
+  padding: 8px 15px;
+  font-size: 13.5px;
+}
+
+/* A key on the page. The same object on the door pages, in the guide and
+   in its scenes, so the eye learns it once. */
 .key {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 1.9em;
   height: 1.9em;
-  padding: 0 0.55em;
-  border-radius: 5px;
-  border: 1px solid var(--color-hairline);
-  background: rgba(255, 255, 255, 0.055);
-  box-shadow: inset 0 -1.5px 0 rgba(0, 0, 0, 0.45);
-  color: rgba(242, 243, 245, 0.92);
+  padding: 0 0.5em;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom-width: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #eee;
   font-family: var(--font-mono);
-  font-size: 0.78em;
+  font-weight: 600;
+  font-size: 0.74em;
   line-height: 1;
   white-space: nowrap;
   transition:
     background-color 120ms ease,
     border-color 120ms ease,
-    transform 120ms ease,
-    box-shadow 120ms ease;
+    transform 120ms ease;
 }
 .key.lit {
-  background: rgba(255, 79, 0, 0.2);
-  border-color: rgba(255, 79, 0, 0.75);
-  color: #ffd9c2;
+  background: var(--color-accent);
+  border-color: #c33c00;
+  color: #1a0700;
   transform: translateY(1px);
-  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
 }
 
 /* Scroll reveal: the rows arrive as the eye does. Off under reduced motion. */
@@ -122,56 +144,10 @@ body {
   }
 }
 
-/* The shots are photographed against the page's own ground, so their edges
-   must not announce themselves. */
-.feather {
-  -webkit-mask-image: radial-gradient(
-    100% 100% at 50% 50%,
-    #000 42%,
-    transparent 88%
-  );
-  mask-image: radial-gradient(100% 100% at 50% 50%, #000 42%, transparent 88%);
-}
-
-/* The mark and the brightest stars share four cardinals; the section
-   markers borrow the same glint. */
-.glint {
-  color: var(--color-accent);
-  text-shadow: 0 0 12px rgba(255, 79, 0, 0.55);
-}
-
-/* The meridian: a line down the margin of the destinations that draws
-   itself as the reader passes each one, because every application you
-   name is a fixed point in the same sky. Hidden where there is no margin. */
-.meridian {
-  --drawn: 0%;
-}
-.meridian .star {
-  display: none;
-}
-@media (min-width: 1024px) {
-  .meridian::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 1px;
-    height: var(--drawn);
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 79, 0, 0.55),
-      rgba(255, 79, 0, 0.2)
-    );
-    transition: height 120ms linear;
-  }
-  /* The star sits on the line: a drawn glyph, not a character, so its
-     centre is its centre. */
-  .meridian .star {
-    display: block;
-    position: absolute;
-    left: -2.5rem;
-    top: 0.25em;
-    transform: translateX(-50%);
-    filter: drop-shadow(0 0 6px rgba(255, 79, 0, 0.6));
-  }
+/* Text laid over the stars keeps a shadow of the ground, so a passing star
+   never sits inside a letter. */
+.over-sky {
+  text-shadow:
+    0 1px 14px rgba(4, 4, 6, 0.95),
+    0 0 3px rgba(4, 4, 6, 0.6);
 }

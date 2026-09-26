@@ -1,336 +1,148 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { northernSky } from "@/data/northern-sky";
 
-// The sky behind the whole site. One fixed canvas under every page: the
-// real northern sky, plotted from catalogue coordinates, oriented to the
-// visitor's clock, wheeling around the celestial pole at its true rate
-// sixty times over. The pole sits behind the hero's mark at the top of the
-// page; the page scrolls over the sky the way a room scrolls under one.
-//
-// Two layers give it depth. The catalogue stars are far and hold still.
-// An anonymous near field drifts a little with the scroll. Hairline
-// figures join the Dippers and Cassiopeia, so the claim that the sky is
-// real can be checked by anyone who knows the shapes.
-// Reduced motion renders the same sky, still.
+// The sky behind the whole site: plain stars on a near-black ground, and
+// nothing drawn between them. It turns about the mark where a page has one
+// (an element marked data-pole), as the night turns about the pole star,
+// and about a point above the page everywhere else. One turn in twenty-four
+// minutes, sixty times the true rate. Reduced motion draws the same sky,
+// still.
 
 type Star = {
   r: number;
-  a0: number;
+  a: number;
   size: number;
   alpha: number;
   color: string;
-  glow: boolean;
-  spike: boolean;
-  twinkleAmp: number;
-  twinkleFreq: number;
-  twinklePhase: number;
-  twinklePhase2: number;
+  twinkle: number;
+  phase: number;
 };
 
-type Meteor = { x: number; y: number; dx: number; dy: number; start: number; duration: number };
+const TURN = (2 * Math.PI) / (24 * 60);
 
-const SIDEREAL = 7.292e-5; // rad/s, the true rate of the turning sky
-const SPEED = 60; // a minute of sky per second; one wheel in ~24 min
-
-function siderealNow(): number {
-  const days = (Date.now() - Date.UTC(2000, 0, 1, 12)) / 86400000;
-  const gmst = 18.697374558 + 24.06570982441908 * days;
-  const local = gmst - new Date().getTimezoneOffset() / 60;
-  return ((local % 24) / 24) * Math.PI * 2;
+/** A seeded generator, so the sky is the same on every visit. */
+function seeded(seed: number) {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
-function tint(bv: number): string {
-  if (bv < 0.1) return "223,230,248";
-  if (bv < 0.55) return "242,243,245";
-  if (bv < 1.1) return "246,234,214";
-  return "244,220,186";
+function tint(r: number): string {
+  if (r < 0.22) return "214,224,255";
+  if (r < 0.8) return "242,242,244";
+  if (r < 0.93) return "248,234,212";
+  return "250,214,178";
 }
-
-// The figures, by catalogue position (J2000): the Big Dipper, the Little
-// Dipper, and Cassiopeia's W. Hours and degrees, joined in order.
-const figures: [number, number][][] = [
-  // Ursa Major, the Dipper: Alkaid, Mizar, Alioth, Megrez, Phecda, Merak, Dubhe, back to Megrez
-  [[13.792, 49.31], [13.399, 54.93], [12.900, 55.96], [12.257, 57.03], [11.897, 53.69], [11.031, 56.38], [11.062, 61.75], [12.257, 57.03]],
-  // Ursa Minor: Polaris, Yildun, Epsilon, Zeta, Beta (Kochab), Gamma (Pherkad), Eta, Zeta
-  [[2.530, 89.26], [17.537, 86.59], [16.766, 82.04], [15.734, 77.79], [14.845, 74.16], [15.345, 71.83], [16.292, 75.76], [15.734, 77.79]],
-  // Cassiopeia: Caph, Schedar, Gamma, Ruchbah, Segin
-  [[0.153, 59.15], [0.675, 56.54], [0.945, 60.72], [1.430, 60.24], [1.907, 63.67]],
-];
 
 export default function Sky() {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = ref.current;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-    if (!context) return;
-
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const lst0 = siderealNow();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let raf = 0;
     let width = 0;
     let height = 0;
-    let poleX = 0;
-    let poleY = 0;
-    let pxPerDeg = 1;
-    let rMax = 0;
-    let far: Star[] = [];
-    let near: Star[] = [];
-    let band: HTMLCanvasElement | null = null;
-    let meteor: Meteor | null = null;
-    let meteorAt = performance.now() + 9000 + Math.random() * 14000;
-    let disposed = false;
-
-    const make = (r: number, a0: number, mag: number, bv: number): Star => ({
-      r,
-      a0,
-      size: Math.max(0.55, 2.8 - 0.36 * mag),
-      alpha: Math.min(0.95, Math.max(0.3, 1.08 - 0.1 * mag)),
-      color: tint(bv),
-      glow: mag <= 2.1,
-      spike: mag <= 2.55,
-      twinkleAmp: Math.min(0.5, 0.09 + 0.055 * mag),
-      twinkleFreq: 0.4 + Math.random() * 0.9,
-      twinklePhase: Math.random() * Math.PI * 2,
-      twinklePhase2: Math.random() * Math.PI * 2,
-    });
-
-    // The pole: behind the hero's mark when the page has one, measured at
-    // the top of the document; a fixed point up and to the left otherwise.
-    const findPole = () => {
-      const mark = document.querySelector('svg[aria-label="Lodestar"]');
-      if (mark) {
-        const m = mark.getBoundingClientRect();
-        poleX = m.left + m.width / 2;
-        poleY = m.top + m.height / 2 + window.scrollY;
-        if (poleY < height) return;
-      }
-      poleX = width * 0.12;
-      poleY = height * 0.26;
-    };
+    let dpr = 1;
+    let cx = 0;
+    let cy = 0;
+    let stars: Star[] = [];
+    let raf = 0;
 
     const seed = () => {
+      dpr = Math.min(2, window.devicePixelRatio || 1);
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      findPole();
-
-      // Fit sixty degrees of declination between the pole and the farthest
-      // corner, so both Dippers and Cassiopeia land on screen at any size.
-      const corner = Math.max(
-        Math.hypot(poleX, poleY),
-        Math.hypot(width - poleX, poleY),
-        Math.hypot(poleX, height - poleY),
-        Math.hypot(width - poleX, height - poleY),
-      );
-      pxPerDeg = corner / 60;
-      rMax = corner + 40;
-
-      far = northernSky.map(([ra, dec, mag, bv]) => make((90 - dec) * pxPerDeg, -ra * (Math.PI / 12), mag, bv));
-      const count = Math.round((Math.PI * rMax * rMax) / 7000);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      const pole = document.querySelector("[data-pole]");
+      if (pole) {
+        const box = pole.getBoundingClientRect();
+        cx = box.left + box.width / 2;
+        cy = box.top + box.height / 2 + window.scrollY;
+      } else {
+        cx = width * 0.5;
+        cy = -height * 0.2;
+      }
+      const reach =
+        Math.max(
+          Math.hypot(cx, cy),
+          Math.hypot(width - cx, cy),
+          Math.hypot(cx, height - cy),
+          Math.hypot(width - cx, height - cy),
+        ) + 20;
+      const random = seeded(11);
+      const count = Math.round((Math.PI * reach * reach) / 2300);
+      stars = [];
       for (let i = 0; i < count; i++) {
-        const mag = 4.1 + 2.4 * Math.sqrt(Math.random());
-        const bv = Math.random() < 0.72 ? 0.3 : Math.random() < 0.5 ? 0.8 : 1.3;
-        far.push(make(Math.sqrt(Math.random()) * rMax, Math.random() * Math.PI * 2, mag, bv));
-      }
-      // The near field: fewer, a shade larger, and they drift with the scroll.
-      near = [];
-      for (let i = 0; i < Math.round(count / 6); i++) {
-        const mag = 3.6 + 1.6 * Math.sqrt(Math.random());
-        near.push(make(Math.sqrt(Math.random()) * rMax, Math.random() * Math.PI * 2, mag, 0.3));
-      }
-      band = paintBand();
-    };
-
-    // The figures, painted once in the sky's own frame (pole at the
-    // centre, sidereal angle zero) and turned with the sky each frame.
-    const paintBand = (): HTMLCanvasElement => {
-      const off = document.createElement("canvas");
-      const side = Math.ceil(rMax * 2);
-      off.width = side * dpr;
-      off.height = side * dpr;
-      const c = off.getContext("2d")!;
-      c.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const cx = side / 2, cy = side / 2;
-      const place = (raH: number, dec: number) => {
-        const r = (90 - dec) * pxPerDeg;
-        const a = -raH * (Math.PI / 12);
-        return [cx - r * Math.sin(a), cy - r * Math.cos(a)] as const;
-      };
-      // The figures: hairlines between named stars.
-      c.strokeStyle = "rgba(242,243,245,0.11)";
-      c.lineWidth = 0.8;
-      for (const figure of figures) {
-        c.beginPath();
-        figure.forEach(([ra, dec], i) => {
-          const [x, y] = place(ra, dec);
-          if (i === 0) c.moveTo(x, y);
-          else c.lineTo(x, y);
+        const magnitude = Math.pow(random(), 2.6);
+        stars.push({
+          r: Math.sqrt(random()) * reach,
+          a: random() * Math.PI * 2,
+          size: 0.45 + magnitude * 1.5,
+          alpha: 0.28 + 0.6 * Math.pow(random(), 0.7),
+          color: tint(random()),
+          twinkle: 0.5 + random() * 1.2,
+          phase: random() * Math.PI * 2,
         });
-        c.stroke();
       }
-      return off;
-    };
-
-    const drawStars = (stars: Star[], t: number, theta: number, ox: number, oy: number) => {
-      for (const star of stars) {
-        const angle = theta + star.a0;
-        const x = poleX - star.r * Math.sin(angle) + ox;
-        const y = poleY - star.r * Math.cos(angle) + oy;
-        if (x < -24 || x > width + 24 || y < -24 || y > height + 24) continue;
-        const shimmer = still
-          ? 0.5
-          : 0.65 * (0.5 + 0.5 * Math.sin(star.twinkleFreq * t + star.twinklePhase)) +
-            0.35 * (0.5 + 0.5 * Math.sin(star.twinkleFreq * 2.7 * t + star.twinklePhase2));
-        const alpha = star.alpha * (1 - star.twinkleAmp * shimmer);
-        if (star.glow) {
-          const reach = star.size * (6.5 + 1.5 * (1 - shimmer));
-          const halo = context.createRadialGradient(x, y, 0, x, y, reach);
-          halo.addColorStop(0, `rgba(${star.color},${(alpha * 0.32).toFixed(3)})`);
-          halo.addColorStop(1, `rgba(${star.color},0)`);
-          context.globalAlpha = 1;
-          context.fillStyle = halo;
-          context.beginPath();
-          context.arc(x, y, reach, 0, Math.PI * 2);
-          context.fill();
-        }
-        context.globalAlpha = alpha;
-        context.fillStyle = `rgb(${star.color})`;
-        context.beginPath();
-        context.arc(x, y, star.size, 0, Math.PI * 2);
-        context.fill();
-        if (star.spike) {
-          const arm = 4 + star.size * 3;
-          context.globalAlpha = alpha * 0.4;
-          context.strokeStyle = `rgb(${star.color})`;
-          context.lineWidth = 0.8;
-          context.beginPath();
-          context.moveTo(x - arm, y);
-          context.lineTo(x + arm, y);
-          context.moveTo(x, y - arm);
-          context.lineTo(x, y + arm);
-          context.stroke();
-        }
-      }
-      context.globalAlpha = 1;
     };
 
     const draw = (now: number) => {
       const t = now / 1000;
-      const theta = lst0 + (still ? 0 : SIDEREAL * SPEED * t);
-      // The sky is fixed; the page scrolls over it. The pole was measured
-      // at the top of the document, so it rides up with the scroll a
-      // little, and the near field a little more: depth.
-      const scroll = window.scrollY;
-      const farY = -scroll * 0.04;
-      const nearY = -scroll * 0.1;
+      const theta = still ? 0 : TURN * t;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, width, height);
-      if (band) {
-        context.save();
-        context.translate(poleX, poleY + farY);
-        context.rotate(-theta);
-        context.drawImage(band, -rMax, -rMax, rMax * 2, rMax * 2);
-        context.restore();
+      for (const star of stars) {
+        const angle = star.a + theta;
+        const x = cx + star.r * Math.cos(angle);
+        const y = cy + star.r * Math.sin(angle);
+        if (x < -4 || x > width + 4 || y < -4 || y > height + 4) continue;
+        const shimmer = still
+          ? 1
+          : 0.78 + 0.22 * Math.sin(star.twinkle * t + star.phase);
+        context.fillStyle = `rgba(${star.color},${(star.alpha * shimmer).toFixed(3)})`;
+        context.beginPath();
+        context.arc(x, y, star.size, 0, Math.PI * 2);
+        context.fill();
       }
-      drawStars(far, t, theta, 0, farY);
-      drawStars(near, t, theta, 0, nearY);
-    };
-
-    const spawnMeteor = (now: number) => {
-      const travel = 150 + Math.random() * 90;
-      const angle = Math.PI * (0.22 + Math.random() * 0.23);
-      const sign = Math.random() < 0.5 ? -1 : 1;
-      meteor = {
-        x: width * (0.12 + Math.random() * 0.76),
-        y: height * (0.06 + Math.random() * 0.5),
-        dx: Math.sin(angle) * travel * sign,
-        dy: Math.cos(angle) * travel,
-        start: now,
-        duration: 700 + Math.random() * 500,
-      };
-    };
-
-    const drawMeteor = (now: number) => {
-      if (!meteor) return;
-      const p = (now - meteor.start) / meteor.duration;
-      if (p >= 1) {
-        meteor = null;
-        meteorAt = now + 14000 + Math.random() * 20000;
-        return;
-      }
-      const fade = Math.sin(Math.PI * p);
-      const hx = meteor.x + meteor.dx * p;
-      const hy = meteor.y + meteor.dy * p;
-      const norm = Math.hypot(meteor.dx, meteor.dy);
-      const tx = hx - (meteor.dx / norm) * 90;
-      const ty = hy - (meteor.dy / norm) * 90;
-      const trail = context.createLinearGradient(tx, ty, hx, hy);
-      trail.addColorStop(0, "rgba(255,79,0,0)");
-      trail.addColorStop(1, `rgba(255,79,0,${(0.5 * fade).toFixed(3)})`);
-      context.strokeStyle = trail;
-      context.lineWidth = 1.2;
-      context.beginPath();
-      context.moveTo(tx, ty);
-      context.lineTo(hx, hy);
-      context.stroke();
-      context.globalAlpha = 0.85 * fade;
-      context.fillStyle = "#ffd9c2";
-      context.beginPath();
-      context.arc(hx, hy, 1, 0, Math.PI * 2);
-      context.fill();
-      context.globalAlpha = 1;
-    };
-
-    const tick = (now: number) => {
-      draw(now);
-      if (!meteor && now >= meteorAt) spawnMeteor(now);
-      drawMeteor(now);
-      raf = requestAnimationFrame(tick);
+      if (!still) raf = requestAnimationFrame(draw);
     };
 
     const restart = () => {
       cancelAnimationFrame(raf);
-      if (!still && !document.hidden) raf = requestAnimationFrame(tick);
-    };
-    const onScrollStill = () => {
-      if (still) draw(performance.now());
-    };
-
-    seed();
-    draw(performance.now());
-    restart();
-    const resize = () => {
       seed();
-      draw(performance.now());
+      raf = requestAnimationFrame(draw);
     };
-    document.fonts?.ready.then(() => {
-      if (!disposed) resize();
-    });
-    window.addEventListener("resize", resize);
-    window.addEventListener("scroll", onScrollStill, { passive: true });
-    document.addEventListener("visibilitychange", restart);
+    restart();
+    // The mark settles once the page has laid itself out; measure again.
+    const settle = window.setTimeout(restart, 400);
+    window.addEventListener("resize", restart);
+    // A hidden tab has no sky to draw.
+    const onVisibility = () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else restart();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
-      disposed = true;
       cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("scroll", onScrollStill);
-      document.removeEventListener("visibilitychange", restart);
+      window.clearTimeout(settle);
+      window.removeEventListener("resize", restart);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 
   return (
     <canvas
       ref={ref}
-      className="pointer-events-none fixed inset-0 -z-10"
       aria-hidden="true"
+      className="pointer-events-none fixed inset-0 -z-10 h-full w-full"
     />
   );
 }
