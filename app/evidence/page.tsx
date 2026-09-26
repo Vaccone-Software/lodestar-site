@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import FootLine from "@/components/FootLine";
-import Header from "@/components/Header";
+import Foot from "@/components/Foot";
+import Nav from "@/components/Nav";
 import Permalink from "@/components/Permalink";
+import { latestRelease } from "@/lib/releases";
 
 export const metadata: Metadata = {
   title: "Evidence",
@@ -127,20 +128,22 @@ const results: Result[] = [
   },
 ];
 
-export default function EvidencePage() {
+export default async function EvidencePage() {
+  const { tag } = await latestRelease();
   return (
-    <main id="main" className="min-h-svh px-[5vw] pt-28 pb-24 lg:px-8">
-      <Header />
+    <>
+    <Nav tag={tag} />
+    <main id="main" className="min-h-svh px-4 pt-8 pb-16 md:px-7">
       <div className="mx-auto max-w-[880px]">
-        <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+        <p className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
           Evidence
         </p>
-        <h1 className="font-display mt-4 max-w-[18ch] text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.02] font-normal tracking-[-0.02em]">
+        <h1 className="mt-4 max-w-[18ch] text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.02] font-semibold tracking-[-0.04em]">
           Every claim, and its measurement
         </h1>
 
         <section className="border-hairline mt-12 grid gap-x-12 gap-y-6 border-t pt-8 lg:grid-cols-[10rem_1fr]">
-          <h2 className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+          <h2 className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
             Method
           </h2>
           <div className="text-dim max-w-[62ch] space-y-4 text-[17px] leading-[1.6]">
@@ -177,29 +180,29 @@ export default function EvidencePage() {
               id={`result-${r.n}`}
               className="border-hairline grid scroll-mt-24 gap-x-12 gap-y-4 border-b py-10 lg:grid-cols-[10rem_1fr]"
             >
-              <span className="text-faint font-mono text-[11px] tracking-[0.2em]">
-                <span className="glint">✦</span> {r.n}
+              <span className="text-faint text-[12px] font-semibold tabular-nums">
+                <span className="text-accent">No.</span> {r.n}
                 <Permalink anchor={`result-${r.n}`} />
               </span>
               <div className="max-w-[62ch]">
-                <h3 className="font-display text-ink text-[clamp(1.4rem,2.4vw,1.85rem)] leading-[1.15] tracking-[-0.01em]">
+                <h3 className="text-ink text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.15] font-semibold tracking-[-0.02em]">
                   {r.claim}
                 </h3>
                 <dl className="mt-5 space-y-4 text-[16px] leading-[1.6]">
                   <div>
-                    <dt className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+                    <dt className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
                       Measurement
                     </dt>
                     <dd className="text-ink/90 mt-1">{r.measurement}</dd>
                   </div>
                   <div>
-                    <dt className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+                    <dt className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
                       Method
                     </dt>
                     <dd className="text-dim mt-1">{r.method}</dd>
                   </div>
                   <div>
-                    <dt className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+                    <dt className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
                       Reading
                     </dt>
                     <dd className="text-dim mt-1">{r.reading}</dd>
@@ -211,7 +214,7 @@ export default function EvidencePage() {
         </ol>
 
         <section className="mt-16 grid gap-x-12 gap-y-6 lg:grid-cols-[10rem_1fr]">
-          <h2 className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
+          <h2 className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
             References
           </h2>
           <ul className="text-dim max-w-[62ch] space-y-3 text-[15.5px] leading-[1.6]">
@@ -244,8 +247,9 @@ export default function EvidencePage() {
             </li>
           </ul>
         </section>
-        <FootLine />
+        <Foot className="border-hairline mt-12 border-t pt-6" />
       </div>
     </main>
+    </>
   );
 }

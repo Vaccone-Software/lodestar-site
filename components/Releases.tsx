@@ -127,7 +127,7 @@ export default function Releases({ fallback }: { fallback: Release[] }) {
                 {s.kind} · {shown(lead.date)}
               </span>
             </div>
-            <h2 className="font-display text-ink mt-5 max-w-[22ch] text-[clamp(1.7rem,3.4vw,2.4rem)] leading-[1.08] font-normal tracking-[-0.02em]">
+            <h2 className="text-ink mt-5 max-w-[22ch] text-[clamp(1.6rem,3vw,2.2rem)] leading-[1.08] font-semibold tracking-[-0.03em]">
               {heading(lead)}
             </h2>
             <div className="mt-5">

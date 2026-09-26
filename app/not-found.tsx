@@ -1,35 +1,32 @@
-import Header from "@/components/Header";
-import { Keyboard } from "@/components/Scenes";
+import EscHome from "@/components/EscHome";
+import Foot from "@/components/Foot";
+import Nav from "@/components/Nav";
+import { latestRelease } from "@/lib/releases";
 
 // A page that does not exist is a destination that does not exist, and
 // the answer is the same one every surface in Lodestar gives: esc.
-export default function NotFound() {
+export default async function NotFound() {
+  const { tag } = await latestRelease();
   return (
-    <main id="main" className="flex min-h-svh flex-col px-[5vw] pt-28 pb-16 lg:px-8">
-      <Header />
-      <div className="mx-auto w-full max-w-[720px] flex-1">
-        <p className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
-          <span className="glint">404</span>
-          <span className="mx-2">·</span>
-          No such destination
+    <>
+      <Nav tag={tag} />
+      <EscHome />
+      <main id="main" className="mx-auto flex min-h-[70svh] max-w-[720px] flex-col justify-center px-4 md:px-7">
+        <p className="text-accent text-[12px] font-semibold tracking-[0.16em] uppercase">
+          404 · No such destination
         </p>
-        <h1 className="font-display text-ink mt-5 text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.02] font-normal tracking-[-0.02em]">
+        <h1 className="over-sky mt-3 text-[clamp(38px,5vw,60px)] leading-[1] font-semibold tracking-[-0.04em]">
           Nothing is named that
         </h1>
-        <p className="text-dim mt-6 max-w-[48ch] text-[17px] leading-[1.6]">
-          Every surface in Lodestar answers the same key when a place does
-          not exist. The page does too.
+        <p className="text-dim mt-5 max-w-[46ch] text-[17px] leading-[1.55]">
+          Every surface in Lodestar answers the same key when a place does not
+          exist. The page does too.
         </p>
-        <div className="mt-10">
-          <Keyboard lit={["esc"]} />
-        </div>
-        <a
-          href="/"
-          className="text-dim hover:text-ink mt-4 inline-block font-mono text-[12.5px] transition-colors"
-        >
-          <span className="key lit mr-2">esc</span> goes home
+        <a href="/" className="text-dim hover:text-ink mt-8 inline-flex items-center gap-2 text-[15px]">
+          <kbd className="key lit">esc</kbd> goes home
         </a>
-      </div>
-    </main>
+      </main>
+      <Foot className="mx-auto max-w-[720px] px-4 pb-8 md:px-7" />
+    </>
   );
 }
