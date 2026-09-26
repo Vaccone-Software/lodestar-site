@@ -43,7 +43,7 @@ export async function latestRelease(): Promise<{ tag: string; date: string }> {
     if (typeof tag === "string" && tag.startsWith("v"))
       return { tag, date: typeof date === "string" ? date : "" };
   } catch {}
-  return { tag: "v0.38.1", date: "" };
+  return { tag: "v0.39.0", date: "" };
 }
 
 /** The disk image a tag ships as. */
