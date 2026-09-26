@@ -35,7 +35,7 @@ export default function GuideSearch() {
   }, [q]);
   return (
     <div>
-      <label className="border-hairline flex items-center gap-3 border bg-white/[0.03] px-4 py-3 focus-within:border-white/30">
+      <label className="border-hairline flex items-center gap-3 rounded-[12px] border bg-white/[0.03] px-4 py-3 focus-within:border-white/30">
         <span className="text-accent font-mono text-[13px]">/</span>
         <input
           value={q}
@@ -46,7 +46,7 @@ export default function GuideSearch() {
           spellCheck={false}
         />
         {q ? (
-          <span className="text-faint font-mono text-[11px]">
+          <span className="text-faint text-[12px]">
             {hits.length === 1 ? "1 lesson" : `${hits.length} lessons`}
           </span>
         ) : null}
@@ -57,11 +57,11 @@ export default function GuideSearch() {
             <li key={`${h.slug}-${h.title}`} className="border-hairline border-b">
               <a href={`/guide/${h.slug}#${anchor(h.title)}`} className="group block py-4">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <span className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">{h.page}</span>
-                  {h.hidden ? <span className="glint font-mono text-[10px]">✦ few know this</span> : null}
+                  <span className="text-faint text-[11.5px] font-semibold tracking-[0.14em] uppercase">{h.page}</span>
+                  {h.hidden ? <span className="text-accent text-[11px] font-semibold">Few know this</span> : null}
                 </div>
                 <div className="mt-1 flex flex-wrap items-baseline gap-x-4 gap-y-2">
-                  <span className="font-display text-ink text-[20px] group-hover:underline group-hover:decoration-white/30 group-hover:underline-offset-4">{h.title}</span>
+                  <span className="text-ink text-[19px] font-semibold tracking-[-0.01em] group-hover:underline group-hover:decoration-white/30 group-hover:underline-offset-4">{h.title}</span>
                   {h.keys.length ? <KeyCaps keys={h.keys} className="text-[14px]" /> : null}
                 </div>
                 <p className="text-dim mt-2 max-w-[62ch] text-[15px] leading-[1.6]">{h.rule}</p>

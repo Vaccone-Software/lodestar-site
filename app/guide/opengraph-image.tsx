@@ -8,8 +8,8 @@ export const contentType = "image/png";
 export default function Image() {
   return card({
     eyebrow: "Guide",
-    title: "One page per destination",
-    line: "Each shown before it is described, with the parts nobody finds by pressing keys.",
+    title: "Everything Lodestar does, and the keys for it",
+    line: "One page per destination, with the parts nobody finds by pressing keys",
     seed: 5,
   });
 }
