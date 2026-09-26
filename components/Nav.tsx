@@ -41,7 +41,7 @@ export default function Nav({
         <a
           href="/guide"
           aria-current={current === "guide" ? "page" : undefined}
-          className={`hidden transition-colors md:inline ${current === "guide" ? "text-ink" : "text-dim hover:text-ink"}`}
+          className={`transition-colors ${current === "guide" ? "text-ink" : "text-dim hover:text-ink"}`}
         >
           Guide
         </a>

@@ -47,7 +47,7 @@ export async function card({
   const field = stars(120, seed);
   const long = title.length > 26;
   // The mark, from the same faces the app icon is drawn with.
-  const size = 330;
+  const size = 280;
   const c = size / 2;
   const r = size * 0.48;
   return new ImageResponse(
@@ -72,7 +72,7 @@ export async function card({
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
-        style={{ position: "absolute", right: 70, top: 70 }}
+        style={{ position: "absolute", right: 64, top: 96 }}
       >
         {mark.faces.map((face, i) => (
           <polygon
@@ -91,13 +91,13 @@ export async function card({
       <div style={{ display: "flex", flexDirection: "column", marginBottom: 8 }}>
         <div
           style={{
-            fontSize: long ? 70 : 84,
+            fontSize: long ? 64 : 84,
             lineHeight: 1,
             color: "#f1ede8",
             fontFamily: "Inter",
             fontWeight: 600,
             letterSpacing: -3,
-            maxWidth: 760,
+            maxWidth: 700,
           }}
         >
           {title}
