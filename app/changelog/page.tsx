@@ -10,13 +10,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/changelog" },
 };
 
-// Baked at build so the page is right on deploy day; the client re-reads
-// the API so releases that land between deploys appear anyway. no-store
-// for the same reason it is load bearing on the front page: Next's data
-// cache would otherwise bake whichever answer it saw first.
+// Built once and rebuilt in the background at most ten minutes after a
+// release, so a new release reaches the page without a deploy; the client
+// re-reads the API as well.
 async function baked(): Promise<Release[]> {
   try {
-    const response = await fetch(releasesUrl, { cache: "no-store" });
+    const response = await fetch(releasesUrl, { next: { revalidate: 600 } });
     return parseReleases(await response.json());
   } catch {
     return [];

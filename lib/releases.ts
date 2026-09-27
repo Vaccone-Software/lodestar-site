@@ -27,15 +27,15 @@ export function parseReleases(data: unknown): Release[] {
     }));
 }
 
-/** The newest release's tag and date, baked at build so a static page is
-    right on deploy day. no-store is load bearing: Next keeps a persistent
-    data cache between builds, and a cached answer here bakes whatever
-    version was current the last time the cache was written. */
+/** The newest release's tag and date. Pages are built once and rebuilt in
+    the background at most an hour after a release, so a new version reaches
+    the page without a deploy; the download pill re-reads it in the browser
+    as well. (Never no-store: that renders every page on every request.) */
 export async function latestRelease(): Promise<{ tag: string; date: string }> {
   try {
     const response = await fetch(
       "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1",
-      { cache: "no-store" },
+      { next: { revalidate: 3600 } },
     );
     const data = await response.json();
     const tag = data?.[0]?.tag_name;
