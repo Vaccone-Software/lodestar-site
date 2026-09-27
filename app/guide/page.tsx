@@ -7,7 +7,7 @@ import { guide, type GuidePage } from "@/data/guide";
 import { latestRelease } from "@/lib/releases";
 
 export const metadata: Metadata = {
-  title: "Guide",
+  title: "Guide: Every Feature and Keyboard Shortcut for Mac",
   description:
     "The Lodestar guide: one page per destination, each lesson shown before it is described, with the parts nobody finds by pressing keys and the config line behind every behaviour.",
   alternates: { canonical: "/guide" },

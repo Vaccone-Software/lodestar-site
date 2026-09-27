@@ -23,6 +23,10 @@ export type Lesson = {
 export type GuidePage = {
   slug: string;
   name: string;
+  /** The title in search results: the task, in a search's words. */
+  title: string;
+  /** The door this page teaches, when it teaches one. */
+  door?: "write" | "switch" | "keep" | "speak";
   blurb: string;
   first: Lesson;
   ready: Lesson[];
@@ -34,6 +38,8 @@ export type GuidePage = {
 export const guide: GuidePage[] = [
   {
     slug: "application",
+    title: "Open and Switch Apps from the Keyboard on Mac",
+    door: "switch",
     name: "An application",
     blurb: "Letters, the launcher, chains, and the map.",
     first: {
@@ -94,6 +100,8 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "layout",
+    title: "Arrange Windows Side by Side and Save Layouts on Mac",
+    door: "switch",
     name: "A layout",
     blurb: "Side by side, saved worlds, positions, displays, and undo.",
     first: {
@@ -160,6 +168,7 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "page",
+    title: "Open Websites and Browser Profiles from the Keyboard on Mac",
     name: "A page",
     blurb: "Ask, saved names, profiles, and links clicked anywhere.",
     first: {
@@ -208,6 +217,7 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "button",
+    title: "Click Buttons and Links from the Keyboard on Mac",
     name: "A button",
     blurb: "Letters on everything pressable, menus under search, and scrolling.",
     first: {
@@ -256,6 +266,7 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "text",
+    title: "Select Text on Screen from the Keyboard on Mac",
     name: "Text on screen",
     blurb: "Highlight by typing, one word or a whole passage, in any app.",
     first: {
@@ -298,6 +309,8 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "clipboard",
+    title: "Clipboard History on Mac: Paste, Pin and Search",
+    door: "keep",
     name: "What you copied",
     blurb: "Recents under letters, pins under numbers, and a search that reads screenshots.",
     first: {
@@ -354,6 +367,8 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "say",
+    title: "Dictation on Mac: Speak, Edit and Place Your Words",
+    door: "speak",
     name: "What you say",
     blurb: "Dictation into any field, editing from the keys, and the dozen moves the draft uses.",
     first: {
@@ -424,6 +439,8 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "write",
+    title: "Check Spelling and Grammar in Every App on Mac",
+    door: "write",
     name: "What you write",
     blurb: "A line under what reads wrong, in every app, and a letter to fix it.",
     first: {
@@ -474,6 +491,7 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "coach",
+    title: "Keyboard Shortcut Suggestions That Learn From You",
     name: "The coach",
     blurb: "What it can offer, what it records, and how to say no.",
     first: {
@@ -528,6 +546,7 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "settings",
+    title: "Settings, the Config File and Every Option",
     name: "Settings",
     blurb: "The window, the file, the shell, and every option.",
     first: {

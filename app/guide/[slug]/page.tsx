@@ -8,7 +8,9 @@ import Options from "@/components/Options";
 import Permalink from "@/components/Permalink";
 import Reveal from "@/components/Reveal";
 import { guide, type Lesson } from "@/data/guide";
+import { doors } from "@/data/doors";
 import { latestRelease } from "@/lib/releases";
+import { appId, breadcrumbs, graph, site } from "@/lib/seo";
 
 export function generateStaticParams() {
   return guide.map((p) => ({ slug: p.slug }));
@@ -23,8 +25,8 @@ export async function generateMetadata({
   const page = guide.find((p) => p.slug === slug);
   if (!page) return {};
   return {
-    title: page.name,
-    description: `${page.name} in Lodestar: ${page.blurb}`,
+    title: page.title,
+    description: `${page.title}, with Lodestar: ${page.blurb} Every lesson with its keys, the fine print, and the settings behind it.`,
     alternates: { canonical: `/guide/${slug}` },
   };
 }
@@ -127,6 +129,22 @@ export default async function Page({
   const next = guide[index + 1];
   const { tag } = await latestRelease();
   const lessons = [page.first, ...page.ready];
+  const door = doors.find((d) => d.slug === page.door);
+  const jsonLd = graph(
+    {
+      "@type": "TechArticle",
+      headline: page.title,
+      description: page.blurb,
+      url: `${site}/guide/${page.slug}`,
+      about: { "@id": appId },
+      author: { "@type": "Organization", name: "Vaccone Software" },
+    },
+    breadcrumbs([
+      { name: "Lodestar", path: "/" },
+      { name: "Guide", path: "/guide" },
+      { name: page.name, path: `/guide/${page.slug}` },
+    ]),
+  );
   const section = (n: string, label: string) => (
     <p className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
       <span className="text-accent">{n}</span>
@@ -137,12 +155,21 @@ export default async function Page({
   const h2 = "text-ink mt-3 max-w-[18ch] text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.06] font-semibold tracking-[-0.03em]";
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <Nav tag={tag} current="guide" />
       <main id="main" className="mx-auto max-w-[1240px] px-4 pt-8 pb-16 md:px-7">
         <p className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
           <a href="/guide" className="text-accent hover:text-[#ff7a3d]">Guide</a>
           <span className="mx-2">·</span>
           {String(index + 1).padStart(2, "0")} of {guide.length}
+          {door ? (
+            <>
+              <span className="mx-2">·</span>
+              <a href={`/${door.slug}`} className="hover:text-ink transition-colors">
+                Part of {door.name}
+              </a>
+            </>
+          ) : null}
         </p>
         <h1 className="over-sky mt-3 text-[clamp(38px,5vw,64px)] leading-[1] font-semibold tracking-[-0.04em]">
           {page.name}

@@ -5,7 +5,9 @@ import { KeySequence } from "@/components/Key";
 import Loop from "@/components/Loop";
 import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
+import { guide } from "@/data/guide";
 import { latestRelease } from "@/lib/releases";
+import { appJsonLd, breadcrumbs, graph } from "@/lib/seo";
 
 // The four doors and nothing else: any other name is a 404, and the guide,
 // the evidence and the changelog keep their own routes.
@@ -24,7 +26,7 @@ export async function generateMetadata({
   const door = doors.find((d) => d.slug === slug);
   if (!door) return {};
   return {
-    title: `${door.name}: ${door.h1}`,
+    title: door.title,
     description: door.description,
     alternates: { canonical: `/${door.slug}` },
     openGraph: { title: `Lodestar · ${door.h1}`, description: door.description, url: `/${door.slug}` },
@@ -51,8 +53,19 @@ export default async function Page({
   const door = doors.find((d) => d.slug === slug);
   if (!door) notFound();
   const { tag } = await latestRelease();
+  // The guide page that goes deeper: the door page stays one screen, and
+  // the depth is one link away, for readers and for search engines alike.
+  const deeper = guide.find((page) => page.slug === door.guide[0]);
+  const jsonLd = graph(
+    appJsonLd(tag, [door.lede, ...door.steps.map((step) => `${step.title}: ${step.line}`)]),
+    breadcrumbs([
+      { name: "Lodestar", path: "/" },
+      { name: door.name, path: `/${door.slug}` },
+    ]),
+  );
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <Nav tag={tag} current={door.slug} />
       <main
         id="main"
@@ -83,7 +96,17 @@ export default async function Page({
         </section>
         <section className="border-hairline mt-6 grid gap-7 border-t pt-5 [@media(min-width:901px)_and_(min-height:701px)]:mt-0 [@media(min-width:901px)_and_(min-height:701px)]:grid-cols-[1.25fr_1fr_1.1fr] [@media(min-width:901px)_and_(min-height:701px)]:gap-9">
           <div>
-            <Label>How it works</Label>
+            <div className="flex items-baseline justify-between gap-4">
+              <Label>How it works</Label>
+              {deeper ? (
+                <a
+                  href={`/guide/${deeper.slug}`}
+                  className="text-faint hover:text-ink mb-3 text-[12px] font-medium transition-colors"
+                >
+                  The full guide to {door.name} <span className="text-accent">→</span>
+                </a>
+              ) : null}
+            </div>
             <ol className="grid gap-3">
               {door.steps.map((step, i) => (
                 <li

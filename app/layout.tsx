@@ -28,7 +28,7 @@ const description =
 export const metadata: Metadata = {
   metadataBase: new URL("https://lodestar.vaccone.software"),
   title: {
-    default: "Lodestar · free tools that make your Mac second nature",
+    default: "Lodestar: Free Grammar, Clipboard and Dictation Tools for Mac",
     template: "%s · Lodestar",
   },
   description,

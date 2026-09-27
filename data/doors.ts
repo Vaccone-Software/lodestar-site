@@ -18,11 +18,18 @@ export type Door = {
   detail: { name: string; line: string; keys?: Keys }[];
   /** For search engines: the words the page is found by. */
   description: string;
+  /** The page's title in search results and the tab, in the words a search
+      is typed in. The headline keeps its own voice. */
+  title: string;
+  /** The guide pages that go deeper, the first one linked from the page. */
+  guide: string[];
 };
 
 export const doors: Door[] = [
   {
     slug: "write",
+    title: "Free Grammar and Spell Checker for Mac, in Every App",
+    guide: ["write"],
     name: "Write",
     what: "Checks your spelling and grammar as you type, in every app",
     h1: "Write without the typos",
@@ -50,6 +57,8 @@ export const doors: Door[] = [
   },
   {
     slug: "switch",
+    title: "Keyboard App Switcher and Launcher for Mac",
+    guide: ["application", "layout"],
     name: "Switch",
     what: "Switches to any app or window with one key and a letter",
     h1: "Get anywhere with a letter",
@@ -76,6 +85,8 @@ export const doors: Door[] = [
   },
   {
     slug: "keep",
+    title: "Free Clipboard Manager and History for Mac",
+    guide: ["clipboard"],
     name: "Keep",
     what: "Keeps everything you copy, ready to find and paste again",
     h1: "Everything you copy, kept",
@@ -102,6 +113,8 @@ export const doors: Door[] = [
   },
   {
     slug: "speak",
+    title: "On-Device Dictation and Speech to Text for Mac",
+    guide: ["say"],
     name: "Speak",
     what: "Turns what you say into text you can edit, then drops it in place",
     h1: "Say it, then shape it",
