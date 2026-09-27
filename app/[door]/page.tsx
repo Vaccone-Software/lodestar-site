@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import DownloadPill from "@/components/DownloadPill";
-import Foot from "@/components/Foot";
 import { KeySequence } from "@/components/Key";
 import Loop from "@/components/Loop";
 import Nav from "@/components/Nav";
@@ -140,9 +139,7 @@ export default async function Page({
             </div>
           </div>
         </section>
-        <Foot className="mt-8 [@media(min-width:901px)_and_(min-height:701px)]:hidden" />
       </main>
-      <Foot className="fixed right-7 bottom-2 left-7 hidden text-[#57534e] [@media(min-width:901px)_and_(min-height:701px)]:flex" />
     </>
   );
 }
