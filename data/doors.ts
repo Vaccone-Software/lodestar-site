@@ -28,14 +28,14 @@ export type Door = {
 export const doors: Door[] = [
   {
     slug: "write",
-    title: "Free Grammar and Spell Checker for Mac, in Every App",
+    title: "Free Grammar and Spell Checker for Mac",
     guide: ["write"],
     name: "Write",
-    what: "Checks your spelling and grammar as you type, in every app",
+    what: "Checks your spelling and grammar as you type",
     h1: "Write without the typos",
-    lede: "Spelling and grammar checked as you type, in every app, on your Mac",
+    lede: "Spelling and grammar checked as you type, on your Mac",
     steps: [
-      { title: "Write anywhere", line: "Mail, Slack, a browser, any app you type in" },
+      { title: "Write where you write", line: "Mail, Slack, Notes, Messages and fields on the web" },
       { title: "See the line", line: "Spelling as each word ends, grammar as each sentence does" },
       { title: "Put it right", line: "Rest the pointer on the line, or use the keys", keys: ["lode", "⇥", "!A"] },
     ],
@@ -53,7 +53,7 @@ export const doors: Door[] = [
       { name: "Full", line: "The most precise, for 64 GB of memory" },
     ],
     description:
-      "A free spelling and grammar checker for Mac that works in every app, checked on your Mac. A thin line under what reads wrong, fixed with a click or a key.",
+      "A free spelling and grammar checker for Mac that works across your apps, checked on your Mac. A thin line under what reads wrong, fixed with a click or a key.",
   },
   {
     slug: "switch",

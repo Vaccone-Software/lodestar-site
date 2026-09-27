@@ -16,7 +16,7 @@ export function appJsonLd(tag: string, features?: string[]) {
     operatingSystem: "macOS 14 or later (Apple silicon)",
     applicationCategory: "UtilitiesApplication",
     description:
-      "Free tools for the Mac: spelling and grammar checked in every app, any app or window one key and a letter away, clipboard history, and dictation you can edit.",
+      "Free tools for the Mac: spelling and grammar checked as you type, any app or window one key and a letter away, clipboard history, and dictation you can edit.",
     url: `${site}/`,
     softwareVersion: tag.replace(/^v/, ""),
     downloadUrl: dmgFor(tag),

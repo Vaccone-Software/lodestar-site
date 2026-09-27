@@ -185,7 +185,7 @@
       "description" : "The editor: marks under mistakes, lode ⇥ to fix.",
       "properties" : {
         "enabled" : {
-          "description" : "Mark mistakes as you write, in every app; lode ⇥ letters the marks.",
+          "description" : "Mark mistakes as you write; lode ⇥ letters the marks.",
           "type" : "boolean"
         },
         "language" : {

@@ -23,7 +23,7 @@ const jetbrains = JetBrains_Mono({
 // The page speaks in its own voice; the title and description speak in
 // the words a search is typed in. Both are true, and they meet here.
 const description =
-  "Lodestar is a free Mac app: spelling and grammar checked as you type in every app, any app or window one key and a letter away, everything you copy kept and searchable, and dictation you can edit before it lands.";
+  "Lodestar is a free Mac app: spelling and grammar checked as you type, any app or window one key and a letter away, everything you copy kept and searchable, and dictation you can edit before it lands.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lodestar.vaccone.software"),

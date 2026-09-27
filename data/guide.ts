@@ -439,10 +439,10 @@ export const guide: GuidePage[] = [
   },
   {
     slug: "write",
-    title: "Check Spelling and Grammar in Every App on Mac",
+    title: "Check Spelling and Grammar as You Type on Mac",
     door: "write",
     name: "What you write",
-    blurb: "A line under what reads wrong, in every app, and a letter to fix it.",
+    blurb: "A line under what reads wrong, and a letter to fix it.",
     first: {
       title: "Fix a mistake",
       keys: ["lode", "⇥"],
@@ -479,6 +479,7 @@ export const guide: GuidePage[] = [
     finePrint: [
       "It corrects what you meant to write and never what it thinks you should have meant: spelling and grammar, never rewording, never tone, never a name, never your lowercase or your casual words, never anything inside code or a link.",
       "It asks before it reads anything. Turning it on shows one card with Accept and Decline, once per Mac.",
+      "Google Docs is not read yet. It draws its text itself and keeps it from other apps, so a document there gets no lines.",
       "A sentence is read by the model when you finish it or pause in it, so a word is never marked while you are still typing it.",
       "The easiest letters go to the marks nearest your cursor: the mark you just wrote is the one you most likely want.",
       "It spells the way your Mac does: a Mac set to British English is held to British spelling, and so is the model. Settings can choose another.",
