@@ -69,7 +69,7 @@ export const guide: GuidePage[] = [
       },
       {
         title: "Reach a window you lost",
-        keys: ["lode", "⇥"],
+        keys: ["lode", "⇧", "⇥"],
         rule: "The window chooser lists the focused app's windows, most recent first and the one you are in last. Type part of a title or walk the list. In the launcher, ⇥ on a running app expands it into its windows the same way.",
         scene: "chooser",
       },
@@ -96,7 +96,7 @@ export const guide: GuidePage[] = [
       "Three chains can mean the same browser as long as each opens a different profile. The card refuses a duplicate by naming the address that already means it.",
     ],
     why: "Applications are stable, launchable, and singular, so a letter can always resolve to one and can always relaunch it. That makes them the safe bedrock of the whole system, and it is why the first minute of Lodestar is three letters and nothing else. Measured on one hand over a year, a bare letter under lode misfired at zero, and every chain misfired more, which is why single letters come first and chains come only when the letters run out.",
-    options: ["graph", "gestures.graph", "gestures.launcher", "gestures.window-chooser", "lode.trigger"],
+    options: ["graph", "gestures.graph", "gestures.launcher", "lode.trigger"],
   },
   {
     slug: "layout",
@@ -435,7 +435,7 @@ export const guide: GuidePage[] = [
       "The microphone is chosen by its name in Sound settings. A headset that goes silent is retried; the built-in microphone is the safe choice.",
     ],
     why: "There is one grammar and no picker. The floor is the plain text field everyone knows, and the editor exists only past an esc a person need never press. It is vim, stock, with two imports from the author's own editor for finding the pair you mean, because one key that finds the quote you meant beats three that ask you to name it.",
-    options: ["gestures.draft", "draft.input", "draft.words"],
+    options: ["gestures.draft", "draft.input", "draft.model", "draft.words"],
   },
   {
     slug: "write",
@@ -526,7 +526,7 @@ export const guide: GuidePage[] = [
         title: "Read what it knows, or delete it",
         keys: [],
         lit: [],
-        rule: "lodestar observations prints the record plainly, because a store you cannot read is one you cannot consent to. lodestar observations clear deletes it.",
+        rule: "lodestar observations prints the record plainly, because a store you cannot read is one you cannot consent to. lodestar observations clear deletes both records, or one with --logbook or --health.",
       },
       {
         title: "Join a meeting from the door",
@@ -539,11 +539,11 @@ export const guide: GuidePage[] = [
       "The record is how you got places, never what you did there: pauses inside an address, whether the map was consulted, abandoned chains, the wrong key pressed, transitions between apps. No titles, no addresses, no text.",
       "The coach paces itself by what your hands demonstrate. After an accept it stays silent until that address has actually compiled, and each accept in a row shortens the wait.",
       "A gesture you have not fired in ninety days becomes a finding, with the one config line that would retire it. Nothing turns off on its own.",
-      "The health pulse, on its own switch, keeps counts and rhythm moments per quarter hour and never key identities on general typing.",
-      "One line turns observation off, and off means nothing is written.",
+      "Health, on its own switch, keeps the rhythm of your hands: when each key goes down and how long it is held, by hand and finger, and how the pointer moves. Never which keys, never what you type.",
+      "The logbook and health each have a switch and a size limit in Settings, under Observations, and off means nothing is written.",
     ],
     why: "Seeing a shortcut changes nothing. In the study behind this design, people who could keep using the old path used the new one 29 percent of the time, and half of them never used it at all. When the old path was closed, 73 percent switched. So the chip's job is consent, and the intervention is structural: the old road gets a toll, priced in one deliberate confirm.",
-    options: ["coach.enabled", "observations.enabled", "observations.health", "meetings.enabled", "meetings.lead-minutes", "meetings.calendars"],
+    options: ["coach.enabled", "observations.logbook", "observations.logbook-mb", "observations.health", "observations.health-mb", "meetings.enabled", "meetings.lead-minutes", "meetings.calendars"],
   },
   {
     slug: "settings",
@@ -554,7 +554,7 @@ export const guide: GuidePage[] = [
       title: "Change anything",
       keys: ["lode", ","],
       lit: ["lode", ","],
-      rule: "The settings window carries every option the config holds and nothing else. Every row wears the config path it writes, so the window teaches the file as you use it.",
+      rule: "Settings opens on ten places around the mark, one per number key: 0 General, then Write, Switch, Keep and Speak, then Operate, Web, Meetings, Keys and Observations. A digit opens a place from anywhere, a letter works its row, / searches, and ⌘Z undoes. lode , opens the place for whatever is in front of you.",
     },
     ready: [
       {
