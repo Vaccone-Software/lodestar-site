@@ -301,10 +301,6 @@
           "description" : "lode , , the settings window",
           "type" : "boolean"
         },
-        "tabs" : {
-          "description" : "lode tab, a letter on every tab of the window, ⇧tab its windows",
-          "type" : "boolean"
-        },
         "web-bar" : {
           "description" : "lode ⏎, links and search",
           "type" : "boolean"
@@ -432,15 +428,27 @@
     },
     "observations" : {
       "additionalProperties" : false,
-      "description" : "Local observations. How you got places, never what you were doing there; nothing leaves the machine.",
+      "description" : "What Lodestar observes, in two records with their own switches. Nothing leaves the machine.",
       "properties" : {
-        "enabled" : {
-          "description" : "Watch how you reach things, on this machine only, to suggest improvements later.",
+        "health" : {
+          "description" : "Keep the health record: when each key goes down and how long it is held, by hand and finger, and how the pointer moves. Never which keys or what you type. Independent of the logbook.",
           "type" : "boolean"
         },
-        "health" : {
-          "description" : "Also keep the hands' pulse: input counts, typing rhythm moments, active minutes. Counts only, never which keys or what was typed.",
+        "health-mb" : {
+          "description" : "The size Lodestar tells you the health record is nearing. Health is never deleted on its own.",
+          "maximum" : 16384,
+          "minimum" : 256,
+          "type" : "number"
+        },
+        "logbook" : {
+          "description" : "Keep the logbook: how you move between apps, windows and gestures, on this machine only. Sites by name, never their pages, titles or what you type. The coach reads it.",
           "type" : "boolean"
+        },
+        "logbook-mb" : {
+          "description" : "Disk the logbook may claim. Once it is full the oldest months leave first; their monthly summaries stay.",
+          "maximum" : 4096,
+          "minimum" : 64,
+          "type" : "number"
         }
       },
       "type" : [
