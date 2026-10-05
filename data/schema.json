@@ -77,14 +77,6 @@
             "orange"
           ],
           "type" : "string"
-        },
-        "background" : {
-          "description" : "The ground every surface stands on in dark mode: default, a warm grey the colour of wet clay, or lodestone, the cold blue-grey of the compass stone. Light mode is always clay.",
-          "enum" : [
-            "default",
-            "lodestone"
-          ],
-          "type" : "string"
         }
       },
       "type" : [
