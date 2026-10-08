@@ -539,7 +539,7 @@ export const guide: GuidePage[] = [
       "The record is how you got places, never what you did there: pauses inside an address, whether the map was consulted, abandoned chains, the wrong key pressed, transitions between apps. No titles, no addresses, no text.",
       "The coach paces itself by what your hands demonstrate. After an accept it stays silent until that address has actually compiled, and each accept in a row shortens the wait.",
       "A gesture you have not fired in ninety days becomes a finding, with the one config line that would retire it. Nothing turns off on its own.",
-      "Health, on its own switch, keeps the rhythm of your hands: when each key goes down and how long it is held, by hand and finger, and how the pointer moves. Never which keys, never what you type.",
+      "Health, on its own switch, keeps the rhythm of your hands: when each key goes down and how long it is held, by hand, finger and kind of key, and how the pointer moves. It never stores which key, but the pattern can partly show what you typed, so it stays on your Mac. It also notes when it could not see, so a quiet stretch is never mistaken for rest.",
       "The logbook and health each have a switch and a size limit in Settings, under Observations, and off means nothing is written.",
     ],
     why: "Seeing a shortcut changes nothing. In the study behind this design, people who could keep using the old path used the new one 29 percent of the time, and half of them never used it at all. When the old path was closed, 73 percent switched. So the chip's job is consent, and the intervention is structural: the old road gets a toll, priced in one deliberate confirm.",

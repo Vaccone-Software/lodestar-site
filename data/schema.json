@@ -148,6 +148,16 @@
         "enabled" : {
           "description" : "Let Lodestar offer one improvement at a time, in quiet moments, priced in seconds.",
           "type" : "boolean"
+        },
+        "stand" : {
+          "description" : "After a stretch of work with no break, a cue to walk for two minutes, at the next natural stopping point. Twice at most in a stretch.",
+          "type" : "boolean"
+        },
+        "stand-after" : {
+          "description" : "Minutes of unbroken work before the walk is due. The research supports thirty: two minutes of walking every twenty to thirty minutes.",
+          "maximum" : 120,
+          "minimum" : 15,
+          "type" : "number"
         }
       },
       "type" : [
@@ -330,6 +340,10 @@
           "description" : "The year you were born, four digits. Age is the first thing a reading of the hands is adjusted for. Optional.",
           "type" : "string"
         },
+        "exact-keyboards" : {
+          "description" : "Charge each press to the keyboard that sent it, by matching it to that keyboard's own report. Needs Input Monitoring. Off by default; without it a press two keyboards could have sent is charged to neither.",
+          "type" : "boolean"
+        },
         "hand" : {
           "description" : "The hand you write with. Fine motor signs are often one sided and the record keeps each hand apart. Optional.",
           "enum" : [
@@ -432,7 +446,7 @@
       "description" : "What Lodestar observes, in two records with their own switches. Nothing leaves the machine.",
       "properties" : {
         "health" : {
-          "description" : "Keep the health record: when each key goes down and how long it is held, by hand and finger, and how the pointer moves. Never which keys or what you type. Independent of the logbook.",
+          "description" : "Keep the health record: when each key goes down and how long it is held, by hand, finger and kind of key, and how the pointer moves. No key is stored, but the pattern can partly show what you typed, so it stays on this machine and is included in backups. Independent of the logbook.",
           "type" : "boolean"
         },
         "health-mb" : {
