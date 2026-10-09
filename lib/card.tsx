@@ -34,11 +34,14 @@ export async function card({
   line,
   eyebrow,
   seed = 7,
+  oneLine = false,
 }: {
   title: string;
   line: string;
   eyebrow?: string;
   seed?: number;
+  /** A headline that must stand on one line, set smaller to fit beside the mark. */
+  oneLine?: boolean;
 }) {
   const [regular, semibold] = await Promise.all([
     readFile(join(process.cwd(), "assets/fonts/InterTight-400.ttf")),
@@ -91,13 +94,14 @@ export async function card({
       <div style={{ display: "flex", flexDirection: "column", marginBottom: 8 }}>
         <div
           style={{
-            fontSize: long ? 64 : 84,
+            fontSize: oneLine ? 58 : long ? 64 : 84,
             lineHeight: 1,
             color: "#f1ede8",
             fontFamily: "Inter",
             fontWeight: 600,
             letterSpacing: -3,
-            maxWidth: 700,
+            maxWidth: oneLine ? 760 : 700,
+            whiteSpace: oneLine ? "nowrap" : "normal",
           }}
         >
           {title}

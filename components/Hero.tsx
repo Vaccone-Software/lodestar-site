@@ -57,7 +57,7 @@ export default function Hero({ tag }: { tag: string }) {
         >
           <Loop src="/media/hero/mark" className={styles.media} />
         </div>
-        <h1 className={`${styles.title} over-sky`}>Master your Mac</h1>
+        <h1 className={`${styles.title} over-sky`}>Everything one key away</h1>
         <div className={`${styles.sub} over-sky`}>
           <p>Free tools that make your Mac second nature</p>
           <DownloadPill fallback={tag} />
