@@ -59,7 +59,7 @@ export default function Hero({ tag }: { tag: string }) {
         </div>
         <h1 className={`${styles.title} over-sky`}>Everything one key away</h1>
         <div className={`${styles.sub} over-sky`}>
-          <p>Free tools that make your Mac second nature</p>
+          <p>Free tools that stay on your Mac</p>
           <DownloadPill fallback={tag} />
           <span className={styles.fine}>Apple silicon · macOS 14 or later</span>
         </div>

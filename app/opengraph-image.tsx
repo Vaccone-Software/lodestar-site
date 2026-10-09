@@ -11,7 +11,7 @@ export default function Image() {
     eyebrow: "Lodestar",
     title: "Everything one key away",
     oneLine: true,
-    line: "Free tools that make your Mac second nature",
+    line: "Free tools that stay on your Mac",
     seed: 7,
   });
 }
