@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import Permalink from "@/components/Permalink";
-import { stableRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 
 export const metadata: Metadata = {
   title: "Evidence",

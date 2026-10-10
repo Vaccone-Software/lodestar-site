@@ -9,7 +9,7 @@ import Permalink from "@/components/Permalink";
 import Reveal from "@/components/Reveal";
 import { guide, type Lesson } from "@/data/guide";
 import { doors } from "@/data/doors";
-import { stableRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 import { appId, breadcrumbs, graph, site } from "@/lib/seo";
 
 export function generateStaticParams() {

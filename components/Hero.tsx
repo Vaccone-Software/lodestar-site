@@ -23,7 +23,7 @@ function place(crop: Crop): React.CSSProperties {
 
 const phone = "(max-width: 760px), (max-aspect-ratio: 1/1)";
 
-export default function Hero({ tag }: { tag: string }) {
+export default function Hero({ tag }: { tag: string | null }) {
   const stage = useRef<HTMLDivElement>(null);
   const [focus, setFocus] = useState<string | null>(null);
 

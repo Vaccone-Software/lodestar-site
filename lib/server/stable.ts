@@ -117,3 +117,15 @@ export function stableForPage(): Promise<StableAnswer | null> {
     stableAnswer(Date.now()).pipe(Effect.orElseSucceed(() => null)),
   );
 }
+
+/** The stable tag and its date, for a page and its download. A null tag
+    sends the download to the releases page rather than to a guess. */
+export async function stableRelease(): Promise<{
+  tag: string | null;
+  date: string;
+}> {
+  const found = await stableForPage();
+  return found
+    ? { tag: found.tag, date: found.published }
+    : { tag: null, date: "" };
+}

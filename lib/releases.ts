@@ -1,5 +1,3 @@
-import { parseBuilds, stable } from "@/lib/promotion";
-
 // One shape for a release, shared by the page that bakes the list at
 // build and the client that re-reads it between deploys.
 export type Release = {
@@ -10,8 +8,9 @@ export type Release = {
 };
 
 // The releases list, not releases/latest: that endpoint excludes
-// prereleases, and every release before 1.0 is one. A hundred, so the
-// stable walk (lib/promotion.ts) sees months and not a week of patches.
+// prereleases, and every release before 1.0 is one. The changelog lists
+// every build from it; which one is stable is the server's to say
+// (lib/server/stable.ts, GET /api/stable). Safe in the browser.
 export const releasesUrl =
   "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=100";
 
@@ -30,23 +29,18 @@ export function parseReleases(data: unknown): Release[] {
     }));
 }
 
-/** The stable release's tag and date: what a new visitor downloads. The
-    newest build is preview, for the Macs that asked for it; stable is the
-    one that has soaked (lib/promotion.ts). Pages are built once and rebuilt
-    in the background at most an hour later, so stable moving reaches the
-    page without a deploy; the download pill re-reads it in the browser as
-    well. (Never no-store: that renders every page on every request.) */
-export async function stableRelease(): Promise<{ tag: string; date: string }> {
-  try {
-    const response = await fetch(releasesUrl, { next: { revalidate: 3600 } });
-    const found = stable(parseBuilds(await response.json()), Date.now());
-    if (found) return { tag: found.tag, date: new Date(found.published).toISOString() };
-  } catch {}
-  return { tag: "v0.47.0", date: "" };
-}
-
 /** The disk image a tag ships as. */
 export function dmgFor(tag: string): string {
   const version = tag.replace(/^v/, "");
   return `https://github.com/Vaccone-Software/lodestar/releases/download/${tag}/lodestar-${version}.dmg`;
+}
+
+/** Where a download goes when stable is not known: the releases page,
+    never a guessed version. */
+export const releasesPage =
+  "https://github.com/Vaccone-Software/lodestar/releases";
+
+/** The download for a stable tag, or the releases page without one. */
+export function downloadFor(tag: string | null): string {
+  return tag ? dmgFor(tag) : releasesPage;
 }

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
-import { stableRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 import { site } from "@/lib/seo";
 
 export const dynamic = "force-static";

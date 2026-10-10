@@ -1,7 +1,7 @@
 import EscHome from "@/components/EscHome";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
-import { stableRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 
 // A page that does not exist is a destination that does not exist, and
 // the answer is the same one every surface in Lodestar gives: esc.

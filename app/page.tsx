@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import Nav from "@/components/Nav";
-import { stableRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 import { appJsonLd, graph } from "@/lib/seo";
 
 export default async function Page() {

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import Releases from "@/components/Releases";
-import { stableRelease, parseReleases, releasesUrl, type Release } from "@/lib/releases";
+import { parseReleases, releasesUrl, type Release } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 
 export const metadata: Metadata = {
   title: "Changelog",

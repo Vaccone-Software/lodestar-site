@@ -6,7 +6,7 @@ import Loop from "@/components/Loop";
 import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
-import { stableRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 import { appJsonLd, breadcrumbs, graph } from "@/lib/seo";
 
 // The four doors and nothing else: any other name is a 404, and the guide,

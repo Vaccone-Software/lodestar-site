@@ -76,6 +76,15 @@ describe("the front page", () => {
     const { html } = await page("/");
     expect(html).toMatch(/href="https:\/\/github\.com\/Vaccone-Software\/lodestar\/releases\/download\/v[\d.]+\/[^"]+\.dmg"/);
   });
+
+  test("Download is the build /api/stable names", async () => {
+    const response = await fetch(origin + "/api/stable");
+    expect(response.status).toBe(200);
+    const stable = await response.json();
+    expect(stable.zip.name).toBe(`lodestar-${stable.version}.zip`);
+    const { html } = await page("/");
+    expect(html).toContain(`/releases/download/${stable.tag}/lodestar-${stable.version}.dmg`);
+  });
 });
 
 // MARK: - The doors

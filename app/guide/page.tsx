@@ -4,7 +4,7 @@ import GuideSearch from "@/components/GuideSearch";
 import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide, type GuidePage } from "@/data/guide";
-import { stableRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 
 export const metadata: Metadata = {
   title: "Guide: Every Feature and Keyboard Shortcut for Mac",
