@@ -1,9 +1,13 @@
-// POST /api/feedback, called as Next calls it, with Resend played by a
-// stand-in fetch: every answer the app reads, and the email it sends.
+// POST /api/feedback's answers (lib/server/feedback.ts), with Resend played
+// by a stand-in fetch and the deployment's settings handed over through a
+// ConfigProvider, never written into process.env: every answer the app
+// reads, and the email it sends.
 // Runs without a build: `bun test tests/feedback.test.ts`.
 
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { POST } from "@/app/api/feedback/route";
+import { ConfigProvider, Effect } from "effect";
+import { respond } from "@/lib/server/feedback";
+import { HttpLive, fetchAtCallTime } from "@/lib/server/http";
 
 const realFetch = globalThis.fetch;
 const env = {
@@ -11,6 +15,7 @@ const env = {
   FEEDBACK_TO: "to@example.com",
   FEEDBACK_FROM: "from@example.com",
 };
+let settings: Record<string, string> = { ...env };
 let sent: { url: string; init: RequestInit }[] = [];
 
 const resend = (respond: () => Response) => {
@@ -24,7 +29,7 @@ const resend = (respond: () => Response) => {
 };
 
 const post = (body: unknown, header = true) =>
-  POST(
+  run(
     new Request("https://lodestar.vaccone.software/api/feedback", {
       method: "POST",
       headers: {
@@ -35,14 +40,24 @@ const post = (body: unknown, header = true) =>
     }),
   );
 
+const run = (request: Request) =>
+  Effect.runPromise(
+    respond(request).pipe(
+      fetchAtCallTime,
+      Effect.provide(HttpLive),
+      Effect.provide(
+        ConfigProvider.layer(ConfigProvider.fromEnv({ env: settings })),
+      ),
+    ),
+  );
+
 beforeEach(() => {
-  Object.assign(process.env, env);
+  settings = { ...env };
   resend(() => Response.json({ id: "sent" }));
 });
 
 afterEach(() => {
   globalThis.fetch = realFetch;
-  for (const key of Object.keys(env)) delete process.env[key];
 });
 
 describe("/api/feedback", () => {
@@ -93,7 +108,7 @@ describe("/api/feedback", () => {
   });
 
   test("without the deployment's settings it says so", async () => {
-    delete process.env.RESEND_API_KEY;
+    delete settings.RESEND_API_KEY;
     const response = await post({ message: "hi" });
     expect(response.status).toBe(503);
     expect(await response.json()).toEqual({ error: "feedback is not set up" });

@@ -12,6 +12,7 @@ import {
   stable,
   type Build,
 } from "@/lib/promotion";
+import { insideNext } from "@/lib/server/config";
 import { Releases, type GitHubRelease } from "@/lib/server/github";
 
 /** What GET /api/stable returns. The app decodes exactly this. */
@@ -106,15 +107,17 @@ export const stableAnswer = Effect.fn("stableAnswer")(function* (now: number) {
   return found;
 });
 
-// One runtime for the server, shared by the endpoint and every page. Next
-// sets NEXT_RUNTIME in its server and its build; there the list goes
-// through Next's cache. Anywhere else (the tests) GitHub is asked directly.
+// One runtime for the server, shared by the endpoint and every page. Inside
+// Next's server and build (lib/server/config.ts) the list goes through
+// Next's cache; anywhere else (the tests) GitHub is asked directly.
 const memoMap = Layer.makeMemoMapUnsafe();
 export const runtime = ManagedRuntime.make(
-  process.env.NEXT_RUNTIME ? Releases.layerCached : Releases.layer,
-  {
-    memoMap,
-  },
+  Layer.unwrap(
+    Effect.map(insideNext, (inside) =>
+      inside ? Releases.layerCached : Releases.layer,
+    ),
+  ),
+  { memoMap },
 );
 
 /** The stable answer for a page, or null when GitHub cannot say. A page

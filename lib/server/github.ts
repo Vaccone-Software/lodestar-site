@@ -3,13 +3,24 @@
 // the shape promotion needs, so a rate-limit page or a changed field is a
 // named failure and never a wrong answer. Server only.
 //
-// GITHUB_TOKEN, when the deployment has one, lifts the anonymous limit of
-// sixty requests an hour that Vercel's shared addresses can run through.
-// It needs no permissions: the list is public.
+// GITHUB_TOKEN (lib/server/config.ts), when the deployment has one, lifts
+// the anonymous limit of sixty requests an hour that Vercel's shared
+// addresses can run through. It needs no permissions: the list is public.
 
-import { Cause, Context, Effect, Exit, Layer, Schedule, Schema } from "effect";
+import {
+  Cause,
+  Context,
+  Effect,
+  Exit,
+  Layer,
+  Option,
+  Redacted,
+  Schedule,
+  Schema,
+} from "effect";
 import { HttpClient, HttpClientResponse } from "effect/http";
 import { unstable_cache } from "next/cache";
+import { gitHubToken } from "@/lib/server/config";
 import { HttpLive, fetchAtCallTime } from "@/lib/server/http";
 
 export const releasesUrl =
@@ -61,15 +72,17 @@ export class Malformed extends Schema.TaggedError<Malformed>()("Malformed", {
 
 export type ReleasesError = Unreachable | RateLimited | Malformed;
 
-const headers = (): Record<string, string> => {
-  const token = process.env.GITHUB_TOKEN;
-  return {
-    accept: "application/vnd.github+json",
-    "user-agent": "lodestar-site",
-    "x-github-api-version": "2022-11-28",
-    ...(token ? { authorization: `Bearer ${token}` } : {}),
-  };
-};
+const headers = (
+  token: Option.Option<Redacted.Redacted<string>>,
+): Record<string, string> => ({
+  accept: "application/vnd.github+json",
+  "user-agent": "lodestar-site",
+  "x-github-api-version": "2022-11-28",
+  ...Option.match(token, {
+    onNone: () => ({}),
+    onSome: (token) => ({ authorization: `Bearer ${Redacted.value(token)}` }),
+  }),
+});
 
 const judge = (
   response: HttpClientResponse.HttpClientResponse,
@@ -104,7 +117,8 @@ const isReleasesError = (error: unknown): error is ReleasesError =>
 /** Asks GitHub: eight seconds at most, two more tries for a stumble. */
 const make = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient;
-  const once = client.get(releasesUrl, { headers: headers() }).pipe(
+  const token = yield* gitHubToken;
+  const once = client.get(releasesUrl, { headers: headers(token) }).pipe(
     Effect.mapError(
       (error) => new Unreachable({ message: error.message, transient: true }),
     ),
