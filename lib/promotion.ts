@@ -1,11 +1,9 @@
-// The stable channel, as the app computes it (Sources/LodestarCore/
-// Promotion.swift in the app's repository): a pure function of the public
-// releases list and the clock. Every build ships to preview the moment it
-// is published; stable takes it once its line has soaked. Nothing is
-// flipped or stored, so the site, the app's updater and the Homebrew job
-// each compute the same answer from the same list. tests/fixtures/
-// promotion.json is the app's own fixture, copied, so the two languages
-// are held to the same answers.
+// The stable channel, decided here and nowhere else: a pure function of
+// the public releases list and the clock. Every build ships to preview the
+// moment it is published; stable takes it once its line has soaked.
+// Nothing is flipped or stored; the app's updater and the Homebrew job ask
+// /api/stable, so a change to this rule is a deploy of this site.
+// tests/fixtures/promotion.json holds it to its cases.
 //
 //   - A line is a major.minor. Its clock starts at its first build newer
 //     than stable. Patches never reset it; a lone patch starts its own.
@@ -13,6 +11,10 @@
 //   - No build is taken younger than a day; the one before it goes.
 //   - "[held]" in a title passes over that build and its line's builds
 //     still waiting when it came; the stable beneath it stays.
+//   - "[hotfix]" in a title takes that build to stable the moment it is
+//     published, with no soak and no floor: stable exists to spare most
+//     Macs every day's build, never to hold back a fix. Builds after it
+//     wait as usual.
 //   - Releases below 0.48.0 shipped before channels, to everyone.
 
 export type Build = {
@@ -47,6 +49,7 @@ export function isNewer(a: number[], b: number[]): boolean {
 const lineOf = (build: Build) =>
   `${build.version[0] ?? 0}.${build.version[1] ?? 0}`;
 const held = (build: Build) => /\[held\]/i.test(build.title);
+const hotfix = (build: Build) => /\[hotfix\]/i.test(build.title);
 const newest = (builds: Build[]) =>
   builds.reduce((best, build) =>
     isNewer(build.version, best.version) ? build : best,
@@ -125,7 +128,9 @@ function usable(builds: Build[], now: number): Build[] {
 const soakFor = (line: string, stableLine: string) =>
   line === stableLine ? policy.patchSoak : policy.minorSoak;
 const eligibleAt = (build: Build, since: number, soak: number) =>
-  Math.max(since + soak, build.published + policy.settle);
+  hotfix(build)
+    ? build.published
+    : Math.max(since + soak, build.published + policy.settle);
 
 /** Walks time forward from the newest release before channels (or the
     oldest in the list) to `now`, moving stable each time a build becomes
