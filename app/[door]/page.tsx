@@ -6,7 +6,7 @@ import Loop from "@/components/Loop";
 import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
-import { latestRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/releases";
 import { appJsonLd, breadcrumbs, graph } from "@/lib/seo";
 
 // The four doors and nothing else: any other name is a 404, and the guide,
@@ -52,7 +52,7 @@ export default async function Page({
   const { door: slug } = await params;
   const door = doors.find((d) => d.slug === slug);
   if (!door) notFound();
-  const { tag } = await latestRelease();
+  const { tag } = await stableRelease();
   // The guide page that goes deeper: the door page stays one screen, and
   // the depth is one link away, for readers and for search engines alike.
   const deeper = guide.find((page) => page.slug === door.guide[0]);

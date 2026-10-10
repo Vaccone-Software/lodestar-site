@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { dmgFor } from "@/lib/releases";
+import { parseBuilds, stable } from "@/lib/promotion";
+import { dmgFor, releasesUrl } from "@/lib/releases";
 
 // The build bakes a working link; the client re-reads the releases list so
-// the pill tracks new releases between deploys. The list, never
-// releases/latest: that endpoint excludes prereleases, and every release
-// before 1.0 is one.
-const releases =
-  "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1";
+// the pill tracks stable between deploys. Stable, not the newest build:
+// the newest is preview, and a first install should be one that has
+// soaked (lib/promotion.ts).
 
 /** A phone or a tablet: somewhere a disk image cannot be opened. iPadOS
     presents itself as a Mac, so a Mac that answers to touch is one too. */
@@ -37,11 +36,12 @@ export default function DownloadPill({
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     setAway(awayFromAMac());
-    fetch(releases)
+    fetch(releasesUrl)
       .then((response) => (response.ok ? response.json() : null))
       .then((data) => {
-        const assets: { name?: string; browser_download_url?: string }[] =
-          data?.[0]?.assets ?? [];
+        const tag = stable(parseBuilds(data), Date.now())?.tag;
+        const entry = Array.isArray(data) ? data.find((release) => release?.tag_name === tag) : null;
+        const assets: { name?: string; browser_download_url?: string }[] = entry?.assets ?? [];
         const dmg = assets.find((entry) => entry.name?.endsWith(".dmg"));
         if (dmg?.browser_download_url) setHref(dmg.browser_download_url);
       })

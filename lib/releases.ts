@@ -1,3 +1,5 @@
+import { parseBuilds, stable } from "@/lib/promotion";
+
 // One shape for a release, shared by the page that bakes the list at
 // build and the client that re-reads it between deploys.
 export type Release = {
@@ -8,9 +10,10 @@ export type Release = {
 };
 
 // The releases list, not releases/latest: that endpoint excludes
-// prereleases, and every release before 1.0 is one.
+// prereleases, and every release before 1.0 is one. A hundred, so the
+// stable walk (lib/promotion.ts) sees months and not a week of patches.
 export const releasesUrl =
-  "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=50";
+  "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=100";
 
 export function parseReleases(data: unknown): Release[] {
   if (!Array.isArray(data)) return [];
@@ -27,21 +30,17 @@ export function parseReleases(data: unknown): Release[] {
     }));
 }
 
-/** The newest release's tag and date. Pages are built once and rebuilt in
-    the background at most an hour after a release, so a new version reaches
-    the page without a deploy; the download pill re-reads it in the browser
-    as well. (Never no-store: that renders every page on every request.) */
-export async function latestRelease(): Promise<{ tag: string; date: string }> {
+/** The stable release's tag and date: what a new visitor downloads. The
+    newest build is preview, for the Macs that asked for it; stable is the
+    one that has soaked (lib/promotion.ts). Pages are built once and rebuilt
+    in the background at most an hour later, so stable moving reaches the
+    page without a deploy; the download pill re-reads it in the browser as
+    well. (Never no-store: that renders every page on every request.) */
+export async function stableRelease(): Promise<{ tag: string; date: string }> {
   try {
-    const response = await fetch(
-      "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1",
-      { next: { revalidate: 3600 } },
-    );
-    const data = await response.json();
-    const tag = data?.[0]?.tag_name;
-    const date = data?.[0]?.published_at;
-    if (typeof tag === "string" && tag.startsWith("v"))
-      return { tag, date: typeof date === "string" ? date : "" };
+    const response = await fetch(releasesUrl, { next: { revalidate: 3600 } });
+    const found = stable(parseBuilds(await response.json()), Date.now());
+    if (found) return { tag: found.tag, date: new Date(found.published).toISOString() };
   } catch {}
   return { tag: "v0.47.0", date: "" };
 }

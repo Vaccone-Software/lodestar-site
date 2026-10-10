@@ -1,12 +1,12 @@
 import EscHome from "@/components/EscHome";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
-import { latestRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/releases";
 
 // A page that does not exist is a destination that does not exist, and
 // the answer is the same one every surface in Lodestar gives: esc.
 export default async function NotFound() {
-  const { tag } = await latestRelease();
+  const { tag } = await stableRelease();
   return (
     <>
       <Nav tag={tag} />

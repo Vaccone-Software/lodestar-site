@@ -4,7 +4,7 @@ import GuideSearch from "@/components/GuideSearch";
 import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide, type GuidePage } from "@/data/guide";
-import { latestRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/releases";
 
 export const metadata: Metadata = {
   title: "Guide: Every Feature and Keyboard Shortcut for Mac",
@@ -57,7 +57,7 @@ function Row({ page }: { page: GuidePage }) {
 }
 
 export default async function GuideIndex() {
-  const { tag } = await latestRelease();
+  const { tag } = await stableRelease();
   const inDoors = new Set(Object.values(byDoor).flat());
   const rest = guide.filter((p) => !inDoors.has(p.slug));
   const hidden = guide.reduce(
