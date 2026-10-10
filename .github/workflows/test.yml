@@ -15,4 +15,9 @@ jobs:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium
+      # The build and the endpoint read GitHub's releases list; the
+      # workflow's own token keeps a busy runner clear of the anonymous
+      # sixty-an-hour limit.
       - run: bun run test
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
