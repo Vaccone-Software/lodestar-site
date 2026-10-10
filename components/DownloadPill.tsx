@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { dmgFor } from "@/lib/releases";
+import { dmgFor, downloadFor } from "@/lib/releases";
 
-// The build bakes a working link; the client re-reads the releases list so
-// the pill tracks new releases between deploys. The list, never
-// releases/latest: that endpoint excludes prereleases, and every release
-// before 1.0 is one.
-const releases =
-  "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1";
+// The page bakes a working link; the client asks /api/stable again so the
+// pill tracks stable between rebuilds. Stable, not the newest build: the
+// newest is preview, and a first install should be one that has soaked.
+// When stable is not known the link is the releases page, never a guess.
 
 /** A phone or a tablet: somewhere a disk image cannot be opened. iPadOS
     presents itself as a Mac, so a Mac that answers to touch is one too. */
@@ -23,11 +21,11 @@ export default function DownloadPill({
   label = "Download for Mac",
   small = false,
 }: {
-  fallback: string;
+  fallback: string | null;
   label?: string;
   small?: boolean;
 }) {
-  const [href, setHref] = useState(dmgFor(fallback));
+  const [href, setHref] = useState(downloadFor(fallback));
   // Most people who follow a link arrive on a phone, where the download
   // cannot run. There the pill sends the page on to the Mac instead: the
   // share sheet (AirDrop, Messages, Mail to yourself), or the link copied
@@ -37,13 +35,10 @@ export default function DownloadPill({
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     setAway(awayFromAMac());
-    fetch(releases)
+    fetch("/api/stable")
       .then((response) => (response.ok ? response.json() : null))
-      .then((data) => {
-        const assets: { name?: string; browser_download_url?: string }[] =
-          data?.[0]?.assets ?? [];
-        const dmg = assets.find((entry) => entry.name?.endsWith(".dmg"));
-        if (dmg?.browser_download_url) setHref(dmg.browser_download_url);
+      .then((data: { tag?: unknown } | null) => {
+        if (typeof data?.tag === "string") setHref(dmgFor(data.tag));
       })
       .catch(() => {});
   }, []);

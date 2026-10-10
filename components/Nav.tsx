@@ -8,7 +8,7 @@ export default function Nav({
   current,
   over = false,
 }: {
-  tag: string;
+  tag: string | null;
   current?: string;
   /** Laid over the homepage's scene rather than above a page. */
   over?: boolean;

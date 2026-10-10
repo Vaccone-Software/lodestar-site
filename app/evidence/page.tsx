@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import Permalink from "@/components/Permalink";
-import { latestRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 
 export const metadata: Metadata = {
   title: "Evidence",
@@ -129,7 +129,7 @@ const results: Result[] = [
 ];
 
 export default async function EvidencePage() {
-  const { tag } = await latestRelease();
+  const { tag } = await stableRelease();
   return (
     <>
     <Nav tag={tag} />

@@ -1,4 +1,4 @@
-import { dmgFor } from "@/lib/releases";
+import { downloadFor } from "@/lib/releases";
 
 // What search engines are told, in their own vocabulary. The app is
 // described once, under one id, and every page either carries it (the
@@ -8,7 +8,7 @@ import { dmgFor } from "@/lib/releases";
 export const site = "https://lodestar.vaccone.software";
 const appId = `${site}/#app`;
 
-export function appJsonLd(tag: string, features?: string[]) {
+export function appJsonLd(tag: string | null, features?: string[]) {
   return {
     "@type": "SoftwareApplication",
     "@id": appId,
@@ -18,8 +18,8 @@ export function appJsonLd(tag: string, features?: string[]) {
     description:
       "Free tools for the Mac: spelling and grammar checked as you type, any app or window one key and a letter away, clipboard history, and dictation you can edit.",
     url: `${site}/`,
-    softwareVersion: tag.replace(/^v/, ""),
-    downloadUrl: dmgFor(tag),
+    ...(tag ? { softwareVersion: tag.replace(/^v/, "") } : {}),
+    downloadUrl: downloadFor(tag),
     releaseNotes: `${site}/changelog`,
     license: "https://github.com/Vaccone-Software/lodestar/blob/main/LICENSE.md",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },

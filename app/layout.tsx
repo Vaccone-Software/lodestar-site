@@ -25,6 +25,11 @@ const jetbrains = JetBrains_Mono({
 const description =
   "Lodestar is a free Mac app: spelling and grammar checked as you type, any app or window one key and a letter away, everything you copy kept and searchable, and dictation you can edit before it lands.";
 
+// Every page carries the stable download, so every page is rebuilt in the
+// background at most five minutes after stable moves. A page built while
+// GitHub could not be reached links to the releases page until then.
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://lodestar.vaccone.software"),
   title: {
@@ -57,6 +62,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${interTight.variable} ${jetbrains.variable}`}
     >
       <body>

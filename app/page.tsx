@@ -1,10 +1,10 @@
 import Hero from "@/components/Hero";
 import Nav from "@/components/Nav";
-import { latestRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 import { appJsonLd, graph } from "@/lib/seo";
 
 export default async function Page() {
-  const { tag } = await latestRelease();
+  const { tag } = await stableRelease();
   return (
     <main id="main" className="relative">
       <script

@@ -76,6 +76,25 @@ describe("the front page", () => {
     const { html } = await page("/");
     expect(html).toMatch(/href="https:\/\/github\.com\/Vaccone-Software\/lodestar\/releases\/download\/v[\d.]+\/[^"]+\.dmg"/);
   });
+
+  test("every answer carries the site's headers", async () => {
+    for (const path of ["/", "/api/stable", "/opengraph-image"]) {
+      const response = await fetch(origin + path);
+      expect(response.headers.get("x-content-type-options")).toBe("nosniff");
+      expect(response.headers.get("x-frame-options")).toBe("DENY");
+      expect(response.headers.get("referrer-policy")).toBe("strict-origin-when-cross-origin");
+      expect(response.headers.get("x-powered-by")).toBeNull();
+    }
+  });
+
+  test("Download is the build /api/stable names", async () => {
+    const response = await fetch(origin + "/api/stable");
+    expect(response.status).toBe(200);
+    const stable = await response.json();
+    expect(stable.zip.name).toBe(`lodestar-${stable.version}.zip`);
+    const { html } = await page("/");
+    expect(html).toContain(`/releases/download/${stable.tag}/lodestar-${stable.version}.dmg`);
+  });
 });
 
 // MARK: - The doors

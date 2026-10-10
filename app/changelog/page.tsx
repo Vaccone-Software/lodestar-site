@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import Releases from "@/components/Releases";
-import { latestRelease, parseReleases, releasesUrl, type Release } from "@/lib/releases";
+import { parseReleases, releasesUrl, type Release } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -24,7 +25,8 @@ async function baked(): Promise<Release[]> {
 
 export default async function Page() {
   const releases = await baked();
-  const latest = releases[0]?.tag ?? (await latestRelease()).tag;
+  // The download in the nav is stable; the list below is every build.
+  const latest = (await stableRelease()).tag;
   return (
     <>
     <Nav tag={latest} />

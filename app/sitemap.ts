@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
-import { latestRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 import { site } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 // the guide the release documents. The latest release's date is the
 // honest last-modified for all of them.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { date } = await latestRelease();
+  const { date } = await stableRelease();
   const lastModified = date ? new Date(date) : new Date();
   const page = (path: string, priority: number) => ({ url: `${site}${path}`, lastModified, priority });
   return [

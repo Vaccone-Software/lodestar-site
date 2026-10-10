@@ -8,9 +8,11 @@ export type Release = {
 };
 
 // The releases list, not releases/latest: that endpoint excludes
-// prereleases, and every release before 1.0 is one.
+// prereleases, and every release before 1.0 is one. The changelog lists
+// every build from it; which one is stable is the server's to say
+// (lib/server/stable.ts, GET /api/stable). Safe in the browser.
 export const releasesUrl =
-  "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=50";
+  "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=100";
 
 export function parseReleases(data: unknown): Release[] {
   if (!Array.isArray(data)) return [];
@@ -27,27 +29,18 @@ export function parseReleases(data: unknown): Release[] {
     }));
 }
 
-/** The newest release's tag and date. Pages are built once and rebuilt in
-    the background at most an hour after a release, so a new version reaches
-    the page without a deploy; the download pill re-reads it in the browser
-    as well. (Never no-store: that renders every page on every request.) */
-export async function latestRelease(): Promise<{ tag: string; date: string }> {
-  try {
-    const response = await fetch(
-      "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=1",
-      { next: { revalidate: 3600 } },
-    );
-    const data = await response.json();
-    const tag = data?.[0]?.tag_name;
-    const date = data?.[0]?.published_at;
-    if (typeof tag === "string" && tag.startsWith("v"))
-      return { tag, date: typeof date === "string" ? date : "" };
-  } catch {}
-  return { tag: "v0.47.0", date: "" };
-}
-
 /** The disk image a tag ships as. */
 export function dmgFor(tag: string): string {
   const version = tag.replace(/^v/, "");
   return `https://github.com/Vaccone-Software/lodestar/releases/download/${tag}/lodestar-${version}.dmg`;
+}
+
+/** Where a download goes when stable is not known: the releases page,
+    never a guessed version. */
+export const releasesPage =
+  "https://github.com/Vaccone-Software/lodestar/releases";
+
+/** The download for a stable tag, or the releases page without one. */
+export function downloadFor(tag: string | null): string {
+  return tag ? dmgFor(tag) : releasesPage;
 }

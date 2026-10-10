@@ -9,7 +9,7 @@ import Permalink from "@/components/Permalink";
 import Reveal from "@/components/Reveal";
 import { guide, type Lesson } from "@/data/guide";
 import { doors } from "@/data/doors";
-import { latestRelease } from "@/lib/releases";
+import { stableRelease } from "@/lib/server/stable";
 import { appId, breadcrumbs, graph, site } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -127,7 +127,7 @@ export default async function Page({
   const page = guide[index];
   const prev = guide[index - 1];
   const next = guide[index + 1];
-  const { tag } = await latestRelease();
+  const { tag } = await stableRelease();
   const lessons = [page.first, ...page.ready];
   const door = doors.find((d) => d.slug === page.door);
   const jsonLd = graph(
