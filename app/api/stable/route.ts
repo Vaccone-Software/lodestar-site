@@ -10,8 +10,6 @@
 import { Effect } from "effect";
 import { runtime, stableAnswer } from "@/lib/server/stable";
 
-export const dynamic = "force-dynamic";
-
 const fresh = "public, s-maxage=300, stale-while-revalidate=86400";
 
 const failure = (status: number, error: string) =>

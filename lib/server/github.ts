@@ -7,15 +7,16 @@
 // sixty requests an hour that Vercel's shared addresses can run through.
 // It needs no permissions: the list is public.
 
-import { Context, Effect, Layer, Schedule, Schema } from "effect";
-import { FetchHttpClient, HttpClient, HttpClientResponse } from "effect/http";
+import { Cause, Context, Effect, Exit, Layer, Schedule, Schema } from "effect";
+import { HttpClient, HttpClientResponse } from "effect/http";
+import { unstable_cache } from "next/cache";
 import { HttpLive, fetchAtCallTime } from "@/lib/server/http";
 
 export const releasesUrl =
   "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=100";
 
 /** How long a read of the list is kept before GitHub is asked again. A
-    failed ask keeps serving the last good list (Next's data cache). */
+    failed ask keeps serving the last good list (see `layerCached`). */
 export const freshFor = 300;
 
 const Asset = Schema.Struct({
@@ -95,46 +96,83 @@ const judge = (
   );
 };
 
+const isReleasesError = (error: unknown): error is ReleasesError =>
+  error instanceof Unreachable ||
+  error instanceof RateLimited ||
+  error instanceof Malformed;
+
+/** Asks GitHub: eight seconds at most, two more tries for a stumble. */
+const make = Effect.gen(function* () {
+  const client = yield* HttpClient.HttpClient;
+  const once = client.get(releasesUrl, { headers: headers() }).pipe(
+    Effect.mapError(
+      (error) => new Unreachable({ message: error.message, transient: true }),
+    ),
+    Effect.flatMap(judge),
+    fetchAtCallTime,
+    Effect.timeout("8 seconds"),
+    Effect.catchTag("TimeoutError", () =>
+      Effect.fail(
+        new Unreachable({
+          message: "GitHub took longer than eight seconds",
+          transient: true,
+        }),
+      ),
+    ),
+  );
+  const list = once.pipe(
+    Effect.retry({
+      schedule: Schedule.exponential("250 millis").pipe(Schedule.jittered),
+      times: 2,
+      while: (error) => error._tag === "Unreachable" && error.transient,
+    }),
+    Effect.withSpan("Releases.list"),
+  );
+  return { list };
+});
+
+/** The list through Next's cache: kept `freshFor` seconds across every page
+    and the endpoint, refreshed behind the answer, and the last good list
+    kept when a refresh fails. Not fetch's own cache: Next skips that for
+    a request carrying a token in a route that renders per request, which
+    is exactly /api/stable with GITHUB_TOKEN set. A failure is never kept:
+    the error comes back out typed, and the next ask tries again. */
+const throughNextCache = (
+  list: Effect.Effect<ReadonlyArray<GitHubRelease>, ReleasesError>,
+) => {
+  const cached = unstable_cache(
+    async () => {
+      const exit = await Effect.runPromiseExit(list);
+      if (Exit.isSuccess(exit)) return exit.value;
+      throw Cause.squash(exit.cause);
+    },
+    ["github-releases", releasesUrl],
+    { revalidate: freshFor },
+  );
+  return Effect.tryPromise({
+    try: () => cached(),
+    catch: (error) =>
+      isReleasesError(error)
+        ? error
+        : new Unreachable({ message: String(error), transient: false }),
+  });
+};
+
 export class Releases extends Context.Service<
   Releases,
   { readonly list: Effect.Effect<ReadonlyArray<GitHubRelease>, ReleasesError> }
 >()("lodestar-site/Releases") {
+  /** GitHub, asked every time: for tests, and anywhere outside Next. */
   static readonly layer = Layer.effect(
     Releases,
-    Effect.gen(function* () {
-      const client = yield* HttpClient.HttpClient;
-      const once = client.get(releasesUrl, { headers: headers() }).pipe(
-        Effect.mapError(
-          (error) =>
-            new Unreachable({ message: error.message, transient: true }),
-        ),
-        Effect.flatMap(judge),
-        // Next keeps the answer in its data cache for `freshFor` seconds,
-        // across every page and the endpoint, and keeps the last good one
-        // when a later ask fails.
-        Effect.provideService(FetchHttpClient.RequestInit, {
-          next: { revalidate: freshFor },
-        } as RequestInit),
-        fetchAtCallTime,
-        Effect.timeout("8 seconds"),
-        Effect.catchTag("TimeoutError", () =>
-          Effect.fail(
-            new Unreachable({
-              message: "GitHub took longer than eight seconds",
-              transient: true,
-            }),
-          ),
-        ),
-      );
-      const list = once.pipe(
-        Effect.retry({
-          schedule: Schedule.exponential("250 millis").pipe(Schedule.jittered),
-          times: 2,
-          while: (error) => error._tag === "Unreachable" && error.transient,
-        }),
-        Effect.withSpan("Releases.list"),
-      );
-      return Releases.of({ list });
-    }),
+    Effect.map(make, (service) => Releases.of(service)),
+  ).pipe(Layer.provide(HttpLive));
+
+  /** GitHub through Next's cache: what the site runs on. */
+  static readonly layerCached = Layer.effect(
+    Releases,
+    Effect.map(make, ({ list }) =>
+      Releases.of({ list: throughNextCache(list) }),
+    ),
   ).pipe(Layer.provide(HttpLive));
 }

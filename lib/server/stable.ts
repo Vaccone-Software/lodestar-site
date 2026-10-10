@@ -106,9 +106,16 @@ export const stableAnswer = Effect.fn("stableAnswer")(function* (now: number) {
   return found;
 });
 
-// One runtime for the server, shared by the endpoint and every page.
+// One runtime for the server, shared by the endpoint and every page. Next
+// sets NEXT_RUNTIME in its server and its build; there the list goes
+// through Next's cache. Anywhere else (the tests) GitHub is asked directly.
 const memoMap = Layer.makeMemoMapUnsafe();
-export const runtime = ManagedRuntime.make(Releases.layer, { memoMap });
+export const runtime = ManagedRuntime.make(
+  process.env.NEXT_RUNTIME ? Releases.layerCached : Releases.layer,
+  {
+    memoMap,
+  },
+);
 
 /** The stable answer for a page, or null when GitHub cannot say. A page
     never fails for it: the download falls back to the releases page. */
