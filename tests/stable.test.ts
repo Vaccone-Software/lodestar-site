@@ -108,7 +108,7 @@ describe("/api/stable", () => {
     answer(() => Response.json(list));
     const response = await GET();
     expect(response.headers.get("cache-control")).toBe(
-      "public, s-maxage=300, stale-while-revalidate=86400",
+      "public, max-age=0, s-maxage=60",
     );
   });
 

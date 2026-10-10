@@ -3,14 +3,18 @@
 // in lib/promotion.ts and the reading in lib/server, so this file only
 // says it over HTTP.
 //
-// A good answer is cached at the edge for five minutes and served stale
-// for a day while it refreshes, so GitHub stumbling is invisible. A
-// failure is never cached: the next ask tries again.
+// A good answer is kept at the edge for a minute, with no stale window:
+// a day-long stale-while-revalidate let Vercel's edge serve one answer
+// for hours while its background refresh never landed (seen 2026-10-10,
+// age 6440 s, two releases behind). GitHub stumbling stays invisible
+// without it, because the list itself is kept five minutes and its last
+// good copy outlives a failed refresh (lib/server/github.ts). A failure is
+// never cached: the next ask tries again.
 
 import { Effect } from "effect";
 import { runtime, stableAnswer } from "@/lib/server/stable";
 
-const fresh = "public, s-maxage=300, stale-while-revalidate=86400";
+const fresh = "public, max-age=0, s-maxage=60";
 
 const failure = (status: number, error: string) =>
   Response.json(
