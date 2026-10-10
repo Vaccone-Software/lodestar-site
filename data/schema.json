@@ -39,6 +39,14 @@
           "description" : "Keep Lodestar current: check daily, verify the download, apply quietly when idle (installed app only).",
           "type" : "boolean"
         },
+        "channel" : {
+          "description" : "Which releases updates follow. Stable takes a build once it has run on preview Macs for a few days. Preview takes every build as it ships.",
+          "enum" : [
+            "stable",
+            "preview"
+          ],
+          "type" : "string"
+        },
         "show-menu-bar" : {
           "description" : "Show the status item permanently; false hides it until lodestar is picked in the launcher.",
           "type" : "boolean"
