@@ -639,6 +639,110 @@
           "stable": "v1.0.0"
         }
       ]
+    },
+    {
+      "name": "a hotfix goes stable the moment it is published",
+      "releases": [
+        {
+          "tag": "v1.0.0",
+          "published": "2026-01-01T00:00:00Z",
+          "title": "Lodestar 1.0.0",
+          "zip": true,
+          "draft": false
+        },
+        {
+          "tag": "v1.1.0",
+          "published": "2026-01-10T00:00:00Z",
+          "title": "Lodestar 1.1.0",
+          "zip": true,
+          "draft": false
+        },
+        {
+          "tag": "v1.1.1",
+          "published": "2026-01-11T06:00:00Z",
+          "title": "Lodestar 1.1.1 [hotfix]",
+          "zip": true,
+          "draft": false
+        }
+      ],
+      "checks": [
+        {
+          "now": "2026-01-11T05:59:00Z",
+          "stable": "v1.0.0"
+        },
+        {
+          "now": "2026-01-11T06:00:00Z",
+          "stable": "v1.1.1"
+        }
+      ]
+    },
+    {
+      "name": "after a hotfix the next build waits as a patch",
+      "releases": [
+        {
+          "tag": "v1.0.0",
+          "published": "2026-01-01T00:00:00Z",
+          "title": "Lodestar 1.0.0",
+          "zip": true,
+          "draft": false
+        },
+        {
+          "tag": "v1.1.0",
+          "published": "2026-01-10T00:00:00Z",
+          "title": "Lodestar 1.1.0",
+          "zip": true,
+          "draft": false
+        },
+        {
+          "tag": "v1.1.1",
+          "published": "2026-01-11T00:00:00Z",
+          "title": "Lodestar 1.1.1 [HOTFIX]",
+          "zip": true,
+          "draft": false
+        },
+        {
+          "tag": "v1.1.2",
+          "published": "2026-01-12T00:00:00Z",
+          "title": "Lodestar 1.1.2",
+          "zip": true,
+          "draft": false
+        }
+      ],
+      "checks": [
+        {
+          "now": "2026-01-14T23:00:00Z",
+          "stable": "v1.1.1"
+        },
+        {
+          "now": "2026-01-15T00:00:00Z",
+          "stable": "v1.1.2"
+        }
+      ]
+    },
+    {
+      "name": "a held hotfix is still held",
+      "releases": [
+        {
+          "tag": "v1.0.0",
+          "published": "2026-01-01T00:00:00Z",
+          "title": "Lodestar 1.0.0",
+          "zip": true,
+          "draft": false
+        },
+        {
+          "tag": "v1.1.0",
+          "published": "2026-01-10T00:00:00Z",
+          "title": "Lodestar 1.1.0 [hotfix] [held]",
+          "zip": true,
+          "draft": false
+        }
+      ],
+      "checks": [
+        {
+          "now": "2026-03-01T00:00:00Z",
+          "stable": "v1.0.0"
+        }
+      ]
     }
   ]
 }
