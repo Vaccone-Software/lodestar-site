@@ -12,7 +12,7 @@
 //   - A new minor soaks seven days, a patch line three.
 //   - No build is taken younger than a day; the one before it goes.
 //   - "[held]" in a title passes over that build and its line's builds
-//     published before it.
+//     still waiting when it came; the stable beneath it stays.
 //   - Releases below 0.48.0 shipped before channels, to everyone.
 
 export type Build = {
@@ -70,29 +70,40 @@ export function parseBuilds(data: unknown): Build[] {
   });
 }
 
+/**
+ * The builds newer than stable, by line, less what a hold passed over: a
+ * held build always, and its line's earlier builds once the hold is out
+ * (published by `time`). Applied to the waiting builds only, so a hold
+ * cannot take back a build that was already stable when it came.
+ */
+function waiting(candidates: Build[], time: number): Map<string, Build[]> {
+  const lines = new Map<string, Build[]>();
+  for (const build of candidates) lines.set(lineOf(build), [...(lines.get(lineOf(build)) ?? []), build]);
+  for (const [line, members] of lines) {
+    const holds = members.filter((build) => held(build) && build.published <= time);
+    const hold = holds.length ? Math.max(...holds.map((build) => build.published)) : undefined;
+    const live = members.filter((build) => !held(build) && (hold === undefined || build.published > hold));
+    if (live.length) lines.set(line, live);
+    else lines.delete(line);
+  }
+  return lines;
+}
+
 /** The stable build at `now`, or null when there is none. */
 export function stable(builds: Build[], now: number): Build | null {
-  const shipped = builds.filter((build) => !build.draft && build.hasZip && build.published <= now);
-  const lastHold = new Map<string, number>();
-  for (const build of shipped.filter(held))
-    lastHold.set(lineOf(build), Math.max(lastHold.get(lineOf(build)) ?? build.published, build.published));
-  const pool = shipped
-    .filter((build) => {
-      const hold = lastHold.get(lineOf(build));
-      return hold === undefined || build.published > hold;
-    })
+  const pool = builds
+    .filter((build) => !build.draft && build.hasZip && build.published <= now)
     .sort((a, b) => (isNewer(a.version, b.version) ? 1 : isNewer(b.version, a.version) ? -1 : 0));
-  if (!pool.length) return null;
+  const unheld = pool.filter((build) => !held(build));
+  if (!unheld.length) return null;
 
-  const before = pool.filter((build) => isNewer(history, build.version));
-  let current = before.length ? before[before.length - 1] : pool[0];
+  const before = unheld.filter((build) => isNewer(history, build.version));
+  let current = before.length ? before[before.length - 1] : unheld[0];
   let time = current.published;
   for (;;) {
     const candidates = pool.filter((build) => isNewer(build.version, current.version));
-    const lines = new Map<string, Build[]>();
-    for (const build of candidates) lines.set(lineOf(build), [...(lines.get(lineOf(build)) ?? []), build]);
     const eligible: [Build, number][] = [];
-    for (const [line, members] of lines) {
+    for (const [line, members] of waiting(candidates, time)) {
       const since = Math.min(...members.map((build) => build.published));
       const soak = line === lineOf(current) ? policy.patchSoak : policy.minorSoak;
       for (const build of members)
@@ -101,6 +112,13 @@ export function stable(builds: Build[], now: number): Build | null {
     if (!eligible.length) break;
     const moment = Math.max(Math.min(...eligible.map(([, at]) => at)), time);
     if (moment > now) break;
+    // A hold published before that moment changes what is waiting: step
+    // to it and look again, as the app's walk does.
+    const holds = candidates.filter((build) => held(build) && build.published > time && build.published <= moment);
+    if (holds.length) {
+      time = Math.min(...holds.map((build) => build.published));
+      continue;
+    }
     current = newest(eligible.filter(([, at]) => at <= moment).map(([build]) => build));
     time = moment;
   }
