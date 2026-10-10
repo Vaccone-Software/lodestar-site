@@ -9,6 +9,7 @@
 
 import { Context, Effect, Layer, Schedule, Schema } from "effect";
 import { FetchHttpClient, HttpClient, HttpClientResponse } from "effect/http";
+import { HttpLive, fetchAtCallTime } from "@/lib/server/http";
 
 export const releasesUrl =
   "https://api.github.com/repos/Vaccone-Software/lodestar/releases?per_page=100";
@@ -114,11 +115,7 @@ export class Releases extends Context.Service<
         Effect.provideService(FetchHttpClient.RequestInit, {
           next: { revalidate: freshFor },
         } as RequestInit),
-        // fetch as it is at the moment of asking, not as it was when the
-        // runtime first looked: Next patches it for its data cache, and the
-        // tests stand in for GitHub the same way.
-        Effect.provideService(FetchHttpClient.Fetch, ((input, init) =>
-          globalThis.fetch(input, init)) as typeof fetch),
+        fetchAtCallTime,
         Effect.timeout("8 seconds"),
         Effect.catchTag("TimeoutError", () =>
           Effect.fail(
@@ -139,5 +136,5 @@ export class Releases extends Context.Service<
       );
       return Releases.of({ list });
     }),
-  ).pipe(Layer.provide(FetchHttpClient.layer));
+  ).pipe(Layer.provide(HttpLive));
 }
