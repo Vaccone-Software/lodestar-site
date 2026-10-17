@@ -7,6 +7,12 @@
 // Without them the endpoint says it is not set up, and the app keeps the
 // note on the clipboard so nothing written is lost.
 //
+// A note that carries an Idempotency-Key is sent once however often it is
+// posted: the app keeps a note until it knows it arrived, so a note whose
+// answer was lost is posted again with the same key, and the key goes on to
+// Resend, which answers a repeat with the first answer instead of sending
+// the email again (Resend keeps a key for 24 hours).
+//
 // Each way a note can fail is its own error, and each error is one answer:
 // the app reads the status, and these are the statuses it has always had.
 //
@@ -35,6 +41,22 @@ class NotSent extends Schema.TaggedError<NotSent>()("NotSent", {
   status: Schema.optional(Schema.Number),
   detail: Schema.String,
 }) {}
+
+/** The key as the app sends it: the app draws 32 hex digits, and anything of
+    8 to 128 letters, digits, dots, colons, underscores and hyphens is taken.
+    Anything else is ignored, not refused: an older app sends none, and a
+    note without a key is a note that must still arrive. */
+const keyShape = /^[A-Za-z0-9._:-]{8,128}$/;
+
+/** What Resend is given as the email's Idempotency-Key, or undefined for no
+    key. Resend's keys are one space for the whole account (1 to 256
+    characters), so the app's is made a path under this endpoint's own name:
+    nothing else that sends through the account can meet it, and a key
+    someone invented cannot stand in for another endpoint's. */
+export function resendKey(request: Request): string | undefined {
+  const key = request.headers.get("idempotency-key")?.trim();
+  return key && keyShape.test(key) ? `lodestar-feedback/${key}` : undefined;
+}
 
 function text(value: unknown, max: number): string | undefined {
   if (!Predicate.isString(value)) return undefined;
@@ -67,6 +89,7 @@ const send = Effect.fn("feedback.send")(function* (request: Request) {
   const version = text(field("version"), limits.field) ?? "unknown";
   const macos = text(field("macos"), limits.field) ?? "unknown";
   const diagnostics = text(field("diagnostics"), limits.diagnostics);
+  const idempotency = resendKey(request);
 
   const lines = [
     message,
@@ -88,6 +111,10 @@ const send = Effect.fn("feedback.send")(function* (request: Request) {
       text: lines.join("\n"),
       ...(validReply ? { reply_to: validReply } : {}),
     }),
+    (email) =>
+      idempotency
+        ? HttpClientRequest.setHeader(email, "Idempotency-Key", idempotency)
+        : email,
     client.execute,
     Effect.mapError((error) => new NotSent({ detail: error.message })),
   );

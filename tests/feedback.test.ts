@@ -28,13 +28,18 @@ const resend = (respond: () => Response) => {
   ) as unknown as typeof fetch;
 };
 
-const post = (body: unknown, header = true) =>
+const post = (
+  body: unknown,
+  header = true,
+  extra: Record<string, string> = {},
+) =>
   run(
     new Request("https://lodestar.vaccone.software/api/feedback", {
       method: "POST",
       headers: {
         "content-type": "application/json",
         ...(header ? { "x-lodestar-feedback": "1" } : {}),
+        ...extra,
       },
       body: typeof body === "string" ? body : JSON.stringify(body),
     }),
@@ -143,5 +148,66 @@ describe("/api/feedback", () => {
     });
     const response = await post({ message: "hi" });
     expect(response.status).toBe(502);
+  });
+
+  describe("the Idempotency-Key", () => {
+    const resendKeyOf = () =>
+      new Headers(sent[0].init.headers).get("idempotency-key");
+
+    test("the app's key goes to Resend, under this endpoint's own name", async () => {
+      const key = "7f3a9c1e5b2d4f60a8c1e3b5d7f90214";
+      const response = await post({ message: "hi" }, true, {
+        "idempotency-key": key,
+      });
+      expect(response.status).toBe(200);
+      expect(sent).toHaveLength(1);
+      expect(resendKeyOf()).toBe(`lodestar-feedback/${key}`);
+    });
+
+    test("a note posted twice with its key reaches Resend with the same key both times", async () => {
+      const headers = { "idempotency-key": "retried-note-0001" };
+      await post({ message: "hi" }, true, headers);
+      await post({ message: "hi" }, true, headers);
+      expect(sent).toHaveLength(2);
+      const keys = sent.map((call) =>
+        new Headers(call.init.headers).get("idempotency-key"),
+      );
+      expect(keys[0]).toBe("lodestar-feedback/retried-note-0001");
+      expect(keys[1]).toBe(keys[0]);
+    });
+
+    test("without a key Resend is given none", async () => {
+      await post({ message: "hi" });
+      expect(sent).toHaveLength(1);
+      expect(new Headers(sent[0].init.headers).has("idempotency-key")).toBe(
+        false,
+      );
+    });
+
+    test("a malformed key is ignored and the note is still sent", async () => {
+      for (const key of [
+        "short",
+        "x".repeat(129),
+        "has a space in it",
+        "semi;colon;key;value",
+        "naïve-unicode-key-1",
+      ]) {
+        const response = await post({ message: "hi" }, true, {
+          "idempotency-key": key,
+        });
+        expect(response.status).toBe(200);
+        expect(
+          new Headers(sent.at(-1)!.init.headers).has("idempotency-key"),
+        ).toBe(false);
+      }
+      expect(sent).toHaveLength(5);
+    });
+
+    test("an empty key is no key", async () => {
+      await post({ message: "hi" }, true, { "idempotency-key": "" });
+      expect(new Headers(sent[0].init.headers).has("idempotency-key")).toBe(
+        false,
+      );
+    });
   });
 });
