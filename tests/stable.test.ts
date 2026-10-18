@@ -64,7 +64,33 @@ afterEach(() => {
   globalThis.fetch = realFetch;
 });
 
+const sha = (digit: string) => `sha256:${digit.repeat(64)}`;
+
 describe("/api/stable", () => {
+  test("passes GitHub's digest of the zip through, and only a SHA-256", async () => {
+    const withDigest = (tag: string, digest: unknown) => {
+      const base = release(tag, ago(30));
+      return {
+        ...base,
+        assets: [{ ...base.assets[0], digest }, base.assets[1]],
+      };
+    };
+    answer(() => Response.json([withDigest("v0.47.0", sha("a"))]));
+    expect((await (await GET()).json()).zip).toEqual({
+      name: "lodestar-0.47.0.zip",
+      url: "https://github.com/Vaccone-Software/lodestar/releases/download/v0.47.0/lodestar-0.47.0.zip",
+      digest: sha("a"),
+    });
+    for (const odd of [null, "md5:abc", "sha256:ABC", sha("a").slice(0, -1)]) {
+      answer(() => Response.json([withDigest("v0.47.0", odd)]));
+      const body = await (await GET()).json();
+      expect("digest" in body.zip).toBe(false);
+    }
+    // Releases that predate the digest have none, and still answer.
+    answer(() => Response.json(list));
+    expect("digest" in (await (await GET()).json()).zip).toBe(false);
+  });
+
   test("answers the contract, exactly", async () => {
     answer(() => Response.json(list));
     const response = await GET();

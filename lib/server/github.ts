@@ -33,6 +33,9 @@ export const freshFor = 300;
 const Asset = Schema.Struct({
   name: Schema.String,
   browser_download_url: Schema.String,
+  /** GitHub's own hash of the file, `sha256:<hex>`: null for an asset
+      uploaded before GitHub kept one, and absent from older answers. */
+  digest: Schema.optionalKey(Schema.NullOr(Schema.String)),
 });
 
 /** One release, as much of it as promotion and the download read. */

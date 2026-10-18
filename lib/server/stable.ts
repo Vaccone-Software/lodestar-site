@@ -20,7 +20,10 @@ export type StableAnswer = {
   tag: string;
   version: string;
   published: string;
-  zip: { name: string; url: string };
+  /** `digest` is GitHub's `sha256:<hex>` of the zip, when it has one: the
+      app checks the bytes it downloads against it. Absent, nothing is
+      claimed, and the app's code signature check is the gate as ever. */
+  zip: { name: string; url: string; digest?: string };
   preview: { tag: string };
   pending: {
     line: string;
@@ -49,6 +52,11 @@ const zipOf = (release: GitHubRelease) =>
     (asset) =>
       asset.name.startsWith("lodestar-") && asset.name.endsWith(".zip"),
   );
+
+/** The zip's digest as GitHub reports it, only when it is a SHA-256 the
+    app can compare: anything else is not passed on. */
+const digestOf = (asset: { digest?: string | null }): string | undefined =>
+  /^sha256:[0-9a-f]{64}$/.test(asset.digest ?? "") ? asset.digest! : undefined;
 
 const toBuild = (release: GitHubRelease): Build[] => {
   const version = parseVersion(release.tag_name);
@@ -82,7 +90,11 @@ export function answer(
     tag: found.tag,
     version: found.version.join("."),
     published: iso(found.published),
-    zip: { name: zip.name, url: zip.browser_download_url },
+    zip: {
+      name: zip.name,
+      url: zip.browser_download_url,
+      ...(digestOf(zip) ? { digest: digestOf(zip) } : {}),
+    },
     preview: { tag: newest.tag },
     pending: pending(builds, now).map((line) => ({
       line: line.line,
