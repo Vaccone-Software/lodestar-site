@@ -121,7 +121,7 @@ export async function card({
         </div>
       </div>
       <div style={{ display: "flex", fontSize: 20, color: "#7d7771", fontFamily: "Inter", fontWeight: 400 }}>
-        Lodestar · Free · Apple silicon, macOS 14 or later
+        Lodestar · Free · Apple silicon, macOS 27 or later
       </div>
     </div>,
     {

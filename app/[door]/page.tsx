@@ -84,7 +84,7 @@ export default async function Page({
             </p>
             <DownloadPill fallback={tag} />
             <span className="text-faint mt-3 block text-[12.5px]">
-              Free · Apple silicon, macOS 14 or later
+              Free · Apple silicon, macOS 27 or later
             </span>
           </div>
           <div className="relative -order-1 mx-auto aspect-[4/3] w-full max-w-[520px] [@media(min-width:901px)_and_(min-height:701px)]:order-none [@media(min-width:901px)_and_(min-height:701px)]:aspect-auto [@media(min-width:901px)_and_(min-height:701px)]:h-full [@media(min-width:901px)_and_(min-height:701px)]:max-h-[520px] [@media(min-width:901px)_and_(min-height:701px)]:max-w-none">

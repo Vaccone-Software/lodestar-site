@@ -13,7 +13,7 @@ export function appJsonLd(tag: string | null, features?: string[]) {
     "@type": "SoftwareApplication",
     "@id": appId,
     name: "Lodestar",
-    operatingSystem: "macOS 14 or later (Apple silicon)",
+    operatingSystem: "macOS 27 or later (Apple silicon)",
     applicationCategory: "UtilitiesApplication",
     description:
       "Free tools for the Mac: spelling and grammar checked as you type, any app or window one key and a letter away, clipboard history, and dictation you can edit.",
