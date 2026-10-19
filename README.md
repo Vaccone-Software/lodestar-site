@@ -1,6 +1,8 @@
 # lodestar-site
 
-The Lodestar product page. Next.js, Tailwind, Maple Mono, one page.
+The Lodestar product page: the homepage is a Lodestar room built from the
+app's own design rules (components/room), beside the guide, the changelog and
+a page for each door. Next.js, Tailwind.
 
 ```sh
 bun install

@@ -23,7 +23,6 @@
   --well: rgb(34 29 25 / 0.05);
   --edge: rgb(69 43 26 / 0.13);
   --shade: 89 59 33;
-  --stone: #b9aea4;
   --key: #2e2926;
   --key-ink: #e6dfd6;
   --key-top: rgb(255 255 255 / 0.18);
@@ -49,7 +48,6 @@
     --well: rgb(236 229 220 / 0.05);
     --edge: rgb(255 237 219 / 0.11);
     --shade: 14 7 2;
-    --stone: #6e655e;
     --key: rgb(255 255 255 / 0.08);
     --key-ink: #ece5dc;
     --key-top: rgb(255 255 255 / 0.11);

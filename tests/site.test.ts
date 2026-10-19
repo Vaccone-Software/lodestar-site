@@ -12,7 +12,7 @@ import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
 
 const headline = "Everything one key away";
-const subline = "Free tools that stay on your Mac";
+const subline = "Write, switch, keep and speak, anywhere on your Mac";
 
 let server: ReturnType<typeof Bun.spawn>;
 let origin = "";
@@ -165,7 +165,7 @@ describe("layout", () => {
 
   const widths: [number, number][] = [[1920, 1080], [1440, 900], [1024, 768], [390, 844], [320, 640]];
   for (const [width, height] of widths) {
-    test(`at ${width} wide the headline is one line and nothing scrolls sideways`, async () => {
+    test(`at ${width} wide the headline is one line and nothing scrolls`, async () => {
       const tab = await browser.newPage({ viewport: { width, height } });
       // The loops never finish loading; the words are what is measured.
       await tab.goto(origin, { waitUntil: "domcontentloaded" });
@@ -183,13 +183,17 @@ describe("layout", () => {
           right: words.right,
           inside: box.width,
           page: document.documentElement.scrollWidth,
+          tall: document.documentElement.scrollHeight,
           viewport: window.innerWidth,
+          height: window.innerHeight,
         };
       });
       expect(measure.lines).toBe(1);
       expect(measure.left).toBeGreaterThanOrEqual(0);
       expect(measure.right).toBeLessThanOrEqual(measure.viewport);
       expect(measure.page).toBeLessThanOrEqual(measure.viewport);
+      // The room fits the window: nothing on the homepage scrolls.
+      expect(measure.tall).toBeLessThanOrEqual(measure.height);
       await tab.close();
     }, 30_000);
   }

@@ -1,0 +1,535 @@
+/* A Lodestar room. The site is built only from the app's own rules, from
+   DESIGN.md's "Objects in One Light", and then takes them literally: the mark
+   is the one light in the room, every picture's shadow falls away from it,
+   the keys are the app's one keycap, the room wears your Mac's accent, and
+   nothing glides. The colours are globals.css's; the accent is overridden
+   on the room itself, where a pick is worn. No italic, no gradient, no gloss,
+   no glow. */
+
+.room {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+/* The room's keys are the app's size: a hand's keycap, 22 points high. */
+.room :global(.key):not(:global(.cap)) {
+  height: 22px;
+  min-width: 34px;
+  padding: 0 6px;
+  font-size: 13px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px max(24px, env(safe-area-inset-left));
+}
+.brand {
+  font-weight: 600;
+  font-size: 17px;
+  color: inherit;
+  text-decoration: none;
+}
+.links {
+  display: flex;
+  gap: 22px;
+  font-size: 14px;
+}
+.links a {
+  color: var(--dim);
+  text-decoration: none;
+}
+.links a:hover {
+  color: var(--ink);
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.voice {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  width: min(92%, 760px);
+  text-align: center;
+  z-index: 3;
+}
+.voice h1 {
+  margin: 0;
+  font-family: var(--font-voice);
+  font-weight: 400;
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+}
+.voice p {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: var(--dim);
+}
+
+/* The words arrive grey while they are heard, then settle: each one appears
+   in its turn and turns to ink a moment later. */
+.word {
+  animation:
+    arrive 1ms steps(1, end) calc(0.26s + var(--n) * 0.23s) backwards,
+    settle 0.35s var(--curve) calc(0.78s + var(--n) * 0.23s) backwards;
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes settle {
+  from {
+    color: var(--dim);
+  }
+}
+
+/* Write acts on the headline, because it can do so truthfully: a word in
+   the voice is misspelled, a thin line finds it, the lens offers the fix on
+   a letter, and the letter mends it. */
+.typo {
+  text-decoration: underline var(--accent);
+  text-decoration-thickness: 3.5px;
+  text-underline-offset: 7px;
+}
+.chip {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px 7px 12px;
+  border-radius: var(--control);
+  background: var(--pane);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 8px 18px rgb(var(--shade) / 0.3);
+  font: 400 16px/1 var(--font-mono);
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.ring ellipse {
+  fill: none;
+  stroke: var(--hair);
+  stroke-width: 1;
+}
+.mark {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.door {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, 0);
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.door canvas {
+  display: block;
+  transition:
+    filter 0.18s var(--curve),
+    translate 0.18s var(--curve);
+}
+.door.up canvas {
+  translate: 0 -8px;
+}
+.door:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: var(--surface);
+}
+.dimmed {
+  opacity: 0.4;
+}
+.name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 16px;
+}
+.line {
+  max-width: 34ch;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.buy {
+  position: absolute;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  width: min(760px, 94%);
+  text-align: center;
+}
+.facts {
+  font-size: 13px;
+  color: var(--dim);
+}
+.tint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--dim);
+}
+.dots {
+  display: inline-flex;
+  gap: 7px;
+}
+.dots button {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 0 0.5px var(--edge);
+  cursor: pointer;
+}
+.dots button[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 2px var(--ground),
+    0 0 0 3.5px var(--c);
+}
+.dots button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* A room's panel: pane, the surface radius, a soft drawn shadow and a warm
+   half-point edge. It appears complete; nothing slides. */
+.panel {
+  position: absolute;
+  z-index: 5;
+  display: grid;
+  gap: 12px;
+  width: min(420px, 32vw);
+  padding: 20px;
+  border-radius: var(--surface);
+  background: var(--pane);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 1px 1px rgb(var(--shade) / 0.18),
+    0 26px 60px rgb(var(--shade) / 0.4);
+}
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 18px;
+}
+.say {
+  margin: 0;
+  font-family: var(--font-voice);
+  font-size: 18px;
+  line-height: 1.35;
+}
+.body {
+  margin: 0;
+  font-size: 14px;
+  color: var(--dim);
+}
+.stagebox {
+  display: grid;
+  align-content: center;
+  min-height: 150px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--well);
+}
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--dim);
+}
+.foot button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.keys {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.flash {
+  position: absolute;
+  left: 50%;
+  top: 96px;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: none;
+  max-width: 92vw;
+  padding: 11px 18px 12px;
+  border-radius: var(--surface);
+  background: var(--pane);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 18px 40px rgb(var(--shade) / 0.36);
+  text-align: left;
+}
+.flash.on {
+  display: block;
+}
+.flash b {
+  font-weight: 500;
+}
+.flash span {
+  display: block;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+/* The demos, in the app's own grammar. */
+.demo {
+  display: grid;
+  gap: 10px;
+}
+.note {
+  min-height: 1.4em;
+  font-family: var(--font-voice);
+  font-size: 15px;
+  color: var(--dim);
+  text-align: center;
+}
+.sheet {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--raised);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 2px 3px rgb(var(--shade) / 0.12);
+}
+.meta {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid var(--hair);
+  font-size: 13px;
+  color: var(--dim);
+}
+.hand {
+  min-height: 1.5em;
+  font-family: var(--font-mono);
+  font-size: 15px;
+}
+.under {
+  text-decoration: underline var(--accent);
+  text-decoration-thickness: 2.5px;
+  text-underline-offset: 4px;
+}
+.fix {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 10px;
+  margin-left: 66px;
+  padding: 6px 8px 6px 12px;
+  border-radius: var(--control);
+  background: var(--pane);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 6px 14px rgb(var(--shade) / 0.24);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+.wins {
+  position: relative;
+  height: 116px;
+}
+.win {
+  position: absolute;
+  width: 62%;
+  height: 82px;
+  border-radius: 9px;
+  background: var(--raised);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 8px 16px rgb(var(--shade) / 0.2);
+}
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 9px 9px 0 0;
+  background: var(--well);
+  font-size: 11.5px;
+  color: var(--dim);
+}
+.bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e0685c;
+}
+.bar i:nth-child(2) {
+  background: #e8b44c;
+}
+.bar i:nth-child(3) {
+  background: #6dbb5b;
+}
+.bar span {
+  flex: 1;
+  text-align: center;
+}
+.front .bar {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+/* The map the hold of lode peeks: each letter and the app it opens. */
+.map {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  display: grid;
+  gap: 5px;
+  padding: 8px 10px;
+  border-radius: var(--control);
+  background: var(--pane);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 8px 18px rgb(var(--shade) / 0.3);
+  font-size: 12px;
+}
+.map div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: end;
+  gap: 7px;
+}
+.clip {
+  display: grid;
+  align-content: space-between;
+  justify-items: start;
+  padding: 8px;
+  border-radius: 9px;
+  background: var(--raised);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 4px 8px rgb(var(--shade) / 0.16);
+  font-size: 12px;
+}
+.raised {
+  translate: 0 -6px;
+  box-shadow:
+    inset 0 1px 0 var(--key-top),
+    0 0 0 0.5px var(--edge),
+    0 10px 18px rgb(var(--shade) / 0.3);
+}
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--accent);
+}
+.draft {
+  position: relative;
+  padding: 14px 12px 12px;
+  border-radius: 10px;
+  background: var(--raised);
+  box-shadow:
+    0 0 0 0.5px var(--edge),
+    0 6px 14px rgb(var(--shade) / 0.18);
+}
+/* The draft's own top edge is the voice, lit while the microphone is live. */
+.light {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: translateX(-50%);
+}
+.text {
+  min-height: 3.2em;
+  font-family: var(--font-mono);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+/* Grey can still change; ink is final. */
+.grey {
+  color: var(--dim);
+}
+
+@media (max-width: 760px) {
+  .links {
+    display: none;
+  }
+  .voice h1 {
+    font-size: 24px;
+  }
+  .voice p {
+    font-size: 13.5px;
+  }
+  .line {
+    max-width: 42vw;
+    font-size: 12px;
+  }
+  .name {
+    font-size: 15px;
+  }
+  .tint .label {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .room * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
