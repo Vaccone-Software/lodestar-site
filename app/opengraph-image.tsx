@@ -12,6 +12,5 @@ export default function Image() {
     title: "Everything one key away",
     oneLine: true,
     line: "Free tools that stay on your Mac",
-    seed: 7,
   });
 }

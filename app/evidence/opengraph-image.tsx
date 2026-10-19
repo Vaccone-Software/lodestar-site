@@ -10,6 +10,5 @@ export default function Image() {
     eyebrow: "Evidence",
     title: "Every claim, and its measurement",
     line: "One hand, fourteen days, seventy thousand events, read at the source.",
-    seed: 3,
   });
 }

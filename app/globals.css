@@ -1,36 +1,92 @@
 @import "tailwindcss";
 
-/* Two families, each with one job. Inter Tight is everything that is read,
-   headline and paragraph alike. Mono is kept for keys, where it means
-   something: a key on the page and a key under a hand should look like the
-   same object.
+/* The site wears the app's own palette, from DESIGN.md's "Objects in One
+   Light": one ground family warmed a few degrees toward the mark, Night
+   after dark and Clay by day, following the system. A surface is the pane,
+   the thing chosen is raised, and nothing else invents a colour.
 
-   One accent, and it is International Orange. The stars behind the page
-   are the only other light. */
-@theme {
-  --color-ground: #040406;
-  --color-deep: #040406;
-  --color-ink: #f1ede8;
-  --color-dim: #a39d96;
-  --color-faint: #7d7771;
-  --color-accent: #ff4f00;
-  --color-hairline: rgba(255, 255, 255, 0.09);
-  --font-sans:
-    var(--font-inter-tight), -apple-system, "SF Pro Text", system-ui,
-    sans-serif;
-  --font-mono:
-    var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
-  --font-display: var(--font-sans);
-  --font-prose: var(--font-sans);
+   Three faces, one per speaker. The system sans is the interface and every
+   paragraph; mono is the hand, for keys and for what you type; the serif
+   is Lodestar's own voice, and appears where the page speaks as the app
+   does. No italic anywhere.
+
+   One accent, International Orange, deepened on clay so it reads as text,
+   as the app does. The homepage lets you wear your Mac's accent instead. */
+:root {
+  --ground: #efe7de;
+  --pane: #f8efe7;
+  --raised: #fffbf6;
+  --ink: #221d19;
+  --dim: rgb(0 0 0 / 0.66);
+  --faint: rgb(0 0 0 / 0.56);
+  --hair: rgb(34 29 25 / 0.11);
+  --well: rgb(34 29 25 / 0.05);
+  --edge: rgb(69 43 26 / 0.13);
+  --shade: 89 59 33;
+  --stone: #b9aea4;
+  --key: #2e2926;
+  --key-ink: #e6dfd6;
+  --key-top: rgb(255 255 255 / 0.18);
+  --key-lip: rgb(0 0 0 / 0.3);
+  --accent: #c43b00;
+  --on-accent: #fff;
+  --accent-top: #dc8966;
+  --accent-lip: #6e2100;
+  --control: 6.4px;
+  --surface: 16.8px;
+  --curve: cubic-bezier(0.25, 0.1, 0.25, 1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #18130e;
+    --pane: #221d19;
+    --raised: #2e2925;
+    --ink: #ece5dc;
+    --dim: rgb(236 229 220 / 0.6);
+    --faint: rgb(236 229 220 / 0.5);
+    --hair: rgb(236 229 220 / 0.08);
+    --well: rgb(236 229 220 / 0.05);
+    --edge: rgb(255 237 219 / 0.11);
+    --shade: 14 7 2;
+    --stone: #6e655e;
+    --key: rgb(255 255 255 / 0.08);
+    --key-ink: #ece5dc;
+    --key-top: rgb(255 255 255 / 0.11);
+    --key-lip: rgb(0 0 0 / 0.6);
+    --accent: #ff4f00;
+    --on-accent: #fff;
+    --accent-top: #ff9566;
+    --accent-lip: #8f2c00;
+    color-scheme: dark;
+  }
 }
 
-/* The ground is painted on the root, and the sky's canvas sits between it
-   and the page: a negative z-index paints above the root's background and
-   below everything in flow, which a body background would not allow. The
-   colour is also what the rubber-band shows past either end of the page. */
+@theme inline {
+  --color-ground: var(--ground);
+  --color-pane: var(--pane);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-dim: var(--dim);
+  --color-faint: var(--faint);
+  --color-hairline: var(--hair);
+  --color-well: var(--well);
+  --color-accent: var(--accent);
+}
+
+@theme {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, var(--font-inter), "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", var(--font-jetbrains), Menlo, monospace;
+  --font-voice: ui-serif, "New York", var(--font-newsreader), Georgia, serif;
+}
+
+/* The ground is painted on the root, so it is also what the rubber-band
+   shows past either end of a page. */
 html {
-  background-color: var(--color-ground);
-  color: var(--color-ink);
+  background-color: var(--ground);
+  color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -42,13 +98,13 @@ body {
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: var(--color-ground);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 /* A keyboard-first product's site should feel designed under the Tab key. */
 :focus-visible {
-  outline: 1px solid var(--color-accent);
+  outline: 1px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -58,51 +114,10 @@ body {
   }
 }
 
-/* The glass: nearly clear, a bright rim where the light meets the edge,
-   the page bending softly through it. Used only where a hand acts. */
-.glass {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6em;
-  padding: 13px 24px;
-  border-radius: 999px;
-  color: #fff;
-  font-weight: 600;
-  font-size: 15.5px;
-  letter-spacing: -0.005em;
-  white-space: nowrap;
-  background: rgba(255, 255, 255, 0.06);
-  -webkit-backdrop-filter: blur(10px) saturate(170%);
-  backdrop-filter: blur(10px) saturate(170%);
-  box-shadow:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.55),
-    inset 0 -1px 0.5px rgba(255, 255, 255, 0.12),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 12px 26px -10px rgba(0, 0, 0, 0.9);
-  transition: background-color 150ms ease;
-}
-/* The phone's "Send to my Mac" is a button, and wears the glass the link
-   does, not the browser's own button. */
-button.glass {
-  border: 0;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.glass:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-.glass .arrow {
-  color: var(--color-accent);
-}
-.glass.small {
-  padding: 8px 15px;
-  font-size: 13.5px;
-}
-
-/* A key on the page. The same object on the door pages, in the guide and
-   in its scenes, so the eye learns it once. */
+/* A key on the page: the app's one keycap, drawn and never typed. A resting
+   key stands on its lip, the lit key wears the accent. The same object on
+   the homepage, the door pages, in the guide and in its scenes, so the eye
+   learns it once. */
 .key {
   display: inline-flex;
   align-items: center;
@@ -110,26 +125,75 @@ button.glass {
   min-width: 1.9em;
   height: 1.9em;
   padding: 0 0.5em;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-bottom-width: 2px;
-  background: rgba(255, 255, 255, 0.07);
-  color: #eee;
+  border-radius: var(--control);
+  background: var(--key);
+  color: var(--key-ink);
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: 0.74em;
   line-height: 1;
   white-space: nowrap;
-  transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    transform 120ms ease;
+  box-shadow:
+    inset 0 1px 0 var(--key-top),
+    0 0 0 0.5px var(--edge),
+    0 1.5px 0 var(--key-lip);
 }
 .key.lit {
-  background: var(--color-accent);
-  border-color: #c33c00;
-  color: #1a0700;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow:
+    inset 0 1px 0 var(--accent-top),
+    0 1.5px 0 var(--accent-lip);
+}
+.key.down {
   transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 var(--accent-top),
+    0 0.5px 0 var(--accent-lip);
+}
+
+/* The same keycap grown to a link or a button: the bar's resting
+   "Download", and the lit one that is a page's one action. */
+.key.cap {
+  gap: 0.6em;
+  height: 28px;
+  min-width: 0;
+  padding: 0 12px;
+  border: 0;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.key.cap:active {
+  transform: translateY(1px);
+}
+.key.cap.big {
+  height: 52px;
+  padding: 0 30px;
+  border-radius: 13px;
+  font-weight: 600;
+  font-size: 18px;
+  box-shadow:
+    inset 0 1.5px 0 var(--accent-top),
+    0 4px 0 var(--accent-lip),
+    0 10px 22px rgb(var(--shade) / 0.28);
+}
+.key.cap.big:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 1.5px 0 var(--accent-top),
+    0 1px 0 var(--accent-lip),
+    0 4px 10px rgb(var(--shade) / 0.24);
+}
+.key.cap.big:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+.key.cap svg {
+  width: 15px;
+  height: 18px;
 }
 
 /* Scroll reveal: the rows arrive as the eye does. Off under reduced motion. */
@@ -137,8 +201,8 @@ button.glass {
   opacity: 0;
   transform: translateY(14px);
   transition:
-    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
-    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    opacity 700ms var(--curve),
+    transform 700ms var(--curve);
 }
 .reveal.in {
   opacity: 1;
@@ -150,12 +214,4 @@ button.glass {
     transform: none;
     transition: none;
   }
-}
-
-/* Text laid over the stars keeps a shadow of the ground, so a passing star
-   never sits inside a letter. */
-.over-sky {
-  text-shadow:
-    0 1px 14px rgba(4, 4, 6, 0.95),
-    0 0 3px rgba(4, 4, 6, 0.6);
 }

@@ -71,7 +71,7 @@ export default async function GuideIndex() {
         <p className="text-accent text-[12px] font-semibold tracking-[0.16em] uppercase">
           Guide
         </p>
-        <h1 className="over-sky mt-3 max-w-[18ch] text-[clamp(38px,5vw,60px)] leading-[1] font-semibold tracking-[-0.04em]">
+        <h1 className="mt-3 max-w-[18ch] text-[clamp(38px,5vw,60px)] leading-[1] font-semibold tracking-[-0.04em]">
           Everything Lodestar does, and the keys for it
         </h1>
         <p className="text-dim mt-5 max-w-[56ch] text-[17px] leading-[1.55]">

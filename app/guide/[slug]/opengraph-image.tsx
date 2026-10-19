@@ -22,6 +22,5 @@ export default async function Image({
     eyebrow: `Guide · ${String(index + 1).padStart(2, "0")} of ${guide.length}`,
     title: page?.name ?? "Guide",
     line: page?.blurb ?? "One page per destination.",
-    seed: 11 + index,
   });
 }

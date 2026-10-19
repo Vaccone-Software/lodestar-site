@@ -72,14 +72,14 @@ export default async function Page({
         className="mx-auto grid max-w-[1320px] px-4 pb-10 md:px-7 [@media(min-width:901px)_and_(min-height:701px)]:h-[calc(100svh-78px)] [@media(min-width:901px)_and_(min-height:701px)]:min-h-[640px] [@media(min-width:901px)_and_(min-height:701px)]:grid-rows-[minmax(0,1fr)_auto] [@media(min-width:901px)_and_(min-height:701px)]:pb-8"
       >
         <section className="grid min-h-0 items-center gap-6 [@media(min-width:901px)_and_(min-height:701px)]:grid-cols-[1fr_1.1fr]">
-          <div className="over-sky">
+          <div>
             <p className="text-accent text-[12px] font-semibold tracking-[0.16em] uppercase">
               {door.name}
             </p>
             <h1 className="mt-3 mb-3.5 text-[clamp(40px,4.6vw,68px)] leading-[0.98] font-semibold tracking-[-0.045em]">
               {door.h1}
             </h1>
-            <p className="mb-6 max-w-[28em] text-[clamp(16px,1.25vw,19px)] leading-[1.5] text-[#d3cdc6]">
+            <p className="mb-6 max-w-[28em] text-[clamp(16px,1.25vw,19px)] leading-[1.5] text-ink/80">
               {door.lede}
             </p>
             <DownloadPill fallback={tag} />
@@ -135,7 +135,7 @@ export default async function Page({
               {door.never.map((line) => (
                 <li
                   key={line}
-                  className="border-hairline border-b py-[7px] text-[14px] leading-[1.4] text-[#d6d0c9] first:pt-0 last:border-b-0"
+                  className="border-hairline border-b py-[7px] text-[14px] leading-[1.4] text-ink/80 first:pt-0 last:border-b-0"
                 >
                   {line}
                 </li>
@@ -148,7 +148,7 @@ export default async function Page({
               {door.detail.map((row) => (
                 <div
                   key={row.name}
-                  className="border-hairline grid grid-cols-[92px_1fr_auto] items-center gap-2.5 rounded-[9px] border bg-white/[0.03] px-2.5 py-[7px]"
+                  className="border-hairline grid grid-cols-[92px_1fr_auto] items-center gap-2.5 rounded-[9px] border bg-well px-2.5 py-[7px]"
                 >
                   <b className="text-[13.5px] font-semibold">{row.name}</b>
                   <span className="text-dim text-[13px] leading-[1.35]">

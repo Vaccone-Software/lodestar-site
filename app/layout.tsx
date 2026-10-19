@@ -1,15 +1,16 @@
 import { Analytics } from "@vercel/analytics/next";
-import type { Metadata } from "next";
-import { Inter_Tight, JetBrains_Mono } from "next/font/google";
-import Sky from "@/components/Sky";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 
 // Self-hosted at build, with metric-matched fallbacks, so the page never
-// shifts when the faces arrive.
-const interTight = Inter_Tight({
+// shifts when the faces arrive. On a Mac the system faces answer first (SF
+// for the interface, SF Mono for the hand, New York for the voice); these
+// stand in where the system has none of them.
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  variable: "--font-inter-tight",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -19,6 +20,17 @@ const jetbrains = JetBrains_Mono({
   variable: "--font-jetbrains",
   display: "swap",
 });
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: "400",
+  axes: ["opsz"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
+
+// The room runs to the screen's edges, so a notch is the page's to respect.
+export const viewport: Viewport = { viewportFit: "cover" };
 
 // The page speaks in its own voice; the title and description speak in
 // the words a search is typed in. Both are true, and they meet here.
@@ -63,7 +75,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${interTight.variable} ${jetbrains.variable}`}
+      className={`${inter.variable} ${jetbrains.variable} ${newsreader.variable}`}
     >
       <body>
         <a
@@ -72,7 +84,6 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <Sky />
         {children}
         <Analytics />
       </body>

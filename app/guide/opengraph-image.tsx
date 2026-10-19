@@ -10,6 +10,5 @@ export default function Image() {
     eyebrow: "Guide",
     title: "Everything Lodestar does, and the keys for it",
     line: "One page per destination, with the parts nobody finds by pressing keys",
-    seed: 5,
   });
 }

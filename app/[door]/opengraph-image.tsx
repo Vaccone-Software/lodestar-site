@@ -21,6 +21,5 @@ export default async function Image({
     eyebrow: door.name,
     title: door.h1,
     line: door.lede,
-    seed: 3 + doors.indexOf(door),
   });
 }

@@ -29,7 +29,7 @@ export default function Nav({
             aria-current={current === door.slug ? "page" : undefined}
             className={`rounded-full px-3 py-[7px] transition-colors ${
               current === door.slug
-                ? "text-ink bg-white/[0.07]"
+                ? "text-ink bg-well"
                 : "text-dim hover:text-ink"
             }`}
           >

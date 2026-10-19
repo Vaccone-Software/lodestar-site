@@ -15,7 +15,7 @@ export default async function NotFound() {
         <p className="text-accent text-[12px] font-semibold tracking-[0.16em] uppercase">
           404 · No such destination
         </p>
-        <h1 className="over-sky mt-3 text-[clamp(38px,5vw,60px)] leading-[1] font-semibold tracking-[-0.04em]">
+        <h1 className="mt-3 text-[clamp(38px,5vw,60px)] leading-[1] font-semibold tracking-[-0.04em]">
           Nothing is named that
         </h1>
         <p className="text-dim mt-5 max-w-[46ch] text-[17px] leading-[1.55]">

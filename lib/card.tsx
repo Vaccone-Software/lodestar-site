@@ -3,43 +3,22 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import mark from "@/data/mark.json";
 
-// The link card, drawn once for every page: the sky, the mark, a title,
+// The link card, drawn once for every page: the mark on Night, a title,
 // and a line. What a pasted URL unfurls into, and for most people the
 // first thing they see of Lodestar. Generated at build from the same
 // geometry as the mark, so the card and the page never drift apart.
 
 export const cardSize = { width: 1200, height: 630 };
 
-// A still field, seeded so the card is the same on every build.
-function stars(count: number, seed0: number) {
-  let seed = seed0;
-  const next = () => {
-    seed = (seed * 16807) % 2147483647;
-    return seed / 2147483647;
-  };
-  const out = [];
-  for (let i = 0; i < count; i++) {
-    out.push({
-      x: next() * 1200,
-      y: next() * 630,
-      r: 0.5 + next() * 1.3,
-      a: 0.2 + next() * 0.55,
-    });
-  }
-  return out;
-}
-
 export async function card({
   title,
   line,
   eyebrow,
-  seed = 7,
   oneLine = false,
 }: {
   title: string;
   line: string;
   eyebrow?: string;
-  seed?: number;
   /** A headline that must stand on one line, set smaller to fit beside the mark. */
   oneLine?: boolean;
 }) {
@@ -47,7 +26,6 @@ export async function card({
     readFile(join(process.cwd(), "assets/fonts/InterTight-400.ttf")),
     readFile(join(process.cwd(), "assets/fonts/InterTight-600.ttf")),
   ]);
-  const field = stars(120, seed);
   const long = title.length > 26;
   // The mark, from the same faces the app icon is drawn with.
   const size = 280;
@@ -61,16 +39,11 @@ export async function card({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#040406",
+        background: "#18130E",
         padding: 84,
         position: "relative",
       }}
     >
-      <svg width={1200} height={630} viewBox="0 0 1200 630" style={{ position: "absolute", top: 0, left: 0 }}>
-        {field.map((s, i) => (
-          <circle key={i} cx={s.x} cy={s.y} r={s.r} fill={`rgba(242,242,244,${s.a.toFixed(2)})`} />
-        ))}
-      </svg>
       <svg
         width={size}
         height={size}
@@ -96,7 +69,7 @@ export async function card({
           style={{
             fontSize: oneLine ? 58 : long ? 64 : 84,
             lineHeight: 1,
-            color: "#f1ede8",
+            color: "#ECE5DC",
             fontFamily: "Inter",
             fontWeight: 600,
             letterSpacing: -3,
@@ -109,7 +82,7 @@ export async function card({
         <div
           style={{
             fontSize: 28,
-            color: "#a39d96",
+            color: "rgba(236,229,220,0.6)",
             fontFamily: "Inter",
             fontWeight: 400,
             marginTop: 22,
@@ -120,7 +93,7 @@ export async function card({
           {line}
         </div>
       </div>
-      <div style={{ display: "flex", fontSize: 20, color: "#7d7771", fontFamily: "Inter", fontWeight: 400 }}>
+      <div style={{ display: "flex", fontSize: 20, color: "rgba(236,229,220,0.5)", fontFamily: "Inter", fontWeight: 400 }}>
         Lodestar · Free · Apple silicon, macOS 27 or later
       </div>
     </div>,

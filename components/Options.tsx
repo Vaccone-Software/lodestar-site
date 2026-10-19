@@ -53,7 +53,7 @@ export default function Options({ keys }: { keys: string[] }) {
       {rows.map(([path, node]) => (
         <div key={path} className="border-hairline grid gap-x-8 gap-y-2 border-b py-5 lg:grid-cols-[18rem_1fr]">
           <dt>
-            <code className="font-mono text-[13px] text-white/90">{path}</code>
+            <code className="font-mono text-[13px] text-ink">{path}</code>
             <div className="text-faint mt-1 font-mono text-[11px]">
               {typeOf(node!)}
               {node!.default !== undefined && node!.default !== null && typeof node!.default !== "object"

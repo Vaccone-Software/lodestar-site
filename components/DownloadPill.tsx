@@ -16,14 +16,30 @@ function awayFromAMac(): boolean {
   return /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
 }
 
+/** The one apple glyph the big key wears, drawn in the key's own ink. */
+function Apple() {
+  return (
+    <svg viewBox="0 0 15 18" aria-hidden="true">
+      <path
+        d="M12.4 9.6c0-2 1.6-2.9 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7s-1.6-.7-2.6-.7C4.2 5 2.9 5.8 2.2 7c-1.5 2.6-.4 6.4 1 8.5.7 1 1.5 2.1 2.6 2.1 1 0 1.4-.7 2.6-.7s1.6.7 2.6.7c1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3-.1 0-2.2-.8-2.2-3.7zM10.5 3.6c.5-.7.9-1.6.8-2.6-.8 0-1.8.5-2.4 1.2-.5.6-1 1.6-.8 2.5.9.1 1.8-.4 2.4-1.1z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export default function DownloadPill({
   fallback,
   label = "Download for Mac",
   small = false,
+  onDownload,
 }: {
   fallback: string | null;
   label?: string;
+  /** The bar's resting key; otherwise the lit key a page offers once. */
   small?: boolean;
+  /** Called when the download starts, which the link still goes on to do. */
+  onDownload?: () => void;
 }) {
   const [href, setHref] = useState(downloadFor(fallback));
   // Most people who follow a link arrive on a phone, where the download
@@ -42,6 +58,8 @@ export default function DownloadPill({
       })
       .catch(() => {});
   }, []);
+
+  const cap = small ? "key cap" : "key cap big lit";
 
   if (away) {
     const send = async () => {
@@ -62,16 +80,16 @@ export default function DownloadPill({
       } catch {}
     };
     return (
-      <button type="button" onClick={send} className={`glass${small ? " small" : ""}`}>
-        {copied ? "Link copied" : small ? "Send to Mac" : "Send to my Mac"}{" "}
-        <span className="arrow">→</span>
+      <button type="button" onClick={send} className={cap}>
+        {copied ? "Link copied" : small ? "Send to Mac" : "Send to my Mac"}
       </button>
     );
   }
 
   return (
-    <a href={href} className={`glass${small ? " small" : ""}`}>
-      {label} <span className="arrow">→</span>
+    <a href={href} onClick={onDownload} className={cap}>
+      {small ? null : <Apple />}
+      {label}
     </a>
   );
 }

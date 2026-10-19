@@ -232,14 +232,14 @@ export default async function EvidencePage() {
               the repository&apos;s{" "}
               <a
                 href="https://github.com/Vaccone-Software/lodestar/blob/main/DESIGN.md"
-                className="text-ink underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                className="text-ink underline decoration-ink/40 underline-offset-4 hover:decoration-ink"
               >
                 design specification
               </a>{" "}
               and its platform findings in{" "}
               <a
                 href="https://github.com/Vaccone-Software/lodestar/blob/main/FINDINGS.md"
-                className="text-ink underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                className="text-ink underline decoration-ink/40 underline-offset-4 hover:decoration-ink"
               >
                 the engineering ledger
               </a>

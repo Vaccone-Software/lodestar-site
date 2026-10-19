@@ -103,7 +103,7 @@ function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
                 key={keys}
                 className="border-hairline grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b py-3"
               >
-                <dt className="font-mono text-[13px] font-medium text-white/90">{keys}</dt>
+                <dt className="font-mono text-[13px] font-medium text-ink">{keys}</dt>
                 <dd className="text-dim text-[15px] leading-[1.55]">{meaning}</dd>
               </div>
             ))}
@@ -159,7 +159,7 @@ export default async function Page({
       <Nav tag={tag} current="guide" />
       <main id="main" className="mx-auto max-w-[1240px] px-4 pt-8 pb-16 md:px-7">
         <p className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-          <a href="/guide" className="text-accent hover:text-[#ff7a3d]">Guide</a>
+          <a href="/guide" className="text-accent hover:text-ink">Guide</a>
           <span className="mx-2">·</span>
           {String(index + 1).padStart(2, "0")} of {guide.length}
           {door ? (
@@ -171,7 +171,7 @@ export default async function Page({
             </>
           ) : null}
         </p>
-        <h1 className="over-sky mt-3 text-[clamp(38px,5vw,64px)] leading-[1] font-semibold tracking-[-0.04em]">
+        <h1 className="mt-3 text-[clamp(38px,5vw,64px)] leading-[1] font-semibold tracking-[-0.04em]">
           {page.name}
         </h1>
         <p className="text-dim mt-4 max-w-[52ch] text-[18px] leading-[1.55]">
@@ -180,13 +180,13 @@ export default async function Page({
 
         {/* At a glance: every lesson on the page, with its keys, one line
             each, for the hand that only needs reminding. */}
-        <nav aria-label="Lessons" className="border-hairline mt-10 rounded-[14px] border bg-white/[0.025] p-2">
+        <nav aria-label="Lessons" className="border-hairline mt-10 rounded-[14px] border bg-well p-2">
           <ol className="grid md:grid-cols-2">
             {lessons.map((lesson, i) => (
               <li key={lesson.title}>
                 <a
                   href={`#${anchor(lesson.title)}`}
-                  className="grid grid-cols-[1.9rem_1fr_auto] items-center gap-2 rounded-[10px] px-3 py-2.5 hover:bg-white/[0.04]"
+                  className="grid grid-cols-[1.9rem_1fr_auto] items-center gap-2 rounded-[10px] px-3 py-2.5 hover:bg-well"
                 >
                   <span className="text-faint text-[12px] font-semibold tabular-nums">
                     {String(i + 1).padStart(2, "0")}
