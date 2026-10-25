@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Key from "@/components/Key";
 import { parseReleases, releasesUrl, type Release } from "@/lib/releases";
 
 /* The notes arrive hard-wrapped at the width they were written at.
@@ -92,7 +93,7 @@ function group(releases: Release[]): Series[] {
 
 function Body({ release }: { release: Release }) {
   return (
-    <div className="text-dim max-w-[58ch] space-y-4 text-[clamp(1rem,1.25vw,1.08rem)] leading-[1.62]">
+    <div className="text-dim max-w-[65ch] space-y-4 text-[16px] leading-[1.6]">
       {split(release).body.map((paragraph, index) => (
         <p key={index}>{paragraph}</p>
       ))}
@@ -119,15 +120,15 @@ export default function Releases({ fallback }: { fallback: Release[] }) {
         const patches = s.patches.filter((p) => p.tag !== lead.tag);
         return (
           <section key={s.key}>
-            {/* The series: a keycap for the version, its kind, and the
-                tagline of the release that opened it. */}
-            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-              <span className="key text-[22px]">{s.key}</span>
-              <span className="text-faint font-mono text-[11px] tracking-[0.2em] uppercase">
-                {s.kind} · {shown(lead.date)}
+            {/* The series: its version on a key, its kind and day in quiet
+                ink, then the tagline of the release that opened it. */}
+            <div className="text-dim flex flex-wrap items-center gap-x-3 gap-y-2 text-[13px]">
+              <Key>{s.key}</Key>
+              <span>
+                {s.kind === "major" ? "Major" : "Minor"} · {shown(lead.date)}
               </span>
             </div>
-            <h2 className="text-ink mt-5 max-w-[22ch] text-[clamp(1.6rem,3vw,2.2rem)] leading-[1.08] font-semibold tracking-[-0.03em]">
+            <h2 className="font-display text-ink mt-4 max-w-[26ch] text-[clamp(1.5rem,3vw,2rem)] leading-[1.12] font-bold tracking-[-0.02em] text-balance">
               {heading(lead)}
             </h2>
             <div className="mt-5">
@@ -135,29 +136,29 @@ export default function Releases({ fallback }: { fallback: Release[] }) {
             </div>
 
             {patches.length > 0 && (
-              <div className="border-hairline mt-10 border-t">
-                <p className="text-faint mt-4 font-mono text-[11px] tracking-[0.2em] uppercase">
+              <div className="pane mt-10 px-2 py-2">
+                <p className="text-dim px-3 pt-2 pb-1 text-[13px] font-semibold">
                   {patches.length === 1 ? "One patch" : `${patches.length} patches`}
                 </p>
-                <ul className="mt-2">
+                <ul>
                   {patches.map((patch) => (
-                    <li key={patch.tag} className="border-hairline border-b">
+                    <li key={patch.tag} className="border-hairline border-b last:border-b-0">
                       <details className="group">
-                        <summary className="flex cursor-pointer list-none items-baseline gap-4 py-3.5 [&::-webkit-details-marker]:hidden">
-                          <span className="key shrink-0 text-[13px]">
-                            {patch.tag.replace(/^v/, "")}
+                        <summary className="flex cursor-pointer list-none items-center gap-4 rounded-[10px] px-3 py-3 hover:bg-raised/60 [&::-webkit-details-marker]:hidden">
+                          <span className="w-[4.5rem] shrink-0">
+                            <Key quiet>{patch.tag.replace(/^v/, "")}</Key>
                           </span>
-                          <span className="text-ink/90 flex-1 text-[16px] leading-snug">
+                          <span className="text-ink flex-1 text-[16px] leading-snug font-medium">
                             {heading(patch)}
                           </span>
-                          <span className="text-faint hidden shrink-0 font-mono text-[11px] sm:inline">
+                          <span className="text-dim hidden shrink-0 text-[13px] tabular-nums sm:inline">
                             {shown(patch.date)}
                           </span>
-                          <span className="text-faint font-mono text-[11px] transition-transform group-open:rotate-90">
+                          <span className="text-dim text-[16px] leading-none group-open:rotate-90" aria-hidden="true">
                             ›
                           </span>
                         </summary>
-                        <div className="pt-1 pb-6 pl-[3.6rem]">
+                        <div className="px-3 pt-1 pb-6 sm:pl-[6.5rem]">
                           <Body release={patch} />
                         </div>
                       </details>

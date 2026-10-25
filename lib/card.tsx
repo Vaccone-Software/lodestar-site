@@ -39,7 +39,7 @@ export async function card({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#18130E",
+        background: "#120F0C",
         padding: 84,
         position: "relative",
       }}
@@ -61,15 +61,15 @@ export async function card({
           />
         ))}
       </svg>
-      <div style={{ display: "flex", fontSize: 22, color: "#ff4f00", fontFamily: "Inter", fontWeight: 600, letterSpacing: 3 }}>
-        {(eyebrow ?? "Lodestar").toUpperCase()}
+      <div style={{ display: "flex", fontSize: 24, color: "#A99F92", fontFamily: "Inter", fontWeight: 600 }}>
+        {eyebrow ?? "Lodestar"}
       </div>
       <div style={{ display: "flex", flexDirection: "column", marginBottom: 8 }}>
         <div
           style={{
             fontSize: oneLine ? 58 : long ? 64 : 84,
             lineHeight: 1,
-            color: "#ECE5DC",
+            color: "#F1EBE2",
             fontFamily: "Inter",
             fontWeight: 600,
             letterSpacing: -3,
@@ -82,7 +82,7 @@ export async function card({
         <div
           style={{
             fontSize: 28,
-            color: "rgba(236,229,220,0.6)",
+            color: "#A99F92",
             fontFamily: "Inter",
             fontWeight: 400,
             marginTop: 22,
@@ -93,7 +93,7 @@ export async function card({
           {line}
         </div>
       </div>
-      <div style={{ display: "flex", fontSize: 20, color: "rgba(236,229,220,0.5)", fontFamily: "Inter", fontWeight: 400 }}>
+      <div style={{ display: "flex", fontSize: 20, color: "#8C8277", fontFamily: "Inter", fontWeight: 400 }}>
         Lodestar · Free · Apple silicon, macOS 27 or later
       </div>
     </div>,

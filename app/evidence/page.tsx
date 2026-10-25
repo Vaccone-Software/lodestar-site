@@ -128,128 +128,118 @@ const results: Result[] = [
   },
 ];
 
+const label = "text-dim text-[13px] font-semibold";
+
 export default async function EvidencePage() {
   const { tag } = await stableRelease();
   return (
     <>
-    <Nav tag={tag} />
-    <main id="main" className="min-h-svh px-4 pt-8 pb-16 md:px-7">
-      <div className="mx-auto max-w-[880px]">
-        <p className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-          Evidence
-        </p>
-        <h1 className="mt-4 max-w-[18ch] text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.02] font-semibold tracking-[-0.04em]">
-          Every claim, and its measurement
-        </h1>
+      <Nav tag={tag} />
+      <main id="main" className="min-h-svh px-4 pt-10 pb-16 md:px-6">
+        <div className="mx-auto max-w-[880px]">
+          <p className={label}>Evidence</p>
+          <h1 className="font-display mt-3 max-w-[18ch] text-[clamp(2.2rem,5vw,3.25rem)] leading-[1.04] font-bold tracking-[-0.03em] text-balance">
+            Every claim, and its measurement
+          </h1>
 
-        <section className="border-hairline mt-12 grid gap-x-12 gap-y-6 border-t pt-8 lg:grid-cols-[10rem_1fr]">
-          <h2 className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-            Method
-          </h2>
-          <div className="text-dim max-w-[62ch] space-y-4 text-[17px] leading-[1.6]">
-            <p>
-              Lodestar keeps an append-only log of how it is used, on the
-              Mac it runs on: which gesture, when, how long from the key
-              going down to the destination arriving, and what was
-              corrected. It never keeps content: no window titles, no
-              addresses, no text. The same file the coach reads is the file
-              these numbers were read from.
-            </p>
-            <p>
-              The sample is one hand, the author&apos;s, over fourteen days
-              in August 2026: between seventy and seventy-five thousand
-              events. The typing and pointing minutes in the first result
-              come from two days of the health pulse and are estimates from
-              measured counts; navigation is timed directly. One day with a
-              logging artefact is excluded from rhythm figures. Result 10 is
-              a published study, not this hand.
-            </p>
-            <p className="text-ink">
-              A sample of one says nothing about people in general. It says
-              a great deal about whether the mechanisms Lodestar is built on
-              are real, because each was measured on the hand that built
-              them before it shipped.
-            </p>
-          </div>
-        </section>
+          <section className="pane mt-12 grid gap-x-12 gap-y-4 p-6 md:p-8 lg:grid-cols-[9rem_1fr]">
+            <h2 className={label}>Method</h2>
+            <div className="text-dim max-w-[65ch] space-y-4 text-[16px] leading-[1.6]">
+              <p>
+                Lodestar keeps an append-only log of how it is used, on the
+                Mac it runs on: which gesture, when, how long from the key
+                going down to the destination arriving, and what was
+                corrected. It never keeps content: no window titles, no
+                addresses, no text. The same file the coach reads is the file
+                these numbers were read from.
+              </p>
+              <p>
+                The sample is one hand, the author&apos;s, over fourteen days
+                in August 2026: between seventy and seventy-five thousand
+                events. The typing and pointing minutes in the first result
+                come from two days of the health pulse and are estimates from
+                measured counts; navigation is timed directly. One day with a
+                logging artefact is excluded from rhythm figures. Result 10 is
+                a published study, not this hand.
+              </p>
+              <p className="text-ink">
+                A sample of one says nothing about people in general. It says
+                a great deal about whether the mechanisms Lodestar is built on
+                are real, because each was measured on the hand that built
+                them before it shipped.
+              </p>
+            </div>
+          </section>
 
-        <ol className="border-hairline mt-16 border-t">
-          {results.map((r) => (
-            <li
-              key={r.n}
-              id={`result-${r.n}`}
-              className="border-hairline grid scroll-mt-24 gap-x-12 gap-y-4 border-b py-10 lg:grid-cols-[10rem_1fr]"
-            >
-              <span className="text-faint text-[12px] font-semibold tabular-nums">
-                <span className="text-accent">No.</span> {r.n}
-                <Permalink anchor={`result-${r.n}`} />
-              </span>
-              <div className="max-w-[62ch]">
-                <h3 className="text-ink text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.15] font-semibold tracking-[-0.02em]">
-                  {r.claim}
-                </h3>
-                <dl className="mt-5 space-y-4 text-[16px] leading-[1.6]">
-                  <div>
-                    <dt className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-                      Measurement
-                    </dt>
-                    <dd className="text-ink/90 mt-1">{r.measurement}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-                      Method
-                    </dt>
-                    <dd className="text-dim mt-1">{r.method}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-                      Reading
-                    </dt>
-                    <dd className="text-dim mt-1">{r.reading}</dd>
-                  </div>
-                </dl>
-              </div>
-            </li>
-          ))}
-        </ol>
-
-        <section className="mt-16 grid gap-x-12 gap-y-6 lg:grid-cols-[10rem_1fr]">
-          <h2 className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-            References
-          </h2>
-          <ul className="text-dim max-w-[62ch] space-y-3 text-[15.5px] leading-[1.6]">
-            <li>
-              Grossman, T., Dragicevic, P., and Balakrishnan, R. Strategies
-              for accelerating on-line learning of hotkeys. CHI 2007.
-            </li>
-            <li>
-              Lally, P., van Jaarsveld, C., Potts, H., and Wardle, J. How are
-              habits formed: modelling habit formation in the real world.
-              European Journal of Social Psychology, 2010.
-            </li>
-            <li>
-              The instrument itself: the observation layer is documented in
-              the repository&apos;s{" "}
-              <a
-                href="https://github.com/Vaccone-Software/lodestar/blob/main/DESIGN.md"
-                className="text-ink underline decoration-ink/40 underline-offset-4 hover:decoration-ink"
+          <ol className="mt-12">
+            {results.map((r) => (
+              <li
+                key={r.n}
+                id={`result-${r.n}`}
+                className="border-hairline grid scroll-mt-24 gap-x-12 gap-y-3 border-b px-0 py-10 md:px-8 lg:grid-cols-[9rem_1fr]"
               >
-                design specification
-              </a>{" "}
-              and its platform findings in{" "}
-              <a
-                href="https://github.com/Vaccone-Software/lodestar/blob/main/FINDINGS.md"
-                className="text-ink underline decoration-ink/40 underline-offset-4 hover:decoration-ink"
-              >
-                the engineering ledger
-              </a>
-              .
-            </li>
-          </ul>
-        </section>
-        <Foot className="border-hairline mt-12 border-t pt-6" />
-      </div>
-    </main>
+                <span className="text-dim text-[13px] font-semibold tabular-nums">
+                  {r.n}
+                  <Permalink anchor={`result-${r.n}`} />
+                </span>
+                <div className="max-w-[65ch]">
+                  <h3 className="text-ink text-[clamp(1.25rem,2vw,1.4375rem)] leading-[1.25] font-semibold tracking-[-0.01em] text-balance">
+                    {r.claim}
+                  </h3>
+                  <dl className="mt-5 space-y-4 text-[16px] leading-[1.6]">
+                    <div>
+                      <dt className={label}>Measurement</dt>
+                      <dd className="text-ink mt-1">{r.measurement}</dd>
+                    </div>
+                    <div>
+                      <dt className={label}>Method</dt>
+                      <dd className="text-dim mt-1">{r.method}</dd>
+                    </div>
+                    <div>
+                      <dt className={label}>Reading</dt>
+                      <dd className="text-dim mt-1">{r.reading}</dd>
+                    </div>
+                  </dl>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <section className="mt-14 grid gap-x-12 gap-y-4 md:px-8 lg:grid-cols-[9rem_1fr]">
+            <h2 className={label}>References</h2>
+            <ul className="text-dim max-w-[65ch] space-y-3 text-[16px] leading-[1.6]">
+              <li>
+                Grossman, T., Dragicevic, P., and Balakrishnan, R. Strategies
+                for accelerating on-line learning of hotkeys. CHI 2007.
+              </li>
+              <li>
+                Lally, P., van Jaarsveld, C., Potts, H., and Wardle, J. How are
+                habits formed: modelling habit formation in the real world.
+                European Journal of Social Psychology, 2010.
+              </li>
+              <li>
+                The instrument itself: the observation layer is documented in
+                the repository&apos;s{" "}
+                <a
+                  href="https://github.com/Vaccone-Software/lodestar/blob/main/DESIGN.md"
+                  className="text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4"
+                >
+                  design specification
+                </a>{" "}
+                and its platform findings in{" "}
+                <a
+                  href="https://github.com/Vaccone-Software/lodestar/blob/main/FINDINGS.md"
+                  className="text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4"
+                >
+                  the engineering ledger
+                </a>
+                .
+              </li>
+            </ul>
+          </section>
+          <Foot className="border-hairline mt-14 border-t pt-6" />
+        </div>
+      </main>
     </>
   );
 }
