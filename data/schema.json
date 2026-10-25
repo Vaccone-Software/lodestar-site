@@ -1,225 +1,505 @@
 {
-  "$schema" : "http:\/\/json-schema.org\/draft-07\/schema#",
-  "additionalProperties" : false,
-  "definitions" : {
-    "graphNode" : {
-      "oneOf" : [
-        {
-          "description" : "An app name, or a profile as browser:name (brave:Work)",
-          "type" : "string"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "lodestar configuration",
+  "description": "lodestar configuration",
+  "properties": {
+    "lode": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Lode",
+      "properties": {
+        "tap": {
+          "type": "boolean",
+          "description": "A tap of lode arms the next key as a gesture, for one second, as if lode were held. Holding still works and is how the map appears.",
+          "default": true
         },
-        {
-          "additionalProperties" : {
-            "$ref" : "#\/definitions\/graphNode"
-          },
-          "type" : "object"
+        "trigger": {
+          "type": "string",
+          "enum": [
+            "right-command",
+            "left-command"
+          ],
+          "description": "The physical trigger for every gesture.",
+          "default": "right-command"
         }
-      ]
-    }
-  },
-  "description" : "lodestar configuration",
-  "properties" : {
-    "$schema" : {
-      "description" : "Editor affordance — points at the emitted lodestar-schema.json so LSP-aware editors validate and complete.",
-      "type" : "string"
+      },
+      "additionalProperties": false,
+      "description": "The lode key.",
+      "default": {
+        "tap": true,
+        "trigger": "right-command"
+      }
     },
-    "app" : {
-      "additionalProperties" : false,
-      "description" : "App behavior.",
-      "properties" : {
-        "active-display" : {
-          "description" : "How the active display is chosen.",
-          "enum" : [
+    "app": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "App",
+      "properties": {
+        "active-display": {
+          "type": "string",
+          "enum": [
             "pointer",
             "focus"
           ],
-          "type" : "string"
+          "description": "How the active display is chosen.",
+          "default": "pointer"
         },
-        "auto-update" : {
-          "description" : "Keep Lodestar current: check daily, verify the download, apply quietly when idle (installed app only).",
-          "type" : "boolean"
+        "auto-update": {
+          "type": "boolean",
+          "description": "Keep Lodestar current: check daily, verify the download, apply quietly when idle (installed app only).",
+          "default": true
         },
-        "channel" : {
-          "description" : "Which releases updates follow. Stable takes a build once it has run on preview Macs for a few days. Preview takes every build as it ships.",
-          "enum" : [
+        "channel": {
+          "type": "string",
+          "enum": [
             "stable",
             "preview"
           ],
-          "type" : "string"
+          "description": "Which releases updates follow. Stable takes a build once it has run on preview Macs for a few days. Preview takes every build as it ships.",
+          "default": "stable"
         },
-        "show-menu-bar" : {
-          "description" : "Show the status item permanently; false hides it until lodestar is picked in the launcher.",
-          "type" : "boolean"
+        "show-menu-bar": {
+          "type": "boolean",
+          "description": "Show the status item permanently; false hides it until lodestar is picked in the launcher.",
+          "default": true
         },
-        "sounds" : {
-          "description" : "Lodestar's own sounds, together: today the draft's note when the microphone is live and when the words land. The alert sound is the Mac's own setting.",
-          "type" : "boolean"
+        "sounds": {
+          "type": "boolean",
+          "description": "Lodestar's own sounds, together: today the draft's note when the microphone is live and when the words land. The alert sound is the Mac's own setting.",
+          "default": true
         },
-        "start-at-login" : {
-          "description" : "Keep the login LaunchAgent installed (installed app only).",
-          "type" : "boolean"
+        "start-at-login": {
+          "type": "boolean",
+          "description": "Keep the login LaunchAgent installed (installed app only).",
+          "default": true
         },
-        "units" : {
-          "description" : "The units a copied measurement is read into on its card. Empty follows your region.",
-          "enum" : [
+        "units": {
+          "type": "string",
+          "enum": [
             "",
             "metric",
             "imperial"
           ],
-          "type" : "string"
+          "description": "The units a copied measurement is read into on its card. Empty follows your region.",
+          "default": ""
         }
       },
-      "type" : [
+      "additionalProperties": false,
+      "description": "App behavior.",
+      "default": {
+        "active-display": "pointer",
+        "auto-update": true,
+        "channel": "stable",
+        "show-menu-bar": true,
+        "sounds": true,
+        "start-at-login": true,
+        "units": ""
+      }
+    },
+    "gestures": {
+      "type": [
         "object",
         "null"
-      ]
+      ],
+      "title": "GestureSwitches",
+      "properties": {
+        "breaths": {
+          "type": "boolean",
+          "description": "lode ', saved layouts",
+          "default": true
+        },
+        "commands": {
+          "type": "boolean",
+          "description": "lode - the commands bar, the focused app's verbs",
+          "default": true
+        },
+        "display-move": {
+          "type": "boolean",
+          "description": "lode [ and ], move across displays",
+          "default": true
+        },
+        "draft": {
+          "type": "boolean",
+          "description": "lode . speak into the draft, ⇧. revise the field in it",
+          "default": true
+        },
+        "flip-orientation": {
+          "type": "boolean",
+          "description": "lode \\, flip the layout axis",
+          "default": true
+        },
+        "graph": {
+          "type": "boolean",
+          "description": "lode letter chains to your apps",
+          "default": true
+        },
+        "hints": {
+          "type": "boolean",
+          "description": "lode ; click hints, ⇧; sticky",
+          "default": true
+        },
+        "index-jump": {
+          "type": "boolean",
+          "description": "lode 1…9 jump, ⇧1…9 slide",
+          "default": true
+        },
+        "launcher": {
+          "type": "boolean",
+          "description": "lode space, the app launcher",
+          "default": true
+        },
+        "layout-undo": {
+          "type": "boolean",
+          "description": "lode ← undo, lode → redo",
+          "default": true
+        },
+        "maximize": {
+          "type": "boolean",
+          "description": "lode 0 fill the display with the focused window, ⇧0 beside",
+          "default": true
+        },
+        "scroll": {
+          "type": "boolean",
+          "description": "lode ` , keyboard scrolling",
+          "default": true
+        },
+        "select": {
+          "type": "boolean",
+          "description": "lode /, select text by typing it",
+          "default": true
+        },
+        "settings": {
+          "type": "boolean",
+          "description": "lode , , the settings window",
+          "default": true
+        },
+        "web-bar": {
+          "type": "boolean",
+          "description": "lode ⏎, links and search",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "description": "Every gesture, one switch each; false frees its keys to the app.",
+      "default": {
+        "breaths": true,
+        "commands": true,
+        "display-move": true,
+        "draft": true,
+        "flip-orientation": true,
+        "graph": true,
+        "hints": true,
+        "index-jump": true,
+        "launcher": true,
+        "layout-undo": true,
+        "maximize": true,
+        "scroll": true,
+        "select": true,
+        "settings": true,
+        "web-bar": true
+      }
     },
-    "appearance" : {
-      "additionalProperties" : false,
-      "description" : "How Lodestar looks. Never what it asks of you.",
-      "properties" : {
-        "accent" : {
-          "description" : "The colour of the cursor, lit letters, and the echoed query: the Mac's accent, or Lodestar's International Orange, set deeper in light mode so it stays readable.",
-          "enum" : [
-            "system",
-            "orange"
+    "web": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Web",
+      "properties": {
+        "clicks": {
+          "type": [
+            "object",
+            "null"
           ],
-          "type" : "string"
+          "title": "Clicks",
+          "properties": {
+            "browser": {
+              "type": "string",
+              "description": "Bundle id links go to when no route matches (your previous default browser).",
+              "default": ""
+            },
+            "enabled": {
+              "type": "boolean",
+              "description": "Route links clicked in other apps. Set by the menu-bar flow.",
+              "default": false
+            }
+          },
+          "additionalProperties": false,
+          "description": "Links clicked in other apps.",
+          "default": {
+            "browser": "",
+            "enabled": false
+          }
+        },
+        "fallback": {
+          "type": "string",
+          "description": "most-recent, or a profile as browser:name (brave:Work).",
+          "default": "most-recent"
+        },
+        "links": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "title": "Link",
+            "description": "A named link.",
+            "properties": {
+              "profile": {
+                "type": "string",
+                "description": "A profile as browser:name (omit to route)."
+              },
+              "url": {
+                "type": "string",
+                "description": "The site.",
+                "default": ""
+              }
+            },
+            "additionalProperties": false
+          },
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Named links.",
+          "default": {}
+        },
+        "routes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "description": "A profile as browser:name (brave:Work)."
+          },
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Substring pattern → profile; longest match wins.",
+          "default": {}
+        },
+        "search-url": {
+          "type": "string",
+          "description": "Search template; %s becomes the encoded query.",
+          "default": "https://search.brave.com/search?q=%s"
         }
       },
-      "type" : [
+      "additionalProperties": false,
+      "description": "The web bar.",
+      "default": {
+        "clicks": {
+          "browser": "",
+          "enabled": false
+        },
+        "fallback": "most-recent",
+        "links": {},
+        "routes": {},
+        "search-url": "https://search.brave.com/search?q=%s"
+      }
+    },
+    "scroll": {
+      "type": [
         "object",
         "null"
-      ]
-    },
-    "clipboard" : {
-      "additionalProperties" : false,
-      "description" : "Clipboard history.",
-      "properties" : {
-        "enabled" : {
-          "description" : "⇧⌘V opens the clipboard strip. The one Lodestar binding outside the lode key, so it is also the one that can collide with an app; false gives ⇧⌘V back.",
-          "type" : "boolean"
+      ],
+      "title": "Scroll",
+      "properties": {
+        "smooth": {
+          "type": "boolean",
+          "description": "Constant velocity while held; instant stop on release.",
+          "default": true
         },
-        "exclude" : {
-          "additionalProperties" : {
-            "description" : "true to never record clips containing this text.",
-            "type" : "boolean"
-          },
-          "description" : "Substring → true, matched case-insensitively against the clip. The same shape web.routes uses.",
-          "type" : [
-            "object",
-            "null"
-          ]
+        "speed": {
+          "type": "number",
+          "minimum": 200,
+          "maximum": 4000,
+          "x-stoic-clamp": true,
+          "description": "Smooth velocity, pixels per second.",
+          "default": 1800,
+          "x-stoic-unit": "px/s"
         },
-        "exclude-apps" : {
-          "additionalProperties" : {
-            "description" : "true to never record clips copied from this app.",
-            "type" : "boolean"
-          },
-          "description" : "Bundle id → true. Nothing copied in these apps is ever written to disk.",
-          "type" : [
-            "object",
-            "null"
-          ]
-        },
-        "max-size-mb" : {
-          "description" : "Disk the clipboard history may claim; the oldest clips are dropped to stay under it. Pins are never dropped.",
-          "maximum" : 20000,
-          "minimum" : 10,
-          "type" : "number"
-        },
-        "save-to" : {
-          "description" : "The folder an image saved from the clipboard strip lands in. A name typed with a slash in it, or starting with \/ or ~, chooses another place for that save.",
-          "type" : "string"
-        },
-        "time-zones" : {
-          "additionalProperties" : {
-            "description" : "true to read timestamps into this zone too.",
-            "type" : "boolean"
-          },
-          "description" : "Zone identifier (Asia\/Tokyo) → true. A clip that is only a timestamp is read into your zone, UTC, and these.",
-          "type" : [
-            "object",
-            "null"
-          ]
+        "step": {
+          "type": "number",
+          "minimum": 10,
+          "maximum": 400,
+          "x-stoic-clamp": true,
+          "description": "Pixels per press when smooth is off.",
+          "default": 60,
+          "x-stoic-unit": "px"
         }
       },
-      "type" : [
+      "additionalProperties": false,
+      "description": "Scroll mode.",
+      "default": {
+        "smooth": true,
+        "speed": 1800,
+        "step": 60
+      }
+    },
+    "select": {
+      "type": [
         "object",
         "null"
-      ]
-    },
-    "coach" : {
-      "additionalProperties" : false,
-      "description" : "The coach: rare, evidence-backed suggestions drawn from the observations.",
-      "properties" : {
-        "enabled" : {
-          "description" : "Let Lodestar offer one improvement at a time, in quiet moments, priced in seconds.",
-          "type" : "boolean"
-        },
-        "stand" : {
-          "description" : "After a stretch of work with no break, a cue to walk for two minutes, at the next natural stopping point. Twice at most in a stretch.",
-          "type" : "boolean"
-        },
-        "stand-after" : {
-          "description" : "Minutes of unbroken work before the walk is due. The research supports thirty: two minutes of walking every twenty to thirty minutes.",
-          "maximum" : 120,
-          "minimum" : 15,
-          "type" : "number"
+      ],
+      "title": "Select",
+      "properties": {
+        "copy-on-complete": {
+          "type": "boolean",
+          "description": "Copy a completed span to the clipboard the moment its second anchor lands. Escape after only the first anchor copies that word.",
+          "default": false
         }
       },
-      "type" : [
+      "additionalProperties": false,
+      "description": "Select mode.",
+      "default": {
+        "copy-on-complete": false
+      }
+    },
+    "meetings": {
+      "type": [
         "object",
         "null"
-      ]
-    },
-    "draft" : {
-      "additionalProperties" : false,
-      "description" : "The draft: lode . speaks, lode ⇧. revises.",
-      "properties" : {
-        "input" : {
-          "description" : "The microphone the draft listens to, by its name in Sound settings. Empty follows the system default input.",
-          "type" : "string"
-        },
-        "model" : {
-          "description" : "The models that hear what you said again and take out the words you take back: apple (Apple's recognizer only), standard (Parakeet and Gemma 4 E2B, 16 GB Macs and up), full (Qwen3-ASR and Gemma 4 E2B, 24 GB and up), max (Qwen3-ASR and Qwen3.6 35B, 64 GB and up). Empty picks the one this Mac suits and fetches it the first time you dictate.",
-          "enum" : [
-            "",
-            "apple",
-            "standard",
-            "full",
-            "max"
-          ],
-          "type" : "string"
-        },
-        "words" : {
-          "additionalProperties" : {
-            "description" : "true to keep this word in the draft's vocabulary.",
-            "type" : "boolean"
+      ],
+      "title": "Meetings",
+      "properties": {
+        "calendars": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "description": "The browser:name profile this calendar's meetings join in."
           },
-          "description" : "Word → true. Names and terms speech gets wrong; a settled result that sounds like one is written as it, case and all.",
-          "type" : [
-            "object",
-            "null"
-          ]
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Calendar or account name → profile. Outranks web.routes for meetings.",
+          "default": {}
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Offer the calendar's next meeting as a chip.",
+          "default": false
+        },
+        "lead-minutes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120,
+          "x-stoic-integer-spelling": "no fraction or exponent",
+          "x-stoic-clamp": true,
+          "description": "Minutes before the start the chip appears.",
+          "default": 5,
+          "x-stoic-unit": "min"
         }
       },
-      "type" : [
+      "additionalProperties": false,
+      "description": "Meetings at the door.",
+      "default": {
+        "calendars": {},
+        "enabled": false,
+        "lead-minutes": 5
+      }
+    },
+    "clipboard": {
+      "type": [
         "object",
         "null"
-      ]
-    },
-    "editor" : {
-      "additionalProperties" : false,
-      "description" : "The editor: marks under mistakes, lode ⇥ to fix.",
-      "properties" : {
-        "enabled" : {
-          "description" : "Mark mistakes as you write; lode ⇥ letters the marks.",
-          "type" : "boolean"
+      ],
+      "title": "Clipboard",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "⇧⌘V opens the clipboard strip. The one Lodestar binding outside the lode key, so it is also the one that can collide with an app; false gives ⇧⌘V back.",
+          "default": true
         },
-        "language" : {
-          "description" : "The spelling the editor holds you to. Empty follows the Mac's language and region.",
-          "enum" : [
+        "exclude": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean",
+            "description": "true to never record clips containing this text."
+          },
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Substring → true, matched case-insensitively against the clip. The same shape web.routes uses.",
+          "default": {}
+        },
+        "exclude-apps": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean",
+            "description": "true to never record clips copied from this app."
+          },
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Bundle id → true. Nothing copied in these apps is ever written to disk.",
+          "default": {}
+        },
+        "max-size-mb": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 20000,
+          "x-stoic-integer-spelling": "no fraction or exponent",
+          "x-stoic-clamp": true,
+          "description": "Disk the clipboard history may claim; the oldest clips are dropped to stay under it. Pins are never dropped.",
+          "default": 500,
+          "x-stoic-unit": "MB"
+        },
+        "save-to": {
+          "type": "string",
+          "description": "The folder an image saved from the clipboard strip lands in. A name typed with a slash in it, or starting with / or ~, chooses another place for that save.",
+          "default": "~/Downloads"
+        },
+        "time-zones": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean",
+            "description": "true to read timestamps into this zone too."
+          },
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Zone identifier (Asia/Tokyo) → true. A clip that is only a timestamp is read into your zone, UTC, and these.",
+          "default": {}
+        }
+      },
+      "additionalProperties": false,
+      "description": "Clipboard history.",
+      "default": {
+        "enabled": true,
+        "exclude": {},
+        "exclude-apps": {},
+        "max-size-mb": 500,
+        "save-to": "~/Downloads",
+        "time-zones": {}
+      }
+    },
+    "editor": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Editor",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Mark mistakes as you write; lode ⇥ letters the marks.",
+          "default": false
+        },
+        "language": {
+          "type": "string",
+          "enum": [
             "",
             "en_US",
             "en_GB",
@@ -230,375 +510,297 @@
             "en_ZA",
             "en_SG"
           ],
-          "type" : "string"
+          "description": "The spelling the editor holds you to. Empty follows the Mac's language and region.",
+          "default": ""
         },
-        "model" : {
-          "description" : "How the editor reads: spelling (no model, any Mac), minimal (Apple's own model), standard (16 GB Macs and up) or full (64 GB and up). Empty picks the one this Mac suits; one this Mac cannot run falls back the same way.",
-          "enum" : [
+        "model": {
+          "type": "string",
+          "enum": [
             "",
             "spelling",
             "minimal",
             "standard",
             "full"
           ],
-          "type" : "string"
+          "description": "How the editor reads: spelling (no model, any Mac), minimal (Apple's own model), standard (16 GB Macs and up) or full (64 GB and up). Empty picks the one this Mac suits; one this Mac cannot run falls back the same way.",
+          "default": ""
         },
-        "skip-apps" : {
-          "additionalProperties" : {
-            "description" : "true to never read fields in this app.",
-            "type" : "boolean"
+        "skip-apps": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean",
+            "description": "true to never read fields in this app."
           },
-          "description" : "App name → true. Fields in these apps are never read.",
-          "type" : [
-            "object",
-            "null"
-          ]
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "App name → true. Fields in these apps are never read.",
+          "default": {}
         }
       },
-      "type" : [
+      "additionalProperties": false,
+      "description": "The editor: marks under mistakes, lode ⇥ to fix.",
+      "default": {
+        "enabled": false,
+        "language": "",
+        "model": "",
+        "skip-apps": {}
+      }
+    },
+    "observations": {
+      "type": [
         "object",
         "null"
-      ]
-    },
-    "gestures" : {
-      "additionalProperties" : false,
-      "description" : "Every gesture, one switch each; false frees its keys to the app.",
-      "properties" : {
-        "breaths" : {
-          "description" : "lode ', saved layouts",
-          "type" : "boolean"
+      ],
+      "title": "Observations",
+      "properties": {
+        "health": {
+          "type": "boolean",
+          "description": "Keep the health record: when each key goes down and how long it is held, by hand, finger and kind of key, and how the pointer moves. No key is stored, but the pattern can partly show what you typed, so it stays on this machine and is included in backups. Independent of the logbook.",
+          "default": true
         },
-        "commands" : {
-          "description" : "lode - the commands bar, the focused app's verbs",
-          "type" : "boolean"
+        "health-mb": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 16384,
+          "x-stoic-integer-spelling": "no fraction or exponent",
+          "x-stoic-clamp": true,
+          "description": "The size Lodestar tells you the health record is nearing. Health is never deleted on its own.",
+          "default": 1024,
+          "x-stoic-unit": "MB"
         },
-        "display-move" : {
-          "description" : "lode [ and ], move across displays",
-          "type" : "boolean"
+        "logbook": {
+          "type": "boolean",
+          "description": "Keep the logbook: how you move between apps, windows and gestures, on this machine only. Sites by name, never their pages, titles or what you type. The coach reads it.",
+          "default": true
         },
-        "draft" : {
-          "description" : "lode . speak into the draft, ⇧. revise the field in it",
-          "type" : "boolean"
-        },
-        "flip-orientation" : {
-          "description" : "lode \\, flip the layout axis",
-          "type" : "boolean"
-        },
-        "graph" : {
-          "description" : "lode letter chains to your apps",
-          "type" : "boolean"
-        },
-        "hints" : {
-          "description" : "lode ; click hints, ⇧; sticky",
-          "type" : "boolean"
-        },
-        "index-jump" : {
-          "description" : "lode 1…9 jump, ⇧1…9 slide",
-          "type" : "boolean"
-        },
-        "launcher" : {
-          "description" : "lode space, the app launcher",
-          "type" : "boolean"
-        },
-        "layout-undo" : {
-          "description" : "lode ← undo, lode → redo",
-          "type" : "boolean"
-        },
-        "maximize" : {
-          "description" : "lode 0 fill the display with the focused window, ⇧0 beside",
-          "type" : "boolean"
-        },
-        "scroll" : {
-          "description" : "lode ` , keyboard scrolling",
-          "type" : "boolean"
-        },
-        "select" : {
-          "description" : "lode \/, select text by typing it",
-          "type" : "boolean"
-        },
-        "settings" : {
-          "description" : "lode , , the settings window",
-          "type" : "boolean"
-        },
-        "web-bar" : {
-          "description" : "lode ⏎, links and search",
-          "type" : "boolean"
+        "logbook-mb": {
+          "type": "integer",
+          "minimum": 64,
+          "maximum": 4096,
+          "x-stoic-integer-spelling": "no fraction or exponent",
+          "x-stoic-clamp": true,
+          "description": "Disk the logbook may claim. Once it is full the oldest months leave first; their monthly summaries stay.",
+          "default": 256,
+          "x-stoic-unit": "MB"
         }
       },
-      "type" : [
+      "additionalProperties": false,
+      "description": "What Lodestar observes, in two records with their own switches. Nothing leaves the machine.",
+      "default": {
+        "health": true,
+        "health-mb": 1024,
+        "logbook": true,
+        "logbook-mb": 256
+      }
+    },
+    "coach": {
+      "type": [
         "object",
         "null"
-      ]
-    },
-    "graph" : {
-      "additionalProperties" : {
-        "$ref" : "#\/definitions\/graphNode"
+      ],
+      "title": "Coach",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Let Lodestar offer one improvement at a time, in quiet moments, priced in seconds.",
+          "default": true
+        },
+        "stand": {
+          "type": "boolean",
+          "description": "After a stretch of work with no break, a cue to walk for two minutes, at the next natural stopping point. Twice at most in a stretch.",
+          "default": true
+        },
+        "stand-after": {
+          "type": "integer",
+          "minimum": 15,
+          "maximum": 120,
+          "x-stoic-integer-spelling": "no fraction or exponent",
+          "x-stoic-clamp": true,
+          "description": "Minutes of unbroken work before the walk is due. The research supports thirty: two minutes of walking every twenty to thirty minutes.",
+          "default": 30,
+          "x-stoic-unit": "min"
+        }
       },
-      "description" : "lode + letter chains → apps. Values: app name or <browser>:<profile name>.",
-      "type" : [
+      "additionalProperties": false,
+      "description": "The coach: rare, evidence-backed suggestions drawn from the observations.",
+      "default": {
+        "enabled": true,
+        "stand": true,
+        "stand-after": 30
+      }
+    },
+    "keys": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "description": "The key name this keycode produces."
+      },
+      "x-stoic-lossy": true,
+      "x-stoic-transform": {
+        "name": "lossy dictionary",
+        "description": "an object whose invalid entries are dropped"
+      },
+      "description": "Keycode → key-name overrides for non-ANSI layouts.",
+      "default": {}
+    },
+    "graph": {
+      "type": [
         "object",
         "null"
-      ]
+      ],
+      "additionalProperties": {
+        "$ref": "#/definitions/graphNode"
+      },
+      "description": "lode + letter chains → apps. Values: app name or <browser>:<profile name>.",
+      "default": {}
     },
-    "health" : {
-      "additionalProperties" : false,
-      "description" : "About you, for the health record. Local, optional, never sent.",
-      "properties" : {
-        "born" : {
-          "description" : "The year you were born, four digits. Age is the first thing a reading of the hands is adjusted for. Optional.",
-          "type" : "string"
+    "appearance": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Appearance",
+      "properties": {
+        "eye-comfort": {
+          "type": "boolean",
+          "description": "Lodestar adjusts its own surfaces through the day to be easier on your eyes: dimmer and softer after sunset, dimmer still late at night, and quieter when you're not using them. What you copy and view is never changed.",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "description": "How Lodestar looks. Never what it asks of you.",
+      "default": {
+        "eye-comfort": true
+      }
+    },
+    "draft": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Draft",
+      "properties": {
+        "input": {
+          "type": "string",
+          "description": "The microphone the draft listens to, by its name in Sound settings. Empty follows the system default input.",
+          "default": ""
         },
-        "exact-keyboards" : {
-          "description" : "Charge each press to the keyboard that sent it, by matching it to that keyboard's own report. Needs Input Monitoring. Off by default; without it a press two keyboards could have sent is charged to neither.",
-          "type" : "boolean"
+        "model": {
+          "type": "string",
+          "enum": [
+            "",
+            "apple",
+            "standard",
+            "full",
+            "max"
+          ],
+          "description": "The models that hear what you said again and take out the words you take back: apple (Apple's recognizer only), standard (Parakeet and Gemma 4 E2B, 16 GB Macs and up), full (Qwen3-ASR and Gemma 4 E2B, 24 GB and up), max (Qwen3-ASR and Qwen3.6 35B, 64 GB and up). Empty picks the one this Mac suits and fetches it the first time you dictate.",
+          "default": ""
         },
-        "hand" : {
-          "description" : "The hand you write with. Fine motor signs are often one sided and the record keeps each hand apart. Optional.",
-          "enum" : [
+        "words": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean",
+            "description": "true to keep this word in the draft's vocabulary."
+          },
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Word → true. Names and terms speech gets wrong; a settled result that sounds like one is written as it, case and all.",
+          "default": {}
+        }
+      },
+      "additionalProperties": false,
+      "description": "The draft: lode . speaks, lode ⇧. revises.",
+      "default": {
+        "input": "",
+        "model": "",
+        "words": {}
+      }
+    },
+    "health": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Health",
+      "properties": {
+        "born": {
+          "type": "string",
+          "description": "The year you were born, four digits. Age is the first thing a reading of the hands is adjusted for. Optional."
+        },
+        "exact-keyboards": {
+          "type": "boolean",
+          "description": "Charge each press to the keyboard that sent it, by matching it to that keyboard's own report. Needs Input Monitoring. Off by default; without it a press two keyboards could have sent is charged to neither.",
+          "default": false
+        },
+        "hand": {
+          "type": "string",
+          "enum": [
             "left",
             "right",
             "either"
           ],
-          "type" : "string"
+          "description": "The hand you write with. Fine motor signs are often one sided and the record keeps each hand apart. Optional."
         },
-        "keyboards" : {
-          "additionalProperties" : {
-            "additionalProperties" : {
-              "description" : "Where the key sits on this keyboard, as a side and a finger: right thumb, either thumb, left pinky.",
-              "type" : "string"
+        "keyboards": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "description": "Where the key sits on this keyboard, as a side and a finger: right thumb, either thumb, left pinky."
             },
-            "description" : "One keyboard's keys that sit somewhere other than standard, by name: left-shift, right-shift, left-control, right-control, left-option, right-option, left-command, right-command, fn, space, enter, backspace, tab, escape.",
-            "type" : [
-              "object",
-              "null"
-            ]
-          },
-          "description" : "Keyboard id (vendor:product:hash, as the Keyboards page shows it) → the keys a split or custom board moves. Letters keep their columns everywhere and are never here.",
-          "type" : [
-            "object",
-            "null"
-          ]
-        }
-      },
-      "type" : [
-        "object",
-        "null"
-      ]
-    },
-    "keys" : {
-      "additionalProperties" : {
-        "description" : "The key name this keycode produces.",
-        "type" : "string"
-      },
-      "description" : "Keycode → key-name overrides for non-ANSI layouts.",
-      "type" : [
-        "object",
-        "null"
-      ]
-    },
-    "lode" : {
-      "additionalProperties" : false,
-      "description" : "The lode key.",
-      "properties" : {
-        "tap" : {
-          "description" : "A tap of lode arms the next key as a gesture, for one second, as if lode were held. Holding still works and is how the map appears.",
-          "type" : "boolean"
-        },
-        "trigger" : {
-          "description" : "The physical trigger for every gesture.",
-          "enum" : [
-            "right-command",
-            "left-command"
-          ],
-          "type" : "string"
-        }
-      },
-      "type" : [
-        "object",
-        "null"
-      ]
-    },
-    "meetings" : {
-      "additionalProperties" : false,
-      "description" : "Meetings at the door.",
-      "properties" : {
-        "calendars" : {
-          "additionalProperties" : {
-            "description" : "The browser:name profile this calendar's meetings join in.",
-            "type" : "string"
-          },
-          "description" : "Calendar or account name → profile. Outranks web.routes for meetings.",
-          "type" : [
-            "object",
-            "null"
-          ]
-        },
-        "enabled" : {
-          "description" : "Offer the calendar's next meeting as a chip.",
-          "type" : "boolean"
-        },
-        "lead-minutes" : {
-          "description" : "Minutes before the start the chip appears.",
-          "maximum" : 120,
-          "minimum" : 0,
-          "type" : "number"
-        }
-      },
-      "type" : [
-        "object",
-        "null"
-      ]
-    },
-    "observations" : {
-      "additionalProperties" : false,
-      "description" : "What Lodestar observes, in two records with their own switches. Nothing leaves the machine.",
-      "properties" : {
-        "health" : {
-          "description" : "Keep the health record: when each key goes down and how long it is held, by hand, finger and kind of key, and how the pointer moves. No key is stored, but the pattern can partly show what you typed, so it stays on this machine and is included in backups. Independent of the logbook.",
-          "type" : "boolean"
-        },
-        "health-mb" : {
-          "description" : "The size Lodestar tells you the health record is nearing. Health is never deleted on its own.",
-          "maximum" : 16384,
-          "minimum" : 256,
-          "type" : "number"
-        },
-        "logbook" : {
-          "description" : "Keep the logbook: how you move between apps, windows and gestures, on this machine only. Sites by name, never their pages, titles or what you type. The coach reads it.",
-          "type" : "boolean"
-        },
-        "logbook-mb" : {
-          "description" : "Disk the logbook may claim. Once it is full the oldest months leave first; their monthly summaries stay.",
-          "maximum" : 4096,
-          "minimum" : 64,
-          "type" : "number"
-        }
-      },
-      "type" : [
-        "object",
-        "null"
-      ]
-    },
-    "scroll" : {
-      "additionalProperties" : false,
-      "description" : "Scroll mode.",
-      "properties" : {
-        "smooth" : {
-          "description" : "Constant velocity while held; instant stop on release.",
-          "type" : "boolean"
-        },
-        "speed" : {
-          "description" : "Smooth velocity, pixels per second.",
-          "maximum" : 4000,
-          "minimum" : 200,
-          "type" : "number"
-        },
-        "step" : {
-          "description" : "Pixels per press when smooth is off.",
-          "maximum" : 400,
-          "minimum" : 10,
-          "type" : "number"
-        }
-      },
-      "type" : [
-        "object",
-        "null"
-      ]
-    },
-    "select" : {
-      "additionalProperties" : false,
-      "description" : "Select mode.",
-      "properties" : {
-        "copy-on-complete" : {
-          "description" : "Copy a completed span to the clipboard the moment its second anchor lands.",
-          "type" : "boolean"
-        }
-      },
-      "type" : [
-        "object",
-        "null"
-      ]
-    },
-    "version" : {
-      "description" : "The Lodestar release this config was written for.",
-      "type" : "string"
-    },
-    "web" : {
-      "additionalProperties" : false,
-      "description" : "The web bar.",
-      "properties" : {
-        "clicks" : {
-          "additionalProperties" : false,
-          "description" : "Links clicked in other apps.",
-          "properties" : {
-            "browser" : {
-              "description" : "Bundle id links go to when no route matches (your previous default browser).",
-              "type" : "string"
+            "x-stoic-lossy": true,
+            "x-stoic-transform": {
+              "name": "lossy dictionary",
+              "description": "an object whose invalid entries are dropped"
             },
-            "enabled" : {
-              "description" : "Route links clicked in other apps. Set by the menu-bar flow.",
-              "type" : "boolean"
-            }
+            "description": "One keyboard's keys that sit somewhere other than standard, by name: left-shift, right-shift, left-control, right-control, left-option, right-option, left-command, right-command, fn, space, enter, backspace, tab, escape."
           },
-          "type" : [
-            "object",
-            "null"
-          ]
-        },
-        "fallback" : {
-          "description" : "most-recent, or a profile as browser:name (brave:Work).",
-          "type" : "string"
-        },
-        "links" : {
-          "additionalProperties" : {
-            "additionalProperties" : false,
-            "description" : "A named link.",
-            "properties" : {
-              "profile" : {
-                "description" : "A profile as browser:name (omit to route).",
-                "type" : "string"
-              },
-              "url" : {
-                "description" : "The site.",
-                "type" : "string"
-              }
-            },
-            "type" : [
-              "object",
-              "null"
-            ]
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
           },
-          "description" : "Named links.",
-          "type" : [
-            "object",
-            "null"
-          ]
-        },
-        "routes" : {
-          "additionalProperties" : {
-            "description" : "A profile as browser:name (brave:Work).",
-            "type" : "string"
-          },
-          "description" : "Substring pattern → profile; longest match wins.",
-          "type" : [
-            "object",
-            "null"
-          ]
-        },
-        "search-url" : {
-          "description" : "Search template; %s becomes the encoded query.",
-          "type" : "string"
+          "description": "Keyboard id (vendor:product:hash, as the Keyboards page shows it) → the keys a split or custom board moves. Letters keep their columns everywhere and are never here.",
+          "default": {}
         }
       },
-      "type" : [
-        "object",
-        "null"
-      ]
+      "additionalProperties": false,
+      "description": "About you, for the health record. Local, optional, never sent.",
+      "default": {
+        "exact-keyboards": false,
+        "keyboards": {}
+      }
+    },
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
     }
   },
-  "title" : "lodestar configuration",
-  "type" : [
-    "object",
-    "null"
-  ]
+  "additionalProperties": false,
+  "definitions": {
+    "graphNode": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "An app name, or a profile as browser:name (brave:Work)"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/graphNode"
+          }
+        }
+      ]
+    }
+  }
 }
