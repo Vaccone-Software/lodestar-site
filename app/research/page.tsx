@@ -78,7 +78,7 @@ const record: { name: string; items: string[] }[] = [
   },
   {
     name: "About the person",
-    items: ["Year of birth, sex, dominant hand and whether they touch type", "All optional"],
+    items: ["Year of birth, sex as assigned at birth, dominant hand and whether they touch type", "All optional"],
   },
 ];
 
@@ -90,7 +90,7 @@ const studies: { name: string; href: string; condition: string; how: string; lod
     name: "Giancardo et al. 2016",
     href: sources.giancardo,
     condition: "Early Parkinson's",
-    how: "Key hold times from a typing session in clinic (MIT neuroQWERTY)",
+    how: "Key hold times from one typing session of about fourteen minutes (MIT neuroQWERTY)",
     lodestar: "Yes, every hold, every day",
   },
   {
@@ -177,7 +177,7 @@ export default async function ResearchPage() {
               <h2 className="text-[18px] font-semibold">Duration</h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.55]">
                 There is no task to do, so the record runs as long as the person keeps using it. Across
-                eight remote smartphone studies of more than 100,000 people, half had stopped within 5.5 days
+                eight remote smartphone studies of more than 100,000 people, median retention was 5.5 days
                 (
                 <a href={sources.pratap} className={link}>
                   Pratap et al. 2020
@@ -223,8 +223,8 @@ export default async function ResearchPage() {
           <section className="border-hairline mt-14 border-t pt-10">
             <h2 className="text-[23px] font-semibold tracking-[-0.01em]">How it compares</h2>
             <p className="text-dim mt-2 max-w-[62ch] text-[16px] leading-[1.6]">
-              The published studies closest to Lodestar. Most measured people once, in a clinic or a short
-              test. Lodestar records the same signals during ordinary work, every day.
+              The published studies closest to Lodestar. Several measured people once, in one typing session
+              or a short test. Lodestar records the same signals during ordinary work, every day.
             </p>
             <div className="pane mt-6 overflow-x-auto">
               <table className="w-full min-w-[680px] text-left text-[14px] leading-[1.45]">
@@ -264,14 +264,14 @@ export default async function ResearchPage() {
                   <a href={sources.physionet} className={link}>
                     published data
                   </a>{" "}
-                  through Lodestar&apos;s own code gives an AUC of 0.743 for Lan and Yeo&apos;s index, against
-                  their 0.741. This shows the code computes the measure as published, nothing more.
+                  through Lodestar&apos;s own 90 second window code gives an AUC of 0.743 for Lan and
+                  Yeo&apos;s index, against their 0.741. This shows the code computes the measure as published, nothing more.
                 </dd>
               </div>
               <div>
                 <dt className="font-semibold">Its own timing</dt>
                 <dd className="text-dim mt-1">
-                  Lodestar measures itself as it records: it hears each key about 3 ms after the keyboard
+                  Lodestar measures itself as it records: it hears each key about 5 ms after the keyboard
                   event&apos;s own stamp, and sees the hold of 99% of the keys struck.
                 </dd>
               </div>
