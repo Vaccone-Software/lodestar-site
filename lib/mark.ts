@@ -25,7 +25,11 @@ export function toHex(color: Rgb): string {
 }
 
 function mix(a: Rgb, b: Rgb, t: number): Rgb {
-  return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  return [
+    a[0] + (b[0] - a[0]) * t,
+    a[1] + (b[1] - a[1]) * t,
+    a[2] + (b[2] - a[2]) * t,
+  ];
 }
 
 export type Vec = readonly [number, number, number];
@@ -40,7 +44,6 @@ export type Face = {
   /** Clockwise from the top, in 0..2π, for lighting the faces in order. */
   angle: number;
 };
-
 
 /** How far the mark leans toward a door, as a rotation about x and y. */
 export type Lean = readonly [number, number];
@@ -163,7 +166,6 @@ export function faces(spin: number, lean: Lean): Face[] {
   return seen.sort((p, q) => p.depth - q.depth);
 }
 
-
 /** Where the light comes from: above, to the left, toward the viewer. */
 const light = unit([-0.55, 0.7, 0.9]);
 
@@ -177,7 +179,6 @@ export function paint(face: Face, base: Rgb): string {
       : mix(base, [0, 0, 0], -tone * 0.44),
   );
 }
-
 
 /** A corner's place on a square canvas of the given side. */
 export function project(v: Vec, side: number): [number, number] {

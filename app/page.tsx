@@ -10,9 +10,15 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: graph(appJsonLd(tag), siteJsonLd()) }}
+        dangerouslySetInnerHTML={{
+          __html: graph(appJsonLd(tag), siteJsonLd()),
+        }}
       />
-      <Home tag={tag} download={downloadFor(tag)} nav={<Nav tag={tag} withDoors={false} />} />
+      <Home
+        tag={tag}
+        download={downloadFor(tag)}
+        nav={<Nav tag={tag} withDoors={false} />}
+      />
     </>
   );
 }

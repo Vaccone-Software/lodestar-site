@@ -171,7 +171,15 @@ export const guide: GuidePage[] = [
       "Reaching a parked window by an outside road, ⌘Tab or the Dock, brings it back where it was.",
     ],
     why: "A specific window is instance-bound. The whole point is to pin this window out of ten, and a window cannot be freely recreated, so layouts carry the real technical risk and were built last, on the bedrock of the letters. They earn their place because past the motor floor the remaining gains are structural: eliminating a navigation beats accelerating one by any margin. On the day the chord shipped, a side-by-side arrangement went from 2.1 seconds to 757 milliseconds.",
-    options: ["gestures.breaths", "gestures.index-jump", "gestures.maximize", "gestures.flip-orientation", "gestures.display-move", "gestures.layout-undo", "app.active-display"],
+    options: [
+      "gestures.breaths",
+      "gestures.index-jump",
+      "gestures.maximize",
+      "gestures.flip-orientation",
+      "gestures.display-move",
+      "gestures.layout-undo",
+      "app.active-display",
+    ],
   },
   {
     slug: "page",
@@ -222,13 +230,22 @@ export const guide: GuidePage[] = [
       "Chromium browsers for now: Brave, Chrome, Edge.",
     ],
     why: "Choosing a profile is a decision made again every time a link arrives, and the hand cannot learn a decision. A destination is named once. The half of the problem that needed it most was never the bar, where you already have the chance to choose. It was the clicked link, where you have none.",
-    options: ["web.links", "web.routes", "web.fallback", "web.search-url", "web.clicks.enabled", "web.clicks.browser", "gestures.web-bar"],
+    options: [
+      "web.links",
+      "web.routes",
+      "web.fallback",
+      "web.search-url",
+      "web.clicks.enabled",
+      "web.clicks.browser",
+      "gestures.web-bar",
+    ],
   },
   {
     slug: "button",
     title: "Click Buttons and Links from the Keyboard on Mac",
     name: "A button",
-    blurb: "Letters on everything pressable, menus under search, and scrolling.",
+    blurb:
+      "Letters on everything pressable, menus under search, and scrolling.",
     description:
       "Click any button or link on your Mac by typing its letters. Right-click, fill in forms, run menu commands by name and scroll, without the mouse.",
     first: {
@@ -273,7 +290,14 @@ export const guide: GuidePage[] = [
       "Reading the window never waits on the app: a heavy page cannot stall the overlay, and Electron apps are woken automatically.",
     ],
     why: "Clickability is not asked of the app. It is declared by your pick, because the sensor is the screen itself. That is what makes a terminal, a browser, and a chat the same to press in, and it is the mouse's first job moved to the keys.",
-    options: ["gestures.hints", "gestures.commands", "gestures.scroll", "scroll.smooth", "scroll.speed", "scroll.step"],
+    options: [
+      "gestures.hints",
+      "gestures.commands",
+      "gestures.scroll",
+      "scroll.smooth",
+      "scroll.speed",
+      "scroll.step",
+    ],
   },
   {
     slug: "text",
@@ -325,7 +349,8 @@ export const guide: GuidePage[] = [
     title: "Clipboard History on Mac: Paste, Pin and Search",
     door: "keep",
     name: "What you copied",
-    blurb: "Recents under letters, pins under numbers, and a search that reads screenshots.",
+    blurb:
+      "Recents under letters, pins under numbers, and a search that reads screenshots.",
     description:
       "Free clipboard history for Mac: paste a recent copy with a letter, pin what you paste often, search everything you copied and find screenshots by their words.",
     first: {
@@ -378,14 +403,23 @@ export const guide: GuidePage[] = [
       "⌘V inside the search pastes the clipboard's text into the query. The same works in the launcher, commands, Ask, and hints.",
     ],
     why: "The two things you are most likely to want, a pin or what you just copied, sit at the same corner, so there is one place to look. This is the one gesture outside lode, because pasting happens in the middle of typing.",
-    options: ["clipboard.enabled", "clipboard.save-to", "clipboard.exclude", "clipboard.exclude-apps", "clipboard.time-zones", "app.units", "clipboard.max-size-mb"],
+    options: [
+      "clipboard.enabled",
+      "clipboard.save-to",
+      "clipboard.exclude",
+      "clipboard.exclude-apps",
+      "clipboard.time-zones",
+      "app.units",
+      "clipboard.max-size-mb",
+    ],
   },
   {
     slug: "say",
     title: "Dictation on Mac: Speak, Edit and Place Your Words",
     door: "speak",
     name: "What you say",
-    blurb: "Dictation into any field, editing from the keys, and the dozen moves the draft uses.",
+    blurb:
+      "Dictation into any field, editing from the keys, and the dozen moves the draft uses.",
     description:
       "Dictation for Mac you can edit before it lands. Speak into any field, fix a word from the keys, revise what a field holds and teach it names, all on your Mac.",
     first: {
@@ -416,13 +450,28 @@ export const guide: GuidePage[] = [
         table: [
           ["h j k l", "Move by a character, and by the lines you see."],
           ["w · b", "Forward and back by a word."],
-          ["f x · F x", "To the next or the previous x. Every letter you can reach lights while the move is pending."],
+          [
+            "f x · F x",
+            "To the next or the previous x. Every letter you can reach lights while the move is pending.",
+          ],
           ["t x · T x", "To just before it."],
-          ["c motion", "Change what the motion covers, then type. cw changes the word."],
+          [
+            "c motion",
+            "Change what the motion covers, then type. cw changes the word.",
+          ],
           ["d motion", "Delete it. dw, d$ to the end of the line."],
-          ["y motion · p", "Copy it, and paste. The only two keys that touch the system clipboard."],
-          ["iw · aw", "The word under the cursor, without or with the space beside it."],
-          ["q · b", "Any quoted thing, any bracketed thing. ciq changes what is inside the quotes."],
+          [
+            "y motion · p",
+            "Copy it, and paste. The only two keys that touch the system clipboard.",
+          ],
+          [
+            "iw · aw",
+            "The word under the cursor, without or with the space beside it.",
+          ],
+          [
+            "q · b",
+            "Any quoted thing, any bracketed thing. ciq changes what is inside the quotes.",
+          ],
           ["]s · [s", "To the next or the previous editor mark."],
           ["z= · zg", "Take the mark's fix, or keep the word as written."],
           ["u", "Undo."],
@@ -507,7 +556,13 @@ export const guide: GuidePage[] = [
       "Your text never leaves the Mac and is never kept. What Lodestar records is counts: marks shown, fixed and kept, by app.",
     ],
     why: "Silence is the statement that all is well: no badge, no score, no panel beside the text. A key that fixed everything was rejected, because names are exactly where a checker is confidently wrong, and a fix you did not see is not one you agreed to. So every mark is its own letter, and the lens stays until the last one is answered.",
-    options: ["editor.enabled", "editor.model", "editor.language", "editor.skip-apps", "draft.words"],
+    options: [
+      "editor.enabled",
+      "editor.model",
+      "editor.language",
+      "editor.skip-apps",
+      "draft.words",
+    ],
   },
   {
     slug: "coach",
@@ -564,7 +619,16 @@ export const guide: GuidePage[] = [
       "The logbook and health each have a switch and a size limit in Settings, under Observations, and off means nothing is written.",
     ],
     why: "Seeing a shortcut changes nothing. In the study behind this design, people who could keep using the old path used the new one 29 percent of the time, and half of them never used it at all. When the old path was closed, 73 percent switched. So the chip's job is consent, and the intervention is structural: the old road gets a toll, priced in one deliberate confirm.",
-    options: ["coach.enabled", "observations.logbook", "observations.logbook-mb", "observations.health", "observations.health-mb", "meetings.enabled", "meetings.lead-minutes", "meetings.calendars"],
+    options: [
+      "coach.enabled",
+      "observations.logbook",
+      "observations.logbook-mb",
+      "observations.health",
+      "observations.health-mb",
+      "meetings.enabled",
+      "meetings.lead-minutes",
+      "meetings.calendars",
+    ],
   },
   {
     slug: "settings",
@@ -614,6 +678,14 @@ export const guide: GuidePage[] = [
       "The menu bar star holds the walk, updates, the issue reporter, the browser role, settings, the config, the log, and quit.",
     ],
     why: "The window and the file cannot drift in either direction, because both are generated from one table in the source. Every writer, a hand edit, ⌘K, the coach, the shell, converges on the same canonical bytes. A configuration that can be read is one that can be trusted.",
-    options: ["app.auto-update", "app.start-at-login", "app.show-menu-bar", "appearance.accent", "lode.trigger", "keys", "version"],
+    options: [
+      "app.auto-update",
+      "app.start-at-login",
+      "app.show-menu-bar",
+      "appearance.accent",
+      "lode.trigger",
+      "keys",
+      "version",
+    ],
   },
 ];

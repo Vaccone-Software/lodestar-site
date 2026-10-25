@@ -138,13 +138,18 @@ export default function Releases({ fallback }: { fallback: Release[] }) {
             {patches.length > 0 && (
               <div className="pane mt-10 px-2 py-2">
                 <p className="text-dim px-3 pt-2 pb-1 text-[13px] font-semibold">
-                  {patches.length === 1 ? "One patch" : `${patches.length} patches`}
+                  {patches.length === 1
+                    ? "One patch"
+                    : `${patches.length} patches`}
                 </p>
                 <ul>
                   {patches.map((patch) => (
-                    <li key={patch.tag} className="border-hairline border-b last:border-b-0">
+                    <li
+                      key={patch.tag}
+                      className="border-hairline border-b last:border-b-0"
+                    >
                       <details className="group">
-                        <summary className="flex cursor-pointer list-none items-center gap-4 rounded-[10px] px-3 py-3 hover:bg-raised/60 [&::-webkit-details-marker]:hidden">
+                        <summary className="hover:bg-raised/60 flex cursor-pointer list-none items-center gap-4 rounded-[10px] px-3 py-3 [&::-webkit-details-marker]:hidden">
                           <span className="w-[4.5rem] shrink-0">
                             <Key quiet>{patch.tag.replace(/^v/, "")}</Key>
                           </span>
@@ -154,7 +159,10 @@ export default function Releases({ fallback }: { fallback: Release[] }) {
                           <span className="text-dim hidden shrink-0 text-[13px] tabular-nums sm:inline">
                             {shown(patch.date)}
                           </span>
-                          <span className="text-dim text-[16px] leading-none group-open:rotate-90" aria-hidden="true">
+                          <span
+                            className="text-dim text-[16px] leading-none group-open:rotate-90"
+                            aria-hidden="true"
+                          >
                             ›
                           </span>
                         </summary>

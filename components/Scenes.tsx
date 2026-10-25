@@ -84,9 +84,7 @@ export function Display({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px] bg-[#0d0b09] shadow-[inset_0_0_0_0.5px_rgba(241,235,226,0.08)]"
-    >
+    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px] bg-[#0d0b09] shadow-[inset_0_0_0_0.5px_rgba(241,235,226,0.08)]">
       {children}
     </div>
   );
@@ -132,16 +130,28 @@ export function Win({
 }
 
 /** A sidebar and a list, the shape most applications share. */
-export function Body({ tone, rows = [80, 55, 68, 74, 42, 63, 58] }: { tone: string; rows?: number[] }) {
+export function Body({
+  tone,
+  rows = [80, 55, 68, 74, 42, 63, 58],
+}: {
+  tone: string;
+  rows?: number[];
+}) {
   return (
     <div className="flex h-[calc(100%-16px)]">
       <Sidebar tone={tone} />
       <div className="flex-1 space-y-[7px] p-[8px]">
-        <div className="h-[5px] w-[30%] rounded-full" style={{ background: "#524840" }} />
+        <div
+          className="h-[5px] w-[30%] rounded-full"
+          style={{ background: "#524840" }}
+        />
         {rows.map((w, i) => (
           <div key={i} className="flex items-center gap-[6px]">
             <div className="h-[7px] w-[7px] shrink-0 rounded-full bg-[#332c27]" />
-            <div className="h-[3px] rounded-full bg-[#3a332d]" style={{ width: `${w}%` }} />
+            <div
+              className="h-[3px] rounded-full bg-[#3a332d]"
+              style={{ width: `${w}%` }}
+            />
           </div>
         ))}
       </div>
@@ -152,7 +162,10 @@ export function Body({ tone, rows = [80, 55, 68, 74, 42, 63, 58] }: { tone: stri
 export function Sidebar({ tone }: { tone: string }) {
   return (
     <div className="w-[22%] shrink-0 space-y-[6px] border-r border-[rgba(241,235,226,0.06)] bg-[#191512] p-[7px]">
-      <div className="h-[5px] w-[70%] rounded-full" style={{ background: "#524840" }} />
+      <div
+        className="h-[5px] w-[70%] rounded-full"
+        style={{ background: "#524840" }}
+      />
       <div className="h-[3px] w-[85%] rounded-full bg-[#3a332d]" />
       <div className="h-[3px] w-[60%] rounded-full bg-[#3a332d]" />
       <div className="h-[3px] w-[75%] rounded-full bg-[#3a332d]" />
@@ -198,7 +211,7 @@ export function Label({
 }) {
   return (
     <span
-      className={`absolute z-30 rounded-[3px] px-[4px] py-[1.5px] text-[8px] font-semibold leading-none ${
+      className={`absolute z-30 rounded-[3px] px-[4px] py-[1.5px] text-[8px] leading-none font-semibold ${
         lit
           ? "bg-accent text-[#1e1814] shadow-[0_1.5px_0_#a93608]"
           : "bg-[#2b2622] text-[#f1ebe2] shadow-[0_1.5px_0_#110e0c,inset_0_0_0_0.5px_rgba(241,235,226,0.14)]"
@@ -215,7 +228,6 @@ export function lodeLit(held: boolean, key: string | null): string[] {
   return [...(held ? ["lode"] : []), ...(key ? [key] : [])];
 }
 
-
 // ------------------------------------------------------------- keyboard
 
 // The keyboard under the hero, drawn once: the one fact no caption can
@@ -226,11 +238,80 @@ export function lodeLit(held: boolean, key: string | null): string[] {
 // is lode.
 type KeyDef = [string, number, string?];
 const keyboardRows: KeyDef[][] = [
-  [["esc", 1], ["`", 1], ["1", 1], ["2", 1], ["3", 1], ["4", 1], ["5", 1], ["6", 1], ["7", 1], ["8", 1], ["9", 1], ["0", 1], ["-", 1], ["=", 1], ["⌫", 1.6]],
-  [["⇥", 1.6], ["q", 1], ["w", 1], ["e", 1], ["r", 1], ["t", 1], ["y", 1], ["u", 1], ["i", 1], ["o", 1], ["p", 1], ["[", 1], ["]", 1], ["\\", 1]],
-  [["⇪", 1.9], ["a", 1], ["s", 1], ["d", 1], ["f", 1], ["g", 1], ["h", 1], ["j", 1], ["k", 1], ["l", 1], [";", 1], ["'", 1], ["⏎", 1.9]],
-  [["⇧", 2.5, "⇧L"], ["z", 1], ["x", 1], ["c", 1], ["v", 1], ["b", 1], ["n", 1], ["m", 1], [",", 1], [".", 1], ["/", 1], ["⇧", 2.5, "⇧R"]],
-  [["fn", 1], ["⌃", 1], ["⌥", 1, "⌥L"], ["⌘", 1.25, "⌘L"], ["", 5.6, "space"], ["lode", 1.25], ["⌥", 1, "⌥R"], ["◀", 1], ["▲▼", 1, "arrows"], ["▶", 1]],
+  [
+    ["esc", 1],
+    ["`", 1],
+    ["1", 1],
+    ["2", 1],
+    ["3", 1],
+    ["4", 1],
+    ["5", 1],
+    ["6", 1],
+    ["7", 1],
+    ["8", 1],
+    ["9", 1],
+    ["0", 1],
+    ["-", 1],
+    ["=", 1],
+    ["⌫", 1.6],
+  ],
+  [
+    ["⇥", 1.6],
+    ["q", 1],
+    ["w", 1],
+    ["e", 1],
+    ["r", 1],
+    ["t", 1],
+    ["y", 1],
+    ["u", 1],
+    ["i", 1],
+    ["o", 1],
+    ["p", 1],
+    ["[", 1],
+    ["]", 1],
+    ["\\", 1],
+  ],
+  [
+    ["⇪", 1.9],
+    ["a", 1],
+    ["s", 1],
+    ["d", 1],
+    ["f", 1],
+    ["g", 1],
+    ["h", 1],
+    ["j", 1],
+    ["k", 1],
+    ["l", 1],
+    [";", 1],
+    ["'", 1],
+    ["⏎", 1.9],
+  ],
+  [
+    ["⇧", 2.5, "⇧L"],
+    ["z", 1],
+    ["x", 1],
+    ["c", 1],
+    ["v", 1],
+    ["b", 1],
+    ["n", 1],
+    ["m", 1],
+    [",", 1],
+    [".", 1],
+    ["/", 1],
+    ["⇧", 2.5, "⇧R"],
+  ],
+  [
+    ["fn", 1],
+    ["⌃", 1],
+    ["⌥", 1, "⌥L"],
+    ["⌘", 1.25, "⌘L"],
+    ["", 5.6, "space"],
+    ["lode", 1.25],
+    ["⌥", 1, "⌥R"],
+    ["◀", 1],
+    ["▲▼", 1, "arrows"],
+    ["▶", 1],
+  ],
 ];
 const leftHand = /^[qwertasdfgzxcvb12345`]$/i;
 
@@ -243,19 +324,28 @@ export function Keyboard({ lit }: { lit: string[] }) {
   if (set.has("⌘")) set.add("⌘l");
   if (set.has("⌥")) set.add(`⌥${opposite}`.toLowerCase());
   return (
-    <div className="mt-4 space-y-[3px] rounded-[14px] bg-[#171310] p-[8px] shadow-[inset_0_0_0_0.5px_rgba(241,235,226,0.06)]" aria-hidden="true">
+    <div
+      className="mt-4 space-y-[3px] rounded-[14px] bg-[#171310] p-[8px] shadow-[inset_0_0_0_0.5px_rgba(241,235,226,0.06)]"
+      aria-hidden="true"
+    >
       {keyboardRows.map((row, r) => (
         <div key={r} className="flex gap-[3px]">
           {row.map(([label, w, id], i) => {
             if (id === "arrows") {
               // Up over down, half height each, the way a Mac cuts them.
               return (
-                <div key={`${r}-${i}`} className="flex flex-col gap-[2px]" style={{ flex: `${w} ${w} 0%` }}>
+                <div
+                  key={`${r}-${i}`}
+                  className="flex flex-col gap-[2px]"
+                  style={{ flex: `${w} ${w} 0%` }}
+                >
                   {(["▲", "▼"] as const).map((arrow) => (
                     <div
                       key={arrow}
-                      className={`flex h-[calc((clamp(14px,2.4vw,22px)-2px)/2)] items-center justify-center rounded-[3px] text-[clamp(5px,0.7vw,7px)] font-semibold leading-none ${
-                        set.has(arrow) ? "bg-accent text-[#1e1814] shadow-[0_2px_0_#a93608]" : "bg-[#211d19] text-[#8c8277] shadow-[0_2px_0_#0b0907]"
+                      className={`flex h-[calc((clamp(14px,2.4vw,22px)-2px)/2)] items-center justify-center rounded-[3px] text-[clamp(5px,0.7vw,7px)] leading-none font-semibold ${
+                        set.has(arrow)
+                          ? "bg-accent text-[#1e1814] shadow-[0_2px_0_#a93608]"
+                          : "bg-[#211d19] text-[#8c8277] shadow-[0_2px_0_#0b0907]"
                       }`}
                     >
                       {arrow}
@@ -271,7 +361,7 @@ export function Keyboard({ lit }: { lit: string[] }) {
             return (
               <div
                 key={`${r}-${i}`}
-                className={`flex h-[clamp(14px,2.4vw,22px)] items-center justify-center rounded-[4px] text-[clamp(6px,0.9vw,9px)] font-semibold leading-none ${
+                className={`flex h-[clamp(14px,2.4vw,22px)] items-center justify-center rounded-[4px] text-[clamp(6px,0.9vw,9px)] leading-none font-semibold ${
                   on
                     ? "bg-accent text-[#1e1814] shadow-[0_2px_0_#a93608]"
                     : isLode
@@ -313,11 +403,41 @@ type App = {
 };
 
 export const apps: App[] = [
-  { id: "notes", name: "Notes", letter: "N", tone: "#d8c98f", rest: { left: "6%", top: "6%", width: "46%", height: "58%", zIndex: 1 } },
-  { id: "browser", name: "Browser", letter: "B", tone: "#8fb6d8", rest: { left: "30%", top: "22%", width: "52%", height: "62%", zIndex: 2 } },
-  { id: "terminal", name: "Terminal", letter: "T", tone: "#a7d3a1", rest: { left: "52%", top: "3%", width: "42%", height: "46%", zIndex: 3 } },
-  { id: "calendar", name: "Calendar", letter: "C", tone: "#e0a6a6", rest: { left: "14%", top: "40%", width: "44%", height: "52%", zIndex: 4 } },
-  { id: "mail", name: "Mail", letter: "M", tone: "#c9c9d1", rest: { left: "40%", top: "34%", width: "40%", height: "50%", zIndex: 5 } },
+  {
+    id: "notes",
+    name: "Notes",
+    letter: "N",
+    tone: "#d8c98f",
+    rest: { left: "6%", top: "6%", width: "46%", height: "58%", zIndex: 1 },
+  },
+  {
+    id: "browser",
+    name: "Browser",
+    letter: "B",
+    tone: "#8fb6d8",
+    rest: { left: "30%", top: "22%", width: "52%", height: "62%", zIndex: 2 },
+  },
+  {
+    id: "terminal",
+    name: "Terminal",
+    letter: "T",
+    tone: "#a7d3a1",
+    rest: { left: "52%", top: "3%", width: "42%", height: "46%", zIndex: 3 },
+  },
+  {
+    id: "calendar",
+    name: "Calendar",
+    letter: "C",
+    tone: "#e0a6a6",
+    rest: { left: "14%", top: "40%", width: "44%", height: "52%", zIndex: 4 },
+  },
+  {
+    id: "mail",
+    name: "Mail",
+    letter: "M",
+    tone: "#c9c9d1",
+    rest: { left: "40%", top: "34%", width: "40%", height: "50%", zIndex: 5 },
+  },
 ];
 
 export function pile(focus: string | null) {
@@ -344,7 +464,10 @@ export function nameOf(id: string | null) {
 export function PageBody({ tone }: { tone: string }) {
   return (
     <div className="space-y-[7px] p-[8px]">
-      <div className="h-[6px] w-[34%] rounded-full" style={{ background: "#524840" }} />
+      <div
+        className="h-[6px] w-[34%] rounded-full"
+        style={{ background: "#524840" }}
+      />
       <div className="grid grid-cols-3 gap-[5px] pt-[3px]">
         <div className="h-[22px] rounded-[3px] bg-[#211d19]" />
         <div className="h-[22px] rounded-[3px] bg-[#211d19]" />
@@ -368,7 +491,10 @@ export function AskBar({
   profile: string;
 }) {
   return (
-    <Glass show={text !== null} className="inset-x-[16%] top-[30%] px-[3%] py-[2.2%] text-[11px]">
+    <Glass
+      show={text !== null}
+      className="inset-x-[16%] top-[30%] px-[3%] py-[2.2%] text-[11px]"
+    >
       <div className="flex items-center gap-2">
         <span className="text-[#8c8277]">ask</span>
         <span className="text-[#f1ebe2]">
@@ -377,8 +503,10 @@ export function AskBar({
         </span>
       </div>
       <div className="mt-[2%] flex items-center justify-between text-[9px] text-[#a99f92]">
-        <span>{text && hint.startsWith(text) && text.length > 0 ? hint : "search"}</span>
-        <span className="rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold shadow-[0_1.5px_0_#110e0c] text-[#f1ebe2]">
+        <span>
+          {text && hint.startsWith(text) && text.length > 0 ? hint : "search"}
+        </span>
+        <span className="rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold text-[#f1ebe2] shadow-[0_1.5px_0_#110e0c]">
           {profile}
         </span>
       </div>
@@ -387,9 +515,23 @@ export function AskBar({
 }
 
 // An application: the letter, and the arrival.
-type AppFrame = { held: boolean; key: string | null; focus: string | null; caption: string };
-const appRest: AppFrame = { held: false, key: null, focus: null, caption: "Windows, wherever the day left them" };
-const appStill: AppFrame = { ...appRest, focus: "mail", caption: "m is always Mail" };
+type AppFrame = {
+  held: boolean;
+  key: string | null;
+  focus: string | null;
+  caption: string;
+};
+const appRest: AppFrame = {
+  held: false,
+  key: null,
+  focus: null,
+  caption: "Windows, wherever the day left them",
+};
+const appStill: AppFrame = {
+  ...appRest,
+  focus: "mail",
+  caption: "m is always Mail",
+};
 const appScript: Step<AppFrame>[] = [
   [1200, { held: true, caption: "Hold lode" }],
   [800, { key: "M" }],
@@ -397,7 +539,13 @@ const appScript: Step<AppFrame>[] = [
   [420, { held: false, key: null }],
   [2600, { held: true }],
   [700, { key: "N" }],
-  [180, { focus: "notes", caption: "n is always Notes, even when it has to launch" }],
+  [
+    180,
+    {
+      focus: "notes",
+      caption: "n is always Notes, even when it has to launch",
+    },
+  ],
   [420, { held: false, key: null }],
   [3000, { ...appRest }],
 ];
@@ -413,20 +561,52 @@ export function SceneApp() {
 }
 
 // A page: Ask, a name, and the profile it belongs to.
-type PageFrame = { held: boolean; key: string | null; ask: string | null; page: boolean; caption: string };
-const pageRest: PageFrame = { held: false, key: null, ask: null, page: false, caption: "In Mail, with something to look up" };
-const pageStill: PageFrame = { ...pageRest, page: true, caption: "Open in your work profile, without choosing" };
+type PageFrame = {
+  held: boolean;
+  key: string | null;
+  ask: string | null;
+  page: boolean;
+  caption: string;
+};
+const pageRest: PageFrame = {
+  held: false,
+  key: null,
+  ask: null,
+  page: false,
+  caption: "In Mail, with something to look up",
+};
+const pageStill: PageFrame = {
+  ...pageRest,
+  page: true,
+  caption: "Open in your work profile, without choosing",
+};
 const pageScript: Step<PageFrame>[] = [
   [1200, { held: true, caption: "Hold lode" }],
   [700, { key: "⏎" }],
-  [200, { held: false, key: null, ask: "", caption: "Ask. A name you saved, a site, or a search" }],
+  [
+    200,
+    {
+      held: false,
+      key: null,
+      ask: "",
+      caption: "Ask. A name you saved, a site, or a search",
+    },
+  ],
   [500, { ask: "d", key: "d" }],
   [130, { ask: "do", key: "o" }],
   [130, { ask: "doc", key: "c" }],
   [130, { ask: "docs", key: "s" }],
   [300, { key: null }],
   [600, { key: "⏎" }],
-  [180, { ask: null, key: null, page: true, caption: "Open in your work profile, without choosing" }],
+  [
+    180,
+    {
+      ask: null,
+      key: null,
+      page: true,
+      caption: "Open in your work profile, without choosing",
+    },
+  ],
   [3200, { ...pageRest }],
 ];
 export function ScenePage() {
@@ -435,8 +615,16 @@ export function ScenePage() {
   return (
     <div ref={ref} className="select-none">
       <Display title={f.page ? "Browser" : "Mail"}>
-        <Win name="Mail" tone="#c9c9d1" style={{ ...full, opacity: f.page ? 0 : 1 }} />
-        <Win name="docs · Work" tone="#8fb6d8" style={{ ...full, opacity: f.page ? 1 : 0, zIndex: 21 }}>
+        <Win
+          name="Mail"
+          tone="#c9c9d1"
+          style={{ ...full, opacity: f.page ? 0 : 1 }}
+        />
+        <Win
+          name="docs · Work"
+          tone="#8fb6d8"
+          style={{ ...full, opacity: f.page ? 1 : 0, zIndex: 21 }}
+        >
           <PageBody tone="#8fb6d8" />
         </Win>
         <AskBar text={f.ask} hint="docs" profile="Work" />
@@ -447,20 +635,55 @@ export function ScenePage() {
 }
 
 // A button: every pressable thing wears a letter.
-type HintFrame = { held: boolean; key: string | null; labels: boolean; pressed: string | null; caption: string };
-const hintRest: HintFrame = { held: false, key: null, labels: false, pressed: null, caption: "A window with things to press" };
-const hintStill: HintFrame = { ...hintRest, labels: true, caption: "Every button, link, and field wears a letter" };
+type HintFrame = {
+  held: boolean;
+  key: string | null;
+  labels: boolean;
+  pressed: string | null;
+  caption: string;
+};
+const hintRest: HintFrame = {
+  held: false,
+  key: null,
+  labels: false,
+  pressed: null,
+  caption: "A window with things to press",
+};
+const hintStill: HintFrame = {
+  ...hintRest,
+  labels: true,
+  caption: "Every button, link, and field wears a letter",
+};
 const hintScript: Step<HintFrame>[] = [
   [1200, { held: true, caption: "Hold lode" }],
   [700, { key: ";" }],
-  [150, { held: false, key: null, labels: true, caption: "Every button, link, and field wears a letter" }],
+  [
+    150,
+    {
+      held: false,
+      key: null,
+      labels: true,
+      caption: "Every button, link, and field wears a letter",
+    },
+  ],
   [1800, { key: "D", caption: "Press its letter" }],
-  [150, { labels: false, pressed: "D", caption: "Pressed, without finding it with the mouse" }],
+  [
+    150,
+    {
+      labels: false,
+      pressed: "D",
+      caption: "Pressed, without finding it with the mouse",
+    },
+  ],
   [400, { key: null }],
   [2800, { ...hintRest }],
 ];
 const buttons: [string][] = [["A"], ["S"], ["D"], ["F"]];
-const links: [string, string][] = [["G", "35%"], ["H", "49%"], ["J", "63%"]];
+const links: [string, string][] = [
+  ["G", "35%"],
+  ["H", "49%"],
+  ["J", "63%"],
+];
 export function SceneButton() {
   const { ref, active } = useInView();
   const f = useScript(hintRest, hintStill, hintScript, active);
@@ -476,7 +699,9 @@ export function SceneButton() {
                   <div
                     key={k}
                     className={`h-[14px] w-[15%] rounded-[3px] border ${
-                      f.pressed === k ? "border-transparent bg-[#f1e8df]" : "border-transparent bg-[#2b2622]"
+                      f.pressed === k
+                        ? "border-transparent bg-[#f1e8df]"
+                        : "border-transparent bg-[#2b2622]"
                     }`}
                   />
                 ))}
@@ -485,7 +710,10 @@ export function SceneButton() {
                 {links.map(([k, w]) => (
                   <div key={k} className="flex items-center gap-[6px]">
                     <div className="h-[7px] w-[7px] rounded-full bg-[#332c27]" />
-                    <div className="h-[3px] rounded-full bg-[#524840]" style={{ width: w }} />
+                    <div
+                      className="h-[3px] rounded-full bg-[#524840]"
+                      style={{ width: w }}
+                    />
                   </div>
                 ))}
                 <div className="h-[3px] w-[70%] rounded-full bg-[#3a332d]" />
@@ -522,13 +750,37 @@ export function SceneButton() {
 }
 
 // Text on screen: type what you see, mark the start and the end.
-type TextFrame = { held: boolean; key: string | null; query: string; stage: "rest" | "typing" | "start" | "end" | "done"; caption: string };
-const textRest: TextFrame = { held: false, key: null, query: "", stage: "rest", caption: "Text on screen, in any application" };
-const textStill: TextFrame = { ...textRest, stage: "done", caption: "Highlighted, and ready to copy" };
+type TextFrame = {
+  held: boolean;
+  key: string | null;
+  query: string;
+  stage: "rest" | "typing" | "start" | "end" | "done";
+  caption: string;
+};
+const textRest: TextFrame = {
+  held: false,
+  key: null,
+  query: "",
+  stage: "rest",
+  caption: "Text on screen, in any application",
+};
+const textStill: TextFrame = {
+  ...textRest,
+  stage: "done",
+  caption: "Highlighted, and ready to copy",
+};
 const textScript: Step<TextFrame>[] = [
   [1200, { held: true, caption: "Hold lode" }],
   [700, { key: "/" }],
-  [150, { held: false, key: null, stage: "typing", caption: "Type a few characters of what you see" }],
+  [
+    150,
+    {
+      held: false,
+      key: null,
+      stage: "typing",
+      caption: "Type a few characters of what you see",
+    },
+  ],
   [500, { query: "r", key: "r" }],
   [140, { query: "re", key: "e" }],
   [140, { query: "rev", key: "v" }],
@@ -548,7 +800,8 @@ const textScript: Step<TextFrame>[] = [
 export function SceneText() {
   const { ref, active } = useInView();
   const f = useScript(textRest, textStill, textScript, active);
-  const marking = f.stage === "typing" || f.stage === "start" || f.stage === "end";
+  const marking =
+    f.stage === "typing" || f.stage === "start" || f.stage === "end";
   const selected = f.stage === "end" || f.stage === "done";
   const sel = selected ? "bg-[#f1e8df] text-[#1e1814]" : "";
   return (
@@ -563,20 +816,49 @@ export function SceneText() {
                 Bring the{" "}
                 <span className="relative">
                   <span className={sel}>revised</span>
-                  <Label show={f.stage === "typing" && f.query !== "" && "revised".startsWith(f.query)} lit={f.key === "A"} className="-top-[9px] -left-[2px]">A</Label>
-                  <Label show={f.stage === "start" || f.stage === "end"} lit className="-top-[9px] -left-[2px]">A</Label>
+                  <Label
+                    show={
+                      f.stage === "typing" &&
+                      f.query !== "" &&
+                      "revised".startsWith(f.query)
+                    }
+                    lit={f.key === "A"}
+                    className="-top-[9px] -left-[2px]"
+                  >
+                    A
+                  </Label>
+                  <Label
+                    show={f.stage === "start" || f.stage === "end"}
+                    lit
+                    className="-top-[9px] -left-[2px]"
+                  >
+                    A
+                  </Label>
                 </span>
                 <span className={sel}> budget and the vendor</span>
               </p>
               <p>
                 <span className="relative">
                   <span className={sel}>list</span>
-                  <Label show={f.stage === "start" && f.query !== "" && "list".startsWith(f.query)} lit={f.key === "S"} className="-top-[9px] -left-[2px]">S</Label>
+                  <Label
+                    show={
+                      f.stage === "start" &&
+                      f.query !== "" &&
+                      "list".startsWith(f.query)
+                    }
+                    lit={f.key === "S"}
+                    className="-top-[9px] -left-[2px]"
+                  >
+                    S
+                  </Label>
                 </span>
                 , the contract renews on the first.
               </p>
               <p className="text-[#8c8277]">Ask design for the venue photos.</p>
-              <Glass show={marking} className="right-[8px] bottom-[8px] px-[8px] py-[4px] text-[9px]">
+              <Glass
+                show={marking}
+                className="right-[8px] bottom-[8px] px-[8px] py-[4px] text-[9px]"
+              >
                 <span className="text-[#8c8277]">select </span>
                 <span className="text-[#f1ebe2]">{f.query}</span>
                 <span className="bg-accent ml-[1px] inline-block h-[1em] w-[2px] translate-y-[1px]" />
@@ -585,15 +867,34 @@ export function SceneText() {
           </div>
         </Win>
       </Display>
-      <Foot lit={f.key === "A" || f.key === "S" ? ["⇧", f.key] : lodeLit(f.held, f.key)} caption={f.caption} />
+      <Foot
+        lit={
+          f.key === "A" || f.key === "S" ? ["⇧", f.key] : lodeLit(f.held, f.key)
+        }
+        caption={f.caption}
+      />
     </div>
   );
 }
 
 // What you copied: the cards, a letter, the paste.
-type ClipFrame = { key: string | null; strip: boolean; pasted: boolean; caption: string };
-const clipRest: ClipFrame = { key: null, strip: false, pasted: false, caption: "Writing, and something from earlier is needed" };
-const clipStill: ClipFrame = { ...clipRest, strip: true, caption: "Every clip, in the same place every time" };
+type ClipFrame = {
+  key: string | null;
+  strip: boolean;
+  pasted: boolean;
+  caption: string;
+};
+const clipRest: ClipFrame = {
+  key: null,
+  strip: false,
+  pasted: false,
+  caption: "Writing, and something from earlier is needed",
+};
+const clipStill: ClipFrame = {
+  ...clipRest,
+  strip: true,
+  caption: "Every clip, in the same place every time",
+};
 const clipScript: Step<ClipFrame>[] = [
   [1400, { key: "⇧⌘V", caption: "" }],
   [180, { strip: true, caption: "Every clip, in the same place every time" }],
@@ -603,7 +904,13 @@ const clipScript: Step<ClipFrame>[] = [
   [400, { key: null }],
   [3000, { ...clipRest }],
 ];
-const cards: [string, string][] = [["A", "swift build -c release"], ["S", "hello@example.com"], ["D", "The launch review moves to Thursday"], ["F", "A8F2CD34EF"], ["G", "lodestar.vaccone.software"]];
+const cards: [string, string][] = [
+  ["A", "swift build -c release"],
+  ["S", "hello@example.com"],
+  ["D", "The launch review moves to Thursday"],
+  ["F", "A8F2CD34EF"],
+  ["G", "lodestar.vaccone.software"],
+];
 export function SceneClipboard() {
   const { ref, active } = useInView();
   const f = useScript(clipRest, clipStill, clipScript, active);
@@ -617,7 +924,9 @@ export function SceneClipboard() {
               <p>Hi Dana,</p>
               <p>
                 Send the invoice to{" "}
-                <span className={f.pasted ? "text-[#f1ebe2]" : ""}>{f.pasted ? "hello@example.com" : ""}</span>
+                <span className={f.pasted ? "text-[#f1ebe2]" : ""}>
+                  {f.pasted ? "hello@example.com" : ""}
+                </span>
                 <span className="bg-accent ml-[1px] inline-block h-[1em] w-[2px] translate-y-[1px]" />
               </p>
             </div>
@@ -631,16 +940,23 @@ export function SceneClipboard() {
             <div
               key={k}
               className={`rounded-[6px] p-[6px] text-[7.5px] leading-snug ${
-                f.key === k ? "bg-[#f1e8df] text-[#1e1814] shadow-[0_2px_0_#ada093]" : "bg-[#2b2622] text-[#cfc6ba] shadow-[0_2px_0_#110e0c,inset_0_1px_0_rgba(241,235,226,0.08)]"
+                f.key === k
+                  ? "bg-[#f1e8df] text-[#1e1814] shadow-[0_2px_0_#ada093]"
+                  : "bg-[#2b2622] text-[#cfc6ba] shadow-[0_2px_0_#110e0c,inset_0_1px_0_rgba(241,235,226,0.08)]"
               }`}
             >
-              <div className="mb-[4px] text-[8px] font-semibold">{k.toLowerCase()}</div>
+              <div className="mb-[4px] text-[8px] font-semibold">
+                {k.toLowerCase()}
+              </div>
               <div className="line-clamp-2">{text}</div>
             </div>
           ))}
         </div>
       </Display>
-      <Foot lit={f.key === "⇧⌘V" ? ["⇧", "⌘", "v"] : f.key ? [f.key] : []} caption={f.caption} />
+      <Foot
+        lit={f.key === "⇧⌘V" ? ["⇧", "⌘", "v"] : f.key ? [f.key] : []}
+        caption={f.caption}
+      />
     </div>
   );
 }
@@ -649,7 +965,20 @@ export function SceneClipboard() {
 // comes out wrong, and the correction is made without leaving the keys:
 // esc, F b flies back to the word with every reachable letter lit, c w
 // changes it, and ⏎ places the sentence.
-const heard = ["Thanks,", "the", "revised", "bucket", "is", "attached.", "Call", "me", "if", "anything", "looks", "off."];
+const heard = [
+  "Thanks,",
+  "the",
+  "revised",
+  "bucket",
+  "is",
+  "attached.",
+  "Call",
+  "me",
+  "if",
+  "anything",
+  "looks",
+  "off.",
+];
 const heardText = heard.join(" ");
 const wrong = "bucket";
 const right = "budget";
@@ -670,23 +999,106 @@ export function findLights(text: string, cursor: number): Set<number> {
   return lit;
 }
 
-type SayStage = "rest" | "dictating" | "normal" | "find" | "jumped" | "changed" | "typed" | "pasted";
-type SayFrame = { keys: [string, boolean][]; draft: boolean; words: number; stage: SayStage; typed: string; caption: string };
+type SayStage =
+  | "rest"
+  | "dictating"
+  | "normal"
+  | "find"
+  | "jumped"
+  | "changed"
+  | "typed"
+  | "pasted";
+type SayFrame = {
+  keys: [string, boolean][];
+  draft: boolean;
+  words: number;
+  stage: SayStage;
+  typed: string;
+  caption: string;
+};
 const noKeys: [string, boolean][] = [];
-const sayRest: SayFrame = { keys: noKeys, draft: false, words: 0, stage: "rest", typed: "", caption: "A reply to write" };
-const sayStill: SayFrame = { ...sayRest, draft: true, words: heard.length, stage: "dictating", caption: "Speak, and the words appear. ⏎ puts them where your cursor was" };
-const typing: Step<SayFrame>[] = right.split("").map((c, i): Step<SayFrame> => [i === 0 ? 700 : 140, { keys: [[c, true]], typed: right.slice(0, i + 1), ...(i === right.length - 1 ? { stage: "typed" as SayStage, caption: "Typed, into the same sentence" } : {}) }]);
+const sayRest: SayFrame = {
+  keys: noKeys,
+  draft: false,
+  words: 0,
+  stage: "rest",
+  typed: "",
+  caption: "A reply to write",
+};
+const sayStill: SayFrame = {
+  ...sayRest,
+  draft: true,
+  words: heard.length,
+  stage: "dictating",
+  caption: "Speak, and the words appear. ⏎ puts them where your cursor was",
+};
+const typing: Step<SayFrame>[] = right.split("").map((c, i): Step<SayFrame> => [
+  i === 0 ? 700 : 140,
+  {
+    keys: [[c, true]],
+    typed: right.slice(0, i + 1),
+    ...(i === right.length - 1
+      ? {
+          stage: "typed" as SayStage,
+          caption: "Typed, into the same sentence",
+        }
+      : {}),
+  },
+]);
 const sayScript: Step<SayFrame>[] = [
   [1200, { keys: [["lode", true]], caption: "Hold lode" }],
-  [700, { keys: [["lode", true], [".", true]] }],
-  [150, { keys: noKeys, draft: true, stage: "dictating", caption: "Speak. The words appear as you say them" }],
-  ...heard.map((_, i): Step<SayFrame> => [i === 0 ? 500 : 230, { words: i + 1 }]),
+  [
+    700,
+    {
+      keys: [
+        ["lode", true],
+        [".", true],
+      ],
+    },
+  ],
+  [
+    150,
+    {
+      keys: noKeys,
+      draft: true,
+      stage: "dictating",
+      caption: "Speak. The words appear as you say them",
+    },
+  ],
+  ...heard.map((_, i): Step<SayFrame> => [
+    i === 0 ? 500 : 230,
+    { words: i + 1 },
+  ]),
   [900, { caption: "One word, near the start, came out wrong" }],
-  [1200, { keys: [["esc", true]], stage: "normal", caption: "esc. The draft becomes an editor" }],
+  [
+    1200,
+    {
+      keys: [["esc", true]],
+      stage: "normal",
+      caption: "esc. The draft becomes an editor",
+    },
+  ],
   [350, { keys: noKeys }],
-  [900, { keys: [["⇧", true], ["f", true]], stage: "find", caption: "F. Every letter you can jump back to lights up" }],
+  [
+    900,
+    {
+      keys: [
+        ["⇧", true],
+        ["f", true],
+      ],
+      stage: "find",
+      caption: "F. Every letter you can jump back to lights up",
+    },
+  ],
   [400, { keys: noKeys }],
-  [1300, { keys: [["b", true]], stage: "jumped", caption: "b. The cursor flies back to the word" }],
+  [
+    1300,
+    {
+      keys: [["b", true]],
+      stage: "jumped",
+      caption: "b. The cursor flies back to the word",
+    },
+  ],
   [350, { keys: noKeys }],
   [900, { keys: [["c", true]], caption: "c, then w. Change the word" }],
   [350, { keys: noKeys }],
@@ -695,7 +1107,15 @@ const sayScript: Step<SayFrame>[] = [
   ...typing,
   [300, { keys: noKeys }],
   [1000, { keys: [["⏎", true]] }],
-  [150, { keys: noKeys, draft: false, stage: "pasted", caption: "Placed where your cursor was" }],
+  [
+    150,
+    {
+      keys: noKeys,
+      draft: false,
+      stage: "pasted",
+      caption: "Placed where your cursor was",
+    },
+  ],
   [3400, { ...sayRest }],
 ];
 
@@ -703,17 +1123,33 @@ export function SceneSpeech() {
   const { ref, active } = useInView();
   const f = useScript(sayRest, sayStill, sayScript, active);
   const st = f.stage;
-  const lights = st === "find" ? findLights(heardText, heardText.length) : new Set<number>();
+  const lights =
+    st === "find" ? findLights(heardText, heardText.length) : new Set<number>();
   // What the draft shows, as characters, so single letters can light.
   let shown = "";
   if (st === "dictating") shown = heard.slice(0, f.words).join(" ");
-  else if (st === "normal" || st === "find" || st === "jumped") shown = heardText;
+  else if (st === "normal" || st === "find" || st === "jumped")
+    shown = heardText;
   else if (st === "changed" || st === "typed")
-    shown = heardText.slice(0, wrongAt) + f.typed + heardText.slice(wrongAt + wrong.length);
-  const insertAt = st === "changed" || st === "typed" ? wrongAt + f.typed.length : shown.length;
-  const block = st === "normal" || st === "find" ? shown.length - 1 : st === "jumped" ? wrongAt : -1;
+    shown =
+      heardText.slice(0, wrongAt) +
+      f.typed +
+      heardText.slice(wrongAt + wrong.length);
+  const insertAt =
+    st === "changed" || st === "typed"
+      ? wrongAt + f.typed.length
+      : shown.length;
+  const block =
+    st === "normal" || st === "find"
+      ? shown.length - 1
+      : st === "jumped"
+        ? wrongAt
+        : -1;
   const caret = (
-    <span key="caret" className="bg-accent inline-block h-[1em] w-[2px] translate-y-[1px]" />
+    <span
+      key="caret"
+      className="bg-accent inline-block h-[1em] w-[2px] translate-y-[1px]"
+    />
   );
   return (
     <div ref={ref} className="select-none">
@@ -724,20 +1160,31 @@ export function SceneSpeech() {
             <div className="flex-1 p-[10px] text-[9.5px] leading-[1.9] text-[#cfc6ba]">
               <p>Hi Dana,</p>
               <p>
-                <span className="text-[#f1ebe2]">{st === "pasted" ? fixedText : ""}</span>
+                <span className="text-[#f1ebe2]">
+                  {st === "pasted" ? fixedText : ""}
+                </span>
                 <span className="bg-accent ml-[1px] inline-block h-[1em] w-[2px] translate-y-[1px]" />
               </p>
             </div>
           </div>
         </Win>
-        <Glass show={f.draft} className="inset-x-[6%] bottom-[5%] px-[3%] py-[2.4%] text-[10px]">
+        <Glass
+          show={f.draft}
+          className="inset-x-[6%] bottom-[5%] px-[3%] py-[2.4%] text-[10px]"
+        >
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2">
-              <span className={`inline-block h-[6px] w-[6px] rounded-full ${st === "dictating" ? "bg-accent" : "bg-[#3d3630]"}`} />
+              <span
+                className={`inline-block h-[6px] w-[6px] rounded-full ${st === "dictating" ? "bg-accent" : "bg-[#3d3630]"}`}
+              />
               <span className="text-[#8c8277]">draft</span>
             </span>
             <span className="text-[8px] text-[#8c8277]">
-              {st === "dictating" ? "listening" : st === "changed" || st === "typed" ? "insert" : "normal"}
+              {st === "dictating"
+                ? "listening"
+                : st === "changed" || st === "typed"
+                  ? "insert"
+                  : "normal"}
             </span>
           </div>
           <p className="mt-[1.5%] min-h-[2.6em] font-mono leading-[1.6] text-[#f1ebe2]">
@@ -761,25 +1208,54 @@ export function SceneSpeech() {
             {block < 0 && insertAt >= shown.length ? caret : null}
           </p>
           <div className="mt-[1.5%] text-[8px] text-[#8c8277]">
-            {st === "dictating" ? "⏎ paste · ⇧⏎ new line · esc edit" : "⏎ paste · esc close"}
+            {st === "dictating"
+              ? "⏎ paste · ⇧⏎ new line · esc edit"
+              : "⏎ paste · esc close"}
           </div>
         </Glass>
       </Display>
-      <Foot lit={f.keys.filter(([, on]) => on).map(([k]) => k)} caption={f.caption} />
+      <Foot
+        lit={f.keys.filter(([, on]) => on).map(([k]) => k)}
+        caption={f.caption}
+      />
     </div>
   );
 }
 
 // The coach: one offer, its evidence, its price, and the accept.
-type CoachFrame = { held: boolean; key: string | null; chip: "none" | "offer" | "bound"; caption: string };
-const coachRest: CoachFrame = { held: false, key: null, chip: "none", caption: "Mail, reached through the launcher again" };
-const coachStill: CoachFrame = { ...coachRest, chip: "offer", caption: "One offer, with its evidence and its price" };
+type CoachFrame = {
+  held: boolean;
+  key: string | null;
+  chip: "none" | "offer" | "bound";
+  caption: string;
+};
+const coachRest: CoachFrame = {
+  held: false,
+  key: null,
+  chip: "none",
+  caption: "Mail, reached through the launcher again",
+};
+const coachStill: CoachFrame = {
+  ...coachRest,
+  chip: "offer",
+  caption: "One offer, with its evidence and its price",
+};
 const coachScript: Step<CoachFrame>[] = [
-  [1600, { chip: "offer", caption: "One offer, with its evidence and its price" }],
+  [
+    1600,
+    { chip: "offer", caption: "One offer, with its evidence and its price" },
+  ],
   [3200, { held: true, caption: "Tap lode twice to take it" }],
   [220, { held: false }],
   [180, { key: "lode" }],
-  [220, { key: null, chip: "bound", caption: "m is Mail. The launcher will say so until your hand knows" }],
+  [
+    220,
+    {
+      key: null,
+      chip: "bound",
+      caption: "m is Mail. The launcher will say so until your hand knows",
+    },
+  ],
   [3400, { chip: "none" }],
   [1200, { ...coachRest }],
 ];
@@ -790,12 +1266,17 @@ export function SceneCoach() {
     <div ref={ref} className="select-none">
       <Display title="Mail">
         <Win name="Mail" tone="#c9c9d1" style={full} />
-        <Glass show={f.chip !== "none"} className="inset-x-[8%] bottom-[6%] px-[2.6%] py-[2%] text-[10px]">
+        <Glass
+          show={f.chip !== "none"}
+          className="inset-x-[8%] bottom-[6%] px-[2.6%] py-[2%] text-[10px]"
+        >
           {f.chip === "bound" ? (
             <div className="flex items-center justify-between">
               <span className="text-[#f1ebe2]">
                 <span className="text-[#8c8277]">coach </span>
-                <span className="rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold shadow-[0_1.5px_0_#110e0c] text-[#f1ebe2]">m</span>
+                <span className="rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold text-[#f1ebe2] shadow-[0_1.5px_0_#110e0c]">
+                  m
+                </span>
                 <span className="mx-[6px] text-[#a99f92]">→</span>Mail
               </span>
               <span className="text-[#f1ebe2]">bound</span>
@@ -807,45 +1288,104 @@ export function SceneCoach() {
                   <span className="text-[#8c8277]">coach </span>
                   lode m <span className="text-[#a99f92]">→</span> Mail
                 </span>
-                <span className={`px-[6px] ${f.held ? "rounded-[4px] bg-accent px-[5px] py-[1px] font-semibold text-[#1e1814] shadow-[0_1.5px_0_#a93608]" : "rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold shadow-[0_1.5px_0_#110e0c] text-[#f1ebe2]"}`}>
+                <span
+                  className={`px-[6px] ${f.held ? "bg-accent rounded-[4px] px-[5px] py-[1px] font-semibold text-[#1e1814] shadow-[0_1.5px_0_#a93608]" : "rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold text-[#f1ebe2] shadow-[0_1.5px_0_#110e0c]"}`}
+                >
                   lode lode
                 </span>
               </div>
               <div className="mt-[1.6%] text-[8.5px] text-[#a99f92]">
-                you searched for it 31 times across 6 weeks · about 40 seconds a week · tap lode twice to bind it · lode ⌫ not this one
+                you searched for it 31 times across 6 weeks · about 40 seconds a
+                week · tap lode twice to bind it · lode ⌫ not this one
               </div>
             </>
           )}
         </Glass>
       </Display>
-      <Foot lit={f.held || f.key === "lode" ? ["lode"] : []} caption={f.caption} />
+      <Foot
+        lit={f.held || f.key === "lode" ? ["lode"] : []}
+        caption={f.caption}
+      />
     </div>
   );
 }
 
 // What you write: a line under what reads wrong, a letter on each.
-type EditFrame = { held: boolean; key: string | null; labels: boolean; fixedA: boolean; fixedS: boolean; caption: string };
-const editRest: EditFrame = { held: false, key: null, labels: false, fixedA: false, fixedS: false, caption: "A line under what reads wrong, in any app" };
-const editStill: EditFrame = { ...editRest, caption: "A line under what reads wrong, in any app" };
+type EditFrame = {
+  held: boolean;
+  key: string | null;
+  labels: boolean;
+  fixedA: boolean;
+  fixedS: boolean;
+  caption: string;
+};
+const editRest: EditFrame = {
+  held: false,
+  key: null,
+  labels: false,
+  fixedA: false,
+  fixedS: false,
+  caption: "A line under what reads wrong, in any app",
+};
+const editStill: EditFrame = {
+  ...editRest,
+  caption: "A line under what reads wrong, in any app",
+};
 const editScript: Step<EditFrame>[] = [
   [1800, { held: true, caption: "Hold lode" }],
   [700, { key: "⇥" }],
-  [160, { held: false, key: null, labels: true, caption: "Every mark wears a letter and its fix" }],
+  [
+    160,
+    {
+      held: false,
+      key: null,
+      labels: true,
+      caption: "Every mark wears a letter and its fix",
+    },
+  ],
   [1300, { key: "a", caption: "A letter fixes it" }],
   [160, { key: null, fixedA: true }],
   [900, { key: "s" }],
-  [160, { key: null, fixedS: true, labels: false, caption: "No lines: the message was read, and it is right" }],
+  [
+    160,
+    {
+      key: null,
+      fixedS: true,
+      labels: false,
+      caption: "No lines: the message was read, and it is right",
+    },
+  ],
   [3200, { ...editRest }],
 ];
-function Marked({ word, fixed, fix, letter, labels, lit }: { word: string; fixed: boolean; fix: string; letter: string; labels: boolean; lit: boolean }) {
+function Marked({
+  word,
+  fixed,
+  fix,
+  letter,
+  labels,
+  lit,
+}: {
+  word: string;
+  fixed: boolean;
+  fix: string;
+  letter: string;
+  labels: boolean;
+  lit: boolean;
+}) {
   return (
     <span className="relative">
-      <span className={fixed ? "text-[#f1ebe2]" : ""}>{fixed ? fix : word}</span>
+      <span className={fixed ? "text-[#f1ebe2]" : ""}>
+        {fixed ? fix : word}
+      </span>
       <span
         className="absolute right-0 -bottom-[1px] left-0 h-[1.5px] rounded-full bg-[#a99f92]"
         style={{ opacity: fixed ? 0 : 0.9 }}
       />
-      <Label show={labels && !fixed} lit={lit} className="-top-[10px] -left-[2px] whitespace-nowrap">
+      <Label
+        show={labels && !fixed}
+        lit={lit}
+        className="-top-[10px] -left-[2px] whitespace-nowrap"
+      >
         {`${letter} · ${fix}`}
       </Label>
     </span>
@@ -861,12 +1401,28 @@ export function SceneEditor() {
           <div className="flex h-[calc(100%-16px)]">
             <Sidebar tone="#9fc3a0" />
             <div className="relative flex-1 p-[10px] text-[9.5px] leading-[2.1] text-[#cfc6ba]">
-              <p className="text-[#8c8277]">To: Sam · Re: the vendor contract</p>
+              <p className="text-[#8c8277]">
+                To: Sam · Re: the vendor contract
+              </p>
               <p className="mt-[4px]">Hi Sam,</p>
               <p>
-                <Marked word="Their" fix="They're" letter="A" fixed={f.fixedA} labels={f.labels} lit={f.key === "a"} />
+                <Marked
+                  word="Their"
+                  fix="They're"
+                  letter="A"
+                  fixed={f.fixedA}
+                  labels={f.labels}
+                  lit={f.key === "a"}
+                />
                 {" going to "}
-                <Marked word="recieve" fix="receive" letter="S" fixed={f.fixedS} labels={f.labels} lit={f.key === "s"} />
+                <Marked
+                  word="recieve"
+                  fix="receive"
+                  letter="S"
+                  fixed={f.fixedS}
+                  labels={f.labels}
+                  lit={f.key === "s"}
+                />
                 {" the signed copy"}
               </p>
               <p>on Thursday. Let me know if that works.</p>

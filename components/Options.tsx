@@ -26,7 +26,9 @@ function lookup(path: string): Node | null {
 }
 
 function typeOf(node: Node): string {
-  const t = Array.isArray(node.type) ? node.type.filter((x) => x !== "null").join(" or ") : node.type;
+  const t = Array.isArray(node.type)
+    ? node.type.filter((x) => x !== "null").join(" or ")
+    : node.type;
   if (node.enum) return node.enum.map(String).join(" · ");
   return t ?? "";
 }
@@ -51,18 +53,27 @@ export default function Options({ keys }: { keys: string[] }) {
   return (
     <dl className="pane mt-6 grid p-2">
       {rows.map(([path, node]) => (
-        <div key={path} className="border-hairline grid gap-x-8 gap-y-2 border-b px-3 py-5 last:border-b-0 lg:grid-cols-[18rem_1fr]">
+        <div
+          key={path}
+          className="border-hairline grid gap-x-8 gap-y-2 border-b px-3 py-5 last:border-b-0 lg:grid-cols-[18rem_1fr]"
+        >
           <dt>
-            <code className="text-ink font-mono text-[13px] font-medium">{path}</code>
+            <code className="text-ink font-mono text-[13px] font-medium">
+              {path}
+            </code>
             <div className="text-faint mt-1 text-[13px]">
               {typeOf(node!)}
-              {node!.default !== undefined && node!.default !== null && typeof node!.default !== "object"
+              {node!.default !== undefined &&
+              node!.default !== null &&
+              typeof node!.default !== "object"
                 ? ` · default ${String(node!.default)}`
                 : ""}
             </div>
           </dt>
           <dd>
-            <p className="text-dim text-[16px] leading-[1.55]">{node!.description}</p>
+            <p className="text-dim text-[16px] leading-[1.55]">
+              {node!.description}
+            </p>
             <code className="well text-dim mt-3 block px-3 py-2 font-mono text-[13px] break-all">
               <span className="text-faint">$ </span>
               {example(path, node!)}

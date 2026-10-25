@@ -53,7 +53,12 @@ export async function card({
         {mark.faces.map((face, i) => (
           <polygon
             key={i}
-            points={face.points.map(([x, y]) => `${(c + x * r).toFixed(1)},${(c + y * r).toFixed(1)}`).join(" ")}
+            points={face.points
+              .map(
+                ([x, y]) =>
+                  `${(c + x * r).toFixed(1)},${(c + y * r).toFixed(1)}`,
+              )
+              .join(" ")}
             fill={face.fill}
             stroke={face.fill}
             strokeWidth={0.6}
@@ -61,10 +66,20 @@ export async function card({
           />
         ))}
       </svg>
-      <div style={{ display: "flex", fontSize: 24, color: "#A99F92", fontFamily: "Inter", fontWeight: 600 }}>
+      <div
+        style={{
+          display: "flex",
+          fontSize: 24,
+          color: "#A99F92",
+          fontFamily: "Inter",
+          fontWeight: 600,
+        }}
+      >
         {eyebrow ?? "Lodestar"}
       </div>
-      <div style={{ display: "flex", flexDirection: "column", marginBottom: 8 }}>
+      <div
+        style={{ display: "flex", flexDirection: "column", marginBottom: 8 }}
+      >
         <div
           style={{
             fontSize: oneLine ? 58 : long ? 64 : 84,
@@ -93,7 +108,15 @@ export async function card({
           {line}
         </div>
       </div>
-      <div style={{ display: "flex", fontSize: 20, color: "#8C8277", fontFamily: "Inter", fontWeight: 400 }}>
+      <div
+        style={{
+          display: "flex",
+          fontSize: 20,
+          color: "#8C8277",
+          fontFamily: "Inter",
+          fontWeight: 400,
+        }}
+      >
         Lodestar · Free · Apple silicon, macOS 27 or later
       </div>
     </div>,

@@ -33,7 +33,10 @@ export default async function Page() {
   return (
     <>
       <Nav tag={latest} current="changelog" />
-      <main id="main" className="mx-auto max-w-[760px] px-4 pt-10 pb-16 md:px-6">
+      <main
+        id="main"
+        className="mx-auto max-w-[760px] px-4 pt-10 pb-16 md:px-6"
+      >
         <p className="text-dim text-[13px] font-semibold">Changelog</p>
         <h1 className="font-display text-ink mt-3 text-[clamp(2.2rem,5vw,3.25rem)] leading-[1.04] font-bold tracking-[-0.03em] text-balance">
           Every release, as it shipped

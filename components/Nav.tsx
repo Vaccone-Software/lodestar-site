@@ -21,7 +21,10 @@ export default function Nav({
       aria-label="Lodestar"
       className="relative z-20 grid h-[52px] grid-cols-[1fr_auto] items-center px-4 text-[14px] font-medium md:grid-cols-[1fr_auto_1fr] md:px-6"
     >
-      <a href="/" className="text-ink font-display justify-self-start text-[18px] font-bold tracking-[-0.012em]">
+      <a
+        href="/"
+        className="text-ink font-display justify-self-start text-[18px] font-bold tracking-[-0.012em]"
+      >
         Lodestar
       </a>
       {withDoors ? (
@@ -32,7 +35,9 @@ export default function Nav({
               href={`/${door.slug}`}
               aria-current={current === door.slug ? "page" : undefined}
               className={`rounded-[var(--control)] px-3 py-[6px] transition-colors ${
-                current === door.slug ? "text-ink bg-raised" : "text-dim hover:text-ink"
+                current === door.slug
+                  ? "text-ink bg-raised"
+                  : "text-dim hover:text-ink"
               }`}
             >
               {door.name}
@@ -43,10 +48,18 @@ export default function Nav({
         <span className="hidden md:block" />
       )}
       <div className="flex items-center gap-6 justify-self-end">
-        <a href="/guide" aria-current={current === "guide" ? "page" : undefined} className={`hidden sm:inline ${link("guide")}`}>
+        <a
+          href="/guide"
+          aria-current={current === "guide" ? "page" : undefined}
+          className={`hidden sm:inline ${link("guide")}`}
+        >
           Guide
         </a>
-        <a href="/changelog" aria-current={current === "changelog" ? "page" : undefined} className={link("changelog")}>
+        <a
+          href="/changelog"
+          aria-current={current === "changelog" ? "page" : undefined}
+          className={link("changelog")}
+        >
           Changelog
         </a>
         <DownloadPill fallback={tag} label="Download" small />

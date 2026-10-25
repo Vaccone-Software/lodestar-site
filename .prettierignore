@@ -1,0 +1,5 @@
+# Written by the app's scripts and copied in as they are: site-sync.sh
+# copies the schema, make-icon.sh writes the mark. Formatting them here
+# would show a change on every sync.
+data/schema.json
+data/mark.json

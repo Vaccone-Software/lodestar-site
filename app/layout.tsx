@@ -21,7 +21,6 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-
 // The wall runs to the screen's edges, so a notch is the page's to respect.
 export const viewport: Viewport = { viewportFit: "cover" };
 

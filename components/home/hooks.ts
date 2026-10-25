@@ -23,7 +23,11 @@ export function useReducedMotion(): boolean {
 /** Whether a media query matches; the server answers `fallback`. */
 export function useMedia(query: string, fallback = false): boolean {
   const media = useRef(watch(query));
-  return useSyncExternalStore(media.current.subscribe, media.current.snapshot, () => fallback);
+  return useSyncExternalStore(
+    media.current.subscribe,
+    media.current.snapshot,
+    () => fallback,
+  );
 }
 
 /** Calls back every frame with the seconds since it began, until the
@@ -53,7 +57,10 @@ export type Wait = (ms: number) => Promise<void>;
 /** Plays a script, over and over, while it is active. The script sets its
     own state as it goes; put away, it stops where it is, and the caller
     draws its still. Under reduced motion it never starts. */
-export function useScript(play: (wait: Wait) => Promise<void>, active: boolean) {
+export function useScript(
+  play: (wait: Wait) => Promise<void>,
+  active: boolean,
+) {
   const reduced = useReducedMotion();
   const latest = useRef(play);
   useEffect(() => {

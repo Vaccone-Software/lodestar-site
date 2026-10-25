@@ -19,7 +19,8 @@ export const metadata: Metadata = pageMetadata({
 // any of that changes.
 
 const label = "text-dim text-[13px] font-semibold";
-const link = "text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4";
+const link =
+  "text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4";
 const email = "privacy@vaccone.software";
 const updated = "25 October 2026";
 
@@ -69,32 +70,42 @@ export default async function PrivacyPage() {
             What you do stays on your Mac
           </h1>
           <p className="text-dim mt-6 max-w-[62ch] text-[18px] leading-[1.55]">
-            Lodestar has no account and no server that receives what it records. Everything it keeps stays on
-            your Mac, and Vaccone Software never sees it.
+            Lodestar has no account and no server that receives what it records.
+            Everything it keeps stays on your Mac, and Vaccone Software never
+            sees it.
           </p>
           <p className="text-dim mt-3 text-[13px]">Updated {updated}</p>
 
           <section className="pane mt-10 p-6 md:p-8">
-            <h2 className="text-[18px] font-semibold">What Lodestar keeps, on your Mac</h2>
+            <h2 className="text-[18px] font-semibold">
+              What Lodestar keeps, on your Mac
+            </h2>
             <ul className="text-dim mt-3 max-w-[66ch] list-disc space-y-2 pl-5 text-[16px] leading-[1.55]">
               {kept.map((line) => (
                 <li key={line}>{line}</li>
               ))}
             </ul>
             <p className="text-dim mt-5 max-w-[66ch] text-[16px] leading-[1.6]">
-              The health record, the logbook, the clipboard history and the saved state are encrypted with
-              AES-256, under keys kept in your login keychain. All of it lives in{" "}
-              <code className="text-ink text-[15px]">~/.config/lodestar</code> and{" "}
-              <code className="text-ink text-[15px]">~/.local/share/lodestar</code>.
+              The health record, the logbook, the clipboard history and the
+              saved state are encrypted with AES-256, under keys kept in your
+              login keychain. All of it lives in{" "}
+              <code className="text-ink text-[15px]">~/.config/lodestar</code>{" "}
+              and{" "}
+              <code className="text-ink text-[15px]">
+                ~/.local/share/lodestar
+              </code>
+              .
             </p>
             <p className="text-dim mt-3 max-w-[66ch] text-[16px] leading-[1.6]">
-              Dictation, the editor&apos;s grammar checks and settings search run on your Mac. What you say and
-              write is not sent to a server.
+              Dictation, the editor&apos;s grammar checks and settings search
+              run on your Mac. What you say and write is not sent to a server.
             </p>
           </section>
 
           <section className="border-hairline mt-14 border-t pt-10">
-            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">What leaves your Mac, and when</h2>
+            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">
+              What leaves your Mac, and when
+            </h2>
             <p className="text-dim mt-2 max-w-[62ch] text-[16px] leading-[1.6]">
               Only these, and nothing else.
             </p>
@@ -102,13 +113,15 @@ export default async function PrivacyPage() {
               {leaves.map((item) => (
                 <div key={item.name} className="pane p-6">
                   <h3 className="text-[16px] font-semibold">{item.name}</h3>
-                  <p className="text-dim mt-2 text-[15px] leading-[1.55]">{item.line}</p>
+                  <p className="text-dim mt-2 text-[15px] leading-[1.55]">
+                    {item.line}
+                  </p>
                 </div>
               ))}
             </div>
             <p className="text-dim mt-5 max-w-[66ch] text-[16px] leading-[1.6]">
-              Sites and searches you open with Lodestar open in your browser, so the site you chose sees that
-              visit as it would any other.
+              Sites and searches you open with Lodestar open in your browser, so
+              the site you chose sees that visit as it would any other.
             </p>
           </section>
 
@@ -124,8 +137,9 @@ export default async function PrivacyPage() {
             <div>
               <h2 className="text-[18px] font-semibold">Research</h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.6]">
-                Lodestar does not give your record to researchers. If you join a study, you join it through the
-                research group, under their ethics approval and their consent form, and you choose what to
+                Lodestar does not give your record to researchers. If you join a
+                study, you join it through the research group, under their
+                ethics approval and their consent form, and you choose what to
                 export to them. See{" "}
                 <a href="/research" className={link}>
                   Research
@@ -136,16 +150,18 @@ export default async function PrivacyPage() {
             <div>
               <h2 className="text-[18px] font-semibold">This website</h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.6]">
-                The site runs on Vercel, which keeps the usual server logs. Vercel Analytics counts page visits
-                without cookies and without telling us who you are. Send to my Mac uses your phone&apos;s own
-                share sheet, so nothing is sent to us.
+                The site runs on Vercel, which keeps the usual server logs.
+                Vercel Analytics counts page visits without cookies and without
+                telling us who you are. Send to my Mac uses your phone&apos;s
+                own share sheet, so nothing is sent to us.
               </p>
             </div>
             <div>
               <h2 className="text-[18px] font-semibold">Removing it</h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.6]">
-                Uninstall, under Quit in Lodestar&apos;s menu, can also remove everything Lodestar has kept, with
-                the keys that open it. To have a feedback note you sent deleted, write to us.
+                Uninstall, under Quit in Lodestar&apos;s menu, can also remove
+                everything Lodestar has kept, with the keys that open it. To
+                have a feedback note you sent deleted, write to us.
               </p>
             </div>
           </section>

@@ -12,8 +12,13 @@ export default async function NotFound() {
     <>
       <Nav tag={tag} />
       <EscHome />
-      <main id="main" className="mx-auto flex min-h-[70svh] max-w-[720px] flex-col justify-center px-4 md:px-6">
-        <p className="text-dim text-[13px] font-semibold">404 · No such destination</p>
+      <main
+        id="main"
+        className="mx-auto flex min-h-[70svh] max-w-[720px] flex-col justify-center px-4 md:px-6"
+      >
+        <p className="text-dim text-[13px] font-semibold">
+          404 · No such destination
+        </p>
         <h1 className="font-display mt-3 text-[clamp(2.2rem,5vw,3.25rem)] leading-[1.04] font-bold tracking-[-0.03em]">
           Nothing is named that
         </h1>
@@ -21,7 +26,10 @@ export default async function NotFound() {
           Every surface in Lodestar answers the same key when a place does not
           exist. The page does too.
         </p>
-        <a href="/" className="text-dim hover:text-ink mt-8 inline-flex items-center gap-3 text-[16px]">
+        <a
+          href="/"
+          className="text-dim hover:text-ink mt-8 inline-flex items-center gap-3 text-[16px]"
+        >
           <Key lit>esc</Key> goes home
         </a>
       </main>

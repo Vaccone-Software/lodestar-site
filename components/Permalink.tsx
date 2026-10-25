@@ -27,7 +27,9 @@ export default function Permalink({ anchor }: { anchor: string }) {
       aria-label="Copy a link to this lesson"
       title="Copy a link to this lesson"
     >
-      <span className={copied ? "text-ink" : ""}>{copied ? "Copied" : "Link"}</span>
+      <span className={copied ? "text-ink" : ""}>
+        {copied ? "Copied" : "Link"}
+      </span>
     </a>
   );
 }

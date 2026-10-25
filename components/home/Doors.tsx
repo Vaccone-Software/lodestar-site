@@ -30,18 +30,30 @@ async function press(set: (down: boolean) => void, wait: Wait, ms = 150) {
 // MARK: - Write
 
 const lines = [
-  { text: "Hi Ana, see you tomorow at ten.", wrong: "tomorow", right: "tomorrow" },
-  { text: "I will bring the revised schedual.", wrong: "schedual", right: "schedule" },
+  {
+    text: "Hi Ana, see you tomorow at ten.",
+    wrong: "tomorow",
+    right: "tomorrow",
+  },
+  {
+    text: "I will bring the revised schedual.",
+    wrong: "schedual",
+    right: "schedule",
+  },
   { text: "The room is booked untill noon.", wrong: "untill", right: "until" },
   { text: "Thanks for your patiance.", wrong: "patiance", right: "patience" },
 ];
-const fixed = (i: number) => lines[i].text.replace(lines[i].wrong, lines[i].right);
+const fixed = (i: number) =>
+  lines[i].text.replace(lines[i].wrong, lines[i].right);
 
 type Line = { text: string; under?: [number, number]; caret?: boolean };
 
 const writeStill = (): Line[] => {
   const at = lines[1].text.indexOf(lines[1].wrong);
-  return [{ text: fixed(0) }, { text: lines[1].text, under: [at, at + lines[1].wrong.length] }];
+  return [
+    { text: fixed(0) },
+    { text: lines[1].text, under: [at, at + lines[1].wrong.length] },
+  ];
 };
 
 /** A word is caught as it ends, the fix is offered on lode ⇥, and the word
@@ -74,7 +86,10 @@ export function WriteDoor({ active, rows }: DoorProps) {
     if (!offer || !word || !box) return;
     const width = card?.offsetWidth ?? 200;
     setAt({
-      left: Math.max(8, Math.min(word.offsetLeft - 10, box.clientWidth - width - 8)),
+      left: Math.max(
+        8,
+        Math.min(word.offsetLeft - 10, box.clientWidth - width - 8),
+      ),
       top: word.offsetTop + word.offsetHeight + 6,
     });
   }, [offer, shown]);
@@ -109,15 +124,24 @@ export function WriteDoor({ active, rows }: DoorProps) {
     setShown((s) => [...s, { text: "", caret: true }].slice(-3));
     let corrected = false;
     for (let c = 1; c <= text.length; c++) {
-      const typed = corrected ? text.slice(0, start) + right + text.slice(end, c) : text.slice(0, c);
-      typing({ text: typed, caret: true, under: !corrected && c > end ? [start, end] : undefined });
+      const typed = corrected
+        ? text.slice(0, start) + right + text.slice(end, c)
+        : text.slice(0, c);
+      typing({
+        text: typed,
+        caret: true,
+        under: !corrected && c > end ? [start, end] : undefined,
+      });
       if (c === end + 1 && !corrected) {
         await wait(520);
         setOffer(right);
         await wait(900);
         await fix(wait);
         corrected = true;
-        typing({ text: text.slice(0, start) + right + text.slice(end, c), caret: true });
+        typing({
+          text: text.slice(0, start) + right + text.slice(end, c),
+          caret: true,
+        });
       }
       await wait(38 + Math.random() * 40);
     }
@@ -149,7 +173,11 @@ export function WriteDoor({ active, rows }: DoorProps) {
           </div>
         ))}
         {offer ? (
-          <div ref={offerCard} className={styles.offer} style={{ left: at.left, top: at.top }}>
+          <div
+            ref={offerCard}
+            className={styles.offer}
+            style={{ left: at.left, top: at.top }}
+          >
             <span className={styles.offerWord}>{offer}</span>
             <span className="inline-flex gap-1">
               <Key down={keys[0]}>lode</Key>
@@ -212,14 +240,22 @@ export function SwitchDoor({ active, rows }: DoorProps) {
           <div
             key={w.letter}
             className={`${styles.mini} ${chosen ? `${styles.max} night` : ""}`}
-            style={{ left: w.left, top: w.top, zIndex: order.indexOf(w.letter) + 1 }}
+            style={{
+              left: w.left,
+              top: w.top,
+              zIndex: order.indexOf(w.letter) + 1,
+            }}
           >
             <div className={styles.miniTitle}>
               <span>{w.name}</span>
               <Key>{w.letter}</Key>
             </div>
             {widths[i].map((width, j) => (
-              <div key={j} className={styles.line} style={{ width: `${width}%` }} />
+              <div
+                key={j}
+                className={styles.line}
+                style={{ width: `${width}%` }}
+              />
             ))}
           </div>
         );
@@ -275,7 +311,10 @@ export function KeepDoor({ active, rows }: DoorProps) {
     <div className={styles.pic}>
       <div className={styles.cards}>
         {kept.map((clip, i) => (
-          <div key={`${clip.value}-${i}`} className={`${styles.clip} ${i === chosen ? `${styles.clipChosen} night` : ""}`}>
+          <div
+            key={`${clip.value}-${i}`}
+            className={`${styles.clip} ${i === chosen ? `${styles.clipChosen} night` : ""}`}
+          >
             <Key down={down === i}>{letters[i]}</Key>
             <span className={styles.clipValue}>{clip.value}</span>
             <span className={styles.clipNote}>{clip.note}</span>
@@ -302,7 +341,10 @@ const speakThread = (): Bubble[] => [
 ];
 /** Words in the draft: settled ones in ink, ones still being heard in grey. */
 type Draft = { settled: string; hearing: string };
-const speakStill: Draft = { settled: "Yes, still coming", hearing: "to dinner" };
+const speakStill: Draft = {
+  settled: "Yes, still coming",
+  hearing: "to dinner",
+};
 
 /** Talk into the draft: words arrive grey, settle as they are understood,
     and return lands them where you were writing. */
@@ -354,7 +396,11 @@ export function SpeakDoor({ active, rows }: DoorProps) {
       await wait(500);
       setDraft({ settled: "Yes, still coming to dinner", hearing: "" });
       await wait(700);
-      await land(wait, "Yes, still coming to dinner", "Good, table by the window");
+      await land(
+        wait,
+        "Yes, still coming to dinner",
+        "Good, table by the window",
+      );
       return;
     }
     const { text, reply } = said[(n - 1) % said.length];
@@ -369,7 +415,10 @@ export function SpeakDoor({ active, rows }: DoorProps) {
     setTalking(true);
     for (let i = 1; i <= words.length; i++) {
       const settled = Math.max(0, i - 2);
-      setDraft({ settled: words.slice(0, settled).join(" "), hearing: words.slice(settled, i).join(" ") });
+      setDraft({
+        settled: words.slice(0, settled).join(" "),
+        hearing: words.slice(settled, i).join(" "),
+      });
       await wait(260 + Math.random() * 120);
     }
     setTalking(false);
@@ -383,7 +432,10 @@ export function SpeakDoor({ active, rows }: DoorProps) {
     <div className={styles.pic}>
       <div className={styles.thread}>
         {thread.map((bubble) => (
-          <div key={bubble.id} className={`${styles.bubble} ${bubble.out ? styles.out : styles.in}`}>
+          <div
+            key={bubble.id}
+            className={`${styles.bubble} ${bubble.out ? styles.out : styles.in}`}
+          >
             {bubble.text}
           </div>
         ))}

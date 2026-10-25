@@ -16,7 +16,6 @@ function awayFromAMac(): boolean {
   return /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
 }
 
-
 export default function DownloadPill({
   fallback,
   label = "Download",
@@ -55,7 +54,11 @@ export default function DownloadPill({
       const url = window.location.origin + window.location.pathname;
       if (navigator.share) {
         try {
-          await navigator.share({ title: "Lodestar", text: "Lodestar, free tools for your Mac", url });
+          await navigator.share({
+            title: "Lodestar",
+            text: "Lodestar, free tools for your Mac",
+            url,
+          });
           return;
         } catch (error) {
           // Closing the sheet is an answer, not a failure.

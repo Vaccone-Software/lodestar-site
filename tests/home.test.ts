@@ -55,13 +55,23 @@ for (const frame of [around, below]) {
 
     test("names each of the eight once, in order", () => {
       const named = wall.filter((t) => t.feature);
-      const order = frame.mode === "around" ? named : [...named].sort((p, q) => p.y - q.y || p.x - q.x);
-      expect(order.map((t) => t.feature!.id).sort()).toEqual(features.map((f) => f.id).sort());
+      const order =
+        frame.mode === "around"
+          ? named
+          : [...named].sort((p, q) => p.y - q.y || p.x - q.x);
+      expect(order.map((t) => t.feature!.id).sort()).toEqual(
+        features.map((f) => f.id).sort(),
+      );
       expect(named).toHaveLength(8);
     });
 
     test("keeps a clear gap round the launcher and the doors", () => {
-      const row = { x0: frame.left, x1: frame.right + frame.door, y0: frame.top, y1: frame.bottom };
+      const row = {
+        x0: frame.left,
+        x1: frame.right + frame.door,
+        y0: frame.top,
+        y1: frame.bottom,
+      };
       for (const t of wall) {
         const across = t.x < row.x1 + 24 && t.x + t.w > row.x0 - 24;
         const down = t.y < row.y1 + 24 && t.y + t.h > row.y0 - 24;
@@ -71,7 +81,9 @@ for (const frame of [around, below]) {
 
     test("a named window shows enough of itself to be read", () => {
       for (const t of wall.filter((t) => t.feature)) {
-        expect(Math.min(t.y + t.h, frame.height) - Math.max(t.y, 0)).toBeGreaterThanOrEqual(112);
+        expect(
+          Math.min(t.y + t.h, frame.height) - Math.max(t.y, 0),
+        ).toBeGreaterThanOrEqual(112);
       }
     });
 
@@ -85,7 +97,11 @@ describe("the words", () => {
   // The copy voice: a name or a line on a surface ends without a period and
   // carries no dash or semicolon.
   test("every line keeps the voice", () => {
-    for (const line of [headline, subline, ...features.flatMap((f) => [f.name, f.line])]) {
+    for (const line of [
+      headline,
+      subline,
+      ...features.flatMap((f) => [f.name, f.line]),
+    ]) {
       expect(line).not.toMatch(/\.$/);
       expect(line).not.toMatch(/[—–;]/);
     }

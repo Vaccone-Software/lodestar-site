@@ -35,9 +35,19 @@ export const doors: Door[] = [
     h1: "Write without the typos",
     lede: "Spelling and grammar checked as you type, on your Mac",
     steps: [
-      { title: "Write where you write", line: "Mail, Slack, Notes, Messages and fields on the web" },
-      { title: "See the line", line: "Spelling as each word ends, grammar as each sentence does" },
-      { title: "Put it right", line: "Rest the pointer on the line, or use the keys", keys: ["lode", "⇥", "!A"] },
+      {
+        title: "Write where you write",
+        line: "Mail, Slack, Notes, Messages and fields on the web",
+      },
+      {
+        title: "See the line",
+        line: "Spelling as each word ends, grammar as each sentence does",
+      },
+      {
+        title: "Put it right",
+        line: "Rest the pointer on the line, or use the keys",
+        keys: ["lode", "⇥", "!A"],
+      },
     ],
     never: [
       "Rewrite your sentences or change your tone",
@@ -64,9 +74,20 @@ export const doors: Door[] = [
     h1: "Get anywhere with a letter",
     lede: "Hold one key and press a letter, and the app you want comes to the front",
     steps: [
-      { title: "Open anything", line: "Lode and space finds any app and opens it full screen", keys: ["lode", "space"] },
-      { title: "Give it a letter", line: "Lodestar suggests letters for the apps you use most" },
-      { title: "Press the letter", line: "The app comes forward, or opens if it is closed", keys: ["lode", "!M"] },
+      {
+        title: "Open anything",
+        line: "Lode and space finds any app and opens it full screen",
+        keys: ["lode", "space"],
+      },
+      {
+        title: "Give it a letter",
+        line: "Lodestar suggests letters for the apps you use most",
+      },
+      {
+        title: "Press the letter",
+        line: "The app comes forward, or opens if it is closed",
+        keys: ["lode", "!M"],
+      },
     ],
     never: [
       "Move a window you did not ask it to",
@@ -75,9 +96,21 @@ export const doors: Door[] = [
     ],
     detailTitle: "More, when you want it",
     detail: [
-      { name: "Side by side", line: "Two letters in one hold", keys: ["lode", "G", "B"] },
-      { name: "By position", line: "Every window has a number", keys: ["lode", "1…9"] },
-      { name: "Layouts", line: "Save an arrangement, bring it back", keys: ["lode", "'", "W"] },
+      {
+        name: "Side by side",
+        line: "Two letters in one hold",
+        keys: ["lode", "G", "B"],
+      },
+      {
+        name: "By position",
+        line: "Every window has a number",
+        keys: ["lode", "1…9"],
+      },
+      {
+        name: "Layouts",
+        line: "Save an arrangement, bring it back",
+        keys: ["lode", "'", "W"],
+      },
       { name: "The map", line: "Every letter you have", keys: ["lode", "?"] },
     ],
     description:
@@ -92,9 +125,21 @@ export const doors: Door[] = [
     h1: "Everything you copy, kept",
     lede: "Press ⇧⌘V for everything you copied, and a letter to paste it back",
     steps: [
-      { title: "Copy as always", line: "Text, links, images and files are all kept", keys: ["⌘", "C"] },
-      { title: "Open the strip", line: "Your recent copies, each with a letter", keys: ["⇧", "⌘", "V"] },
-      { title: "Paste with a letter", line: "Or press slash and search by what it says", keys: ["!A", "then", "/"] },
+      {
+        title: "Copy as always",
+        line: "Text, links, images and files are all kept",
+        keys: ["⌘", "C"],
+      },
+      {
+        title: "Open the strip",
+        line: "Your recent copies, each with a letter",
+        keys: ["⇧", "⌘", "V"],
+      },
+      {
+        title: "Paste with a letter",
+        line: "Or press slash and search by what it says",
+        keys: ["!A", "then", "/"],
+      },
     ],
     never: [
       "Keep what a password manager marks as secret",
@@ -120,9 +165,20 @@ export const doors: Door[] = [
     h1: "Say it, then shape it",
     lede: "Talk and type into one draft, and it lands where you were writing",
     steps: [
-      { title: "Open the draft", line: "A soft note says it is listening", keys: ["lode", "."] },
-      { title: "Talk, and type too", line: "Words arrive grey, then settle as they are understood" },
-      { title: "Send it", line: "It lands where your cursor was, with a second note", keys: ["!⏎"] },
+      {
+        title: "Open the draft",
+        line: "A soft note says it is listening",
+        keys: ["lode", "."],
+      },
+      {
+        title: "Talk, and type too",
+        line: "Words arrive grey, then settle as they are understood",
+      },
+      {
+        title: "Send it",
+        line: "It lands where your cursor was, with a second note",
+        keys: ["!⏎"],
+      },
     ],
     never: [
       "Keep your audio",
@@ -133,7 +189,11 @@ export const doors: Door[] = [
     detail: [
       { name: "Edit", line: "Stop typing, start moving", keys: ["esc"] },
       { name: "Find", line: "Jump to a letter", keys: ["⇧F", "b"] },
-      { name: "Change", line: "Replace a word, keep talking", keys: ["c", "w"] },
+      {
+        name: "Change",
+        line: "Replace a word, keep talking",
+        keys: ["c", "w"],
+      },
       { name: "Send", line: "From anywhere in the draft", keys: ["⏎"] },
     ],
     description:

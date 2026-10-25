@@ -2,7 +2,19 @@
 // the one key to press next, in the orange, the way the app's own footer
 // lights the key it is waiting on.
 
-const punctuation = new Set([".", ",", "'", ";", "/", "-", "`", "\\", "[", "]", "="]);
+const punctuation = new Set([
+  ".",
+  ",",
+  "'",
+  ";",
+  "/",
+  "-",
+  "`",
+  "\\",
+  "[",
+  "]",
+  "=",
+]);
 
 /** A bare keystroke is shown as typed: lowercase. A capital stays only in a
     chord, where Shift or another modifier is part of the key (⇧W, ⌘K). */
@@ -32,7 +44,14 @@ export default function Key({
   className?: string;
 }) {
   const text = legend(children);
-  const classes = ["key", band(text), lit && "lit", down && "down", quiet && "quiet", className];
+  const classes = [
+    "key",
+    band(text),
+    lit && "lit",
+    down && "down",
+    quiet && "quiet",
+    className,
+  ];
   return <kbd className={classes.filter(Boolean).join(" ")}>{text}</kbd>;
 }
 
@@ -67,7 +86,13 @@ export function Keys({
 /** A written sequence: "!A" is a key lit, "then" is the word between two
     presses. Where a page already has its one lit thing (a door page's
     Download), the sequence draws every key at rest. */
-export function KeySequence({ keys, lighting = true }: { keys: string[]; lighting?: boolean }) {
+export function KeySequence({
+  keys,
+  lighting = true,
+}: {
+  keys: string[];
+  lighting?: boolean;
+}) {
   return (
     <span className="inline-flex items-center gap-1">
       {keys.map((key, i) =>

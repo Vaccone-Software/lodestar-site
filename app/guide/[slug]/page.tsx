@@ -23,11 +23,18 @@ export async function generateMetadata({
   const { slug } = await params;
   const page = guide.find((p) => p.slug === slug);
   if (!page) return {};
-  return pageMetadata({ title: page.title, description: page.description, path: `/guide/${slug}` });
+  return pageMetadata({
+    title: page.title,
+    description: page.description,
+    path: `/guide/${slug}`,
+  });
 }
 
 function anchor(title: string): string {
-  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
 /** The lit keys for a lesson with no scene: what it names, lowercased,
@@ -44,31 +51,44 @@ function litFor(lesson: Lesson): string[] {
 
 /** The keys, said aloud, for a lesson with nothing to animate. */
 const names: Record<string, string> = {
-  "⇧": "shift", "⌘": "command", "⌃": "control", "⌥": "option",
-  "⏎": "return", "⌫": "delete", "⇥": "tab", "←": "left arrow", "→": "right arrow",
-  space: "space", esc: "esc", lode: "lode",
+  "⇧": "shift",
+  "⌘": "command",
+  "⌃": "control",
+  "⌥": "option",
+  "⏎": "return",
+  "⌫": "delete",
+  "⇥": "tab",
+  "←": "left arrow",
+  "→": "right arrow",
+  space: "space",
+  esc: "esc",
+  lode: "lode",
 };
 function say(key: string): string {
   if (names[key]) return names[key];
   if (key.length > 1 && /^[⇧⌘⌃⌥]+/.test(key)) {
-    const mods = key.match(/^[⇧⌘⌃⌥]+/)![0].split("").map((m) => names[m]);
+    const mods = key
+      .match(/^[⇧⌘⌃⌥]+/)![0]
+      .split("")
+      .map((m) => names[m]);
     return [...mods, key.slice(mods.length)].join(" ");
   }
   return key;
 }
 function spoken(keys: string[]): string {
   if (keys.length === 0) return "";
-  const parts = keys.map((k, i) => (k === "lode" && i === 0 ? "hold lode" : say(k)));
-  if (parts.length === 1) return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+  const parts = keys.map((k, i) =>
+    k === "lode" && i === 0 ? "hold lode" : say(k),
+  );
+  if (parts.length === 1)
+    return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
   const [first, ...rest] = parts;
   return `${first.charAt(0).toUpperCase() + first.slice(1)}, then ${rest.join(", then ")}`;
 }
 
 function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
   return (
-    <li
-      className="border-hairline grid items-start gap-x-14 gap-y-7 border-t py-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
-    >
+    <li className="border-hairline grid items-start gap-x-14 gap-y-7 border-t py-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
       <div id={anchor(lesson.title)} className="scroll-mt-24">
         <p className="text-faint flex items-center text-[13px] font-medium tabular-nums">
           <span>{n}</span>
@@ -100,12 +120,18 @@ function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
                 className="border-hairline grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b px-3 py-3 last:border-b-0"
               >
                 <dt className="text-ink text-[13px] font-semibold">{keys}</dt>
-                <dd className="text-dim text-[16px] leading-[1.5]">{meaning}</dd>
+                <dd className="text-dim text-[16px] leading-[1.5]">
+                  {meaning}
+                </dd>
               </div>
             ))}
           </dl>
         ) : (
-          <GuideScene scene={lesson.scene} lit={litFor(lesson)} caption={spoken(lesson.keys)} />
+          <GuideScene
+            scene={lesson.scene}
+            lit={litFor(lesson)}
+            caption={spoken(lesson.keys)}
+          />
         )}
       </div>
     </li>
@@ -146,20 +172,35 @@ export default async function Page({
   const section = (_n: string, label: string) => (
     <p className="text-dim text-[13px] font-semibold">{label}</p>
   );
-  const h2 = "font-display text-ink mt-2 max-w-[18ch] text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.06] font-bold tracking-[-0.025em]";
+  const h2 =
+    "font-display text-ink mt-2 max-w-[18ch] text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.06] font-bold tracking-[-0.025em]";
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       <Nav tag={tag} current="guide" />
-      <main id="main" className="mx-auto max-w-[1240px] px-4 pt-10 pb-16 md:px-7">
+      <main
+        id="main"
+        className="mx-auto max-w-[1240px] px-4 pt-10 pb-16 md:px-7"
+      >
         <p className="text-dim text-[13px] font-medium tabular-nums">
-          <a href="/guide" className="text-ink hover:text-dim transition-colors">Guide</a>
+          <a
+            href="/guide"
+            className="text-ink hover:text-dim transition-colors"
+          >
+            Guide
+          </a>
           <span className="mx-2">·</span>
           {String(index + 1).padStart(2, "0")} of {guide.length}
           {door ? (
             <>
               <span className="mx-2">·</span>
-              <a href={`/${door.slug}`} className="hover:text-ink transition-colors">
+              <a
+                href={`/${door.slug}`}
+                className="hover:text-ink transition-colors"
+              >
                 Part of {door.name}
               </a>
             </>
@@ -185,7 +226,9 @@ export default async function Page({
                   <span className="text-faint text-[13px] font-medium tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-[16px] leading-snug">{lesson.title}</span>
+                  <span className="text-[16px] leading-snug">
+                    {lesson.title}
+                  </span>
                   <span>
                     {lesson.keys.length ? <KeyCaps keys={lesson.keys} /> : null}
                   </span>
@@ -206,7 +249,11 @@ export default async function Page({
           {section("02", "When you are ready")}
           <ol className="mt-4">
             {page.ready.map((lesson, i) => (
-              <LessonBlock key={lesson.title} lesson={lesson} n={String(i + 2).padStart(2, "0")} />
+              <LessonBlock
+                key={lesson.title}
+                lesson={lesson}
+                n={String(i + 2).padStart(2, "0")}
+              />
             ))}
           </ol>
         </section>
@@ -219,7 +266,10 @@ export default async function Page({
           <div>
             <ul className="border-hairline border-t">
               {page.finePrint.map((line) => (
-                <li key={line} className="border-hairline text-dim border-b py-3.5 text-[16px] leading-[1.6]">
+                <li
+                  key={line}
+                  className="border-hairline text-dim border-b py-3.5 text-[16px] leading-[1.6]"
+                >
                   {line}
                 </li>
               ))}
@@ -233,7 +283,9 @@ export default async function Page({
             <h2 className={h2}>Why it works this way</h2>
           </div>
           <div>
-            <p className="text-dim max-w-[60ch] text-[17px] leading-[1.6]">{page.why}</p>
+            <p className="text-dim max-w-[60ch] text-[17px] leading-[1.6]">
+              {page.why}
+            </p>
           </div>
         </section>
 
@@ -255,14 +307,18 @@ export default async function Page({
               ← {prev.name}
             </a>
           ) : (
-            <a href="/guide" className="text-dim hover:text-ink">← Guide</a>
+            <a href="/guide" className="text-dim hover:text-ink">
+              ← Guide
+            </a>
           )}
           {next ? (
             <a href={`/guide/${next.slug}`} className="text-dim hover:text-ink">
               {next.name} →
             </a>
           ) : (
-            <a href="/guide" className="text-dim hover:text-ink">Guide →</a>
+            <a href="/guide" className="text-dim hover:text-ink">
+              Guide →
+            </a>
           )}
         </nav>
         <Foot className="border-hairline mt-10 border-t pt-6" />

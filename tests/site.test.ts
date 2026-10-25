@@ -18,7 +18,10 @@ let origin = "";
 beforeAll(async () => {
   const port = 4100 + Math.floor(Math.random() * 800);
   origin = `http://localhost:${port}`;
-  server = Bun.spawn(["bunx", "next", "start", "-p", String(port)], { stdout: "ignore", stderr: "inherit" });
+  server = Bun.spawn(["bunx", "next", "start", "-p", String(port)], {
+    stdout: "ignore",
+    stderr: "inherit",
+  });
   const deadline = Date.now() + 30_000;
   while (Date.now() < deadline) {
     try {
@@ -33,13 +36,24 @@ afterAll(() => server?.kill());
 
 const page = async (path: string) => {
   const response = await fetch(origin + path);
-  return { status: response.status, html: await response.text(), type: response.headers.get("content-type") ?? "" };
+  return {
+    status: response.status,
+    html: await response.text(),
+    type: response.headers.get("content-type") ?? "",
+  };
 };
 
-const text = (html: string) => html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&#x27;|&#39;/g, "'");
-const heading = (html: string) => text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? "").trim();
+const text = (html: string) =>
+  html
+    .replace(/<[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x27;|&#39;/g, "'");
+const heading = (html: string) =>
+  text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? "").trim();
 const meta = (html: string, key: string) =>
-  html.match(new RegExp(`<meta[^>]+(?:property|name)="${key}"[^>]+content="([^"]*)"`))?.[1];
+  html.match(
+    new RegExp(`<meta[^>]+(?:property|name)="${key}"[^>]+content="([^"]*)"`),
+  )?.[1];
 
 // MARK: - The front page says the line, and nothing else
 
@@ -60,7 +74,9 @@ describe("the front page", () => {
 
   test("the old line is gone everywhere", async () => {
     for (const path of ["/", ...doors.map((door) => `/${door.slug}`)]) {
-      expect(text((await page(path)).html)).not.toMatch(/Master your Mac|second nature/i);
+      expect(text((await page(path)).html)).not.toMatch(
+        /Master your Mac|second nature/i,
+      );
     }
   });
 
@@ -79,7 +95,9 @@ describe("the front page", () => {
 
   test("Download points at a disk image of a release", async () => {
     const { html } = await page("/");
-    expect(html).toMatch(/href="https:\/\/github\.com\/Vaccone-Software\/lodestar\/releases\/download\/v[\d.]+\/[^"]+\.dmg"/);
+    expect(html).toMatch(
+      /href="https:\/\/github\.com\/Vaccone-Software\/lodestar\/releases\/download\/v[\d.]+\/[^"]+\.dmg"/,
+    );
   });
 
   test("every answer carries the site's headers", async () => {
@@ -87,7 +105,9 @@ describe("the front page", () => {
       const response = await fetch(origin + path);
       expect(response.headers.get("x-content-type-options")).toBe("nosniff");
       expect(response.headers.get("x-frame-options")).toBe("DENY");
-      expect(response.headers.get("referrer-policy")).toBe("strict-origin-when-cross-origin");
+      expect(response.headers.get("referrer-policy")).toBe(
+        "strict-origin-when-cross-origin",
+      );
       expect(response.headers.get("x-powered-by")).toBeNull();
     }
   });
@@ -98,7 +118,9 @@ describe("the front page", () => {
     const stable = await response.json();
     expect(stable.zip.name).toBe(`lodestar-${stable.version}.zip`);
     const { html } = await page("/");
-    expect(html).toContain(`/releases/download/${stable.tag}/lodestar-${stable.version}.dmg`);
+    expect(html).toContain(
+      `/releases/download/${stable.tag}/lodestar-${stable.version}.dmg`,
+    );
   });
 });
 
@@ -136,7 +158,8 @@ describe("search", () => {
     const problems: string[] = [];
     for (const url of urls) {
       const path = new URL(url).pathname;
-      const same = (other?: string) => other?.replace(/\/$/, "") === url.replace(/\/$/, "");
+      const same = (other?: string) =>
+        other?.replace(/\/$/, "") === url.replace(/\/$/, "");
       const { status, html } = await page(path);
       const title = text(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "");
       const description = text(meta(html, "description") ?? "");
@@ -145,14 +168,19 @@ describe("search", () => {
       if (titles.has(title)) say(`shares its title "${title}"`);
       titles.add(title);
       if (title.length > 70) say(`title is ${title.length} characters`);
-      if (!description || description.length > 160) say(`description is ${description.length} characters`);
-      if (!same(html.match(/<link rel="canonical" href="([^"]*)"/)?.[1])) say("canonical is another page");
+      if (!description || description.length > 160)
+        say(`description is ${description.length} characters`);
+      if (!same(html.match(/<link rel="canonical" href="([^"]*)"/)?.[1]))
+        say("canonical is another page");
       // Next replaces a page's openGraph and twitter whole, so a page that
       // forgets them previews as the homepage.
       if (!same(meta(html, "og:url"))) say(`og:url is ${meta(html, "og:url")}`);
-      if (path !== "/" && meta(html, "og:title") === `Lodestar · ${headline}`) say("previews as the homepage");
-      if (meta(html, "twitter:title") !== meta(html, "og:title")) say("twitter and og titles differ");
-      if (text(meta(html, "og:description") ?? "") !== description) say("og description differs");
+      if (path !== "/" && meta(html, "og:title") === `Lodestar · ${headline}`)
+        say("previews as the homepage");
+      if (meta(html, "twitter:title") !== meta(html, "og:title"))
+        say("twitter and og titles differ");
+      if (text(meta(html, "og:description") ?? "") !== description)
+        say("og description differs");
     }
     expect(problems).toEqual([]);
   }, 60_000);
@@ -163,8 +191,14 @@ describe("search", () => {
 describe("links", () => {
   test("every page a visitor can reach answers", async () => {
     const seen = new Set<string>();
-    const queue = ["/", "/guide", "/changelog", "/evidence", ...doors.map((d) => `/${d.slug}`),
-                   ...guide.map((g) => `/guide/${g.slug}`)];
+    const queue = [
+      "/",
+      "/guide",
+      "/changelog",
+      "/evidence",
+      ...doors.map((d) => `/${d.slug}`),
+      ...guide.map((g) => `/guide/${g.slug}`),
+    ];
     const broken: string[] = [];
     while (queue.length) {
       const path = queue.shift()!;
@@ -176,7 +210,11 @@ describe("links", () => {
         continue;
       }
       for (const [, href] of html.matchAll(/href="(\/[^"#?]*)/g)) {
-        if (href.startsWith("/_next") || /\.(png|svg|ico|webm|mp4|json|xml|txt)$/.test(href)) continue;
+        if (
+          href.startsWith("/_next") ||
+          /\.(png|svg|ico|webm|mp4|json|xml|txt)$/.test(href)
+        )
+          continue;
         if (!seen.has(href)) queue.push(href);
       }
     }
@@ -204,7 +242,13 @@ describe("layout", () => {
   // A big display shows the whole room on one screen; a laptop shows the
   // line, the download, the launcher and the doors on its first screen and
   // scrolls to the eight; narrower windows stack.
-  const widths: [number, number][] = [[1920, 1080], [1440, 900], [1024, 768], [390, 844], [320, 640]];
+  const widths: [number, number][] = [
+    [1920, 1080],
+    [1440, 900],
+    [1024, 768],
+    [390, 844],
+    [320, 640],
+  ];
   for (const [width, height] of widths) {
     test(`at ${width} wide the headline is one line and nothing scrolls sideways`, async () => {
       const tab = await browser.newPage({ viewport: { width, height } });
@@ -214,10 +258,16 @@ describe("layout", () => {
         const h1 = document.querySelector("h1")!;
         const range = document.createRange();
         range.selectNodeContents(h1);
-        const lines = new Set([...range.getClientRects()].map((rect) => Math.round(rect.top)));
+        const lines = new Set(
+          [...range.getClientRects()].map((rect) => Math.round(rect.top)),
+        );
         const words = range.getBoundingClientRect();
-        const download = document.querySelector("a.key.big, button.key.big")!.getBoundingClientRect();
-        const bar = document.querySelector('input[aria-label="Where to?"]')!.getBoundingClientRect();
+        const download = document
+          .querySelector("a.key.big, button.key.big")!
+          .getBoundingClientRect();
+        const bar = document
+          .querySelector('input[aria-label="Where to?"]')!
+          .getBoundingClientRect();
         return {
           lines: lines.size,
           left: words.left,
@@ -236,14 +286,19 @@ describe("layout", () => {
       expect(measure.page).toBeLessThanOrEqual(measure.viewport);
       // The download is always on the first screen.
       expect(measure.download).toBeLessThanOrEqual(measure.height);
-      if (width >= 1180) expect(measure.bar).toBeLessThanOrEqual(measure.height);
-      if (width >= 1920) expect(measure.tall).toBeLessThanOrEqual(measure.height);
+      if (width >= 1180)
+        expect(measure.bar).toBeLessThanOrEqual(measure.height);
+      if (width >= 1920)
+        expect(measure.tall).toBeLessThanOrEqual(measure.height);
       await tab.close();
     }, 30_000);
   }
 
   // Orange is rare: at rest, the download is the one lit thing.
-  for (const [width, height] of [[1920, 1080], [1440, 900]] as const) {
+  for (const [width, height] of [
+    [1920, 1080],
+    [1440, 900],
+  ] as const) {
     test(`at ${width} wide one thing on the page is lit`, async () => {
       const tab = await browser.newPage({ viewport: { width, height } });
       await tab.goto(origin, { waitUntil: "domcontentloaded" });
@@ -252,7 +307,9 @@ describe("layout", () => {
       const lit = await tab.evaluate(
         () =>
           [...document.querySelectorAll("body *")].filter(
-            (el) => el.getClientRects().length > 0 && getComputedStyle(el).backgroundColor === "rgb(250, 86, 23)",
+            (el) =>
+              el.getClientRects().length > 0 &&
+              getComputedStyle(el).backgroundColor === "rgb(250, 86, 23)",
           ).length,
       );
       expect(lit).toBe(1);

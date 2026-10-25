@@ -22,7 +22,8 @@ export function appJsonLd(tag: string | null, features?: string[]) {
     ...(tag ? { softwareVersion: tag.replace(/^v/, "") } : {}),
     downloadUrl: downloadFor(tag),
     releaseNotes: `${site}/changelog`,
-    license: "https://github.com/Vaccone-Software/lodestar/blob/main/LICENSE.md",
+    license:
+      "https://github.com/Vaccone-Software/lodestar/blob/main/LICENSE.md",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     author: { "@type": "Organization", name: "Vaccone Software" },
     ...(features ? { featureList: features } : {}),
@@ -62,7 +63,14 @@ export function pageMetadata({
     title,
     description,
     alternates: { canonical: path },
-    openGraph: { title: preview, description, url: path, siteName: "Lodestar", type: "website", locale: "en_US" },
+    openGraph: {
+      title: preview,
+      description,
+      url: path,
+      siteName: "Lodestar",
+      type: "website",
+      locale: "en_US",
+    },
     twitter: { card: "summary_large_image", title: preview, description },
   };
 }

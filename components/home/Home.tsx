@@ -1,13 +1,30 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import DownloadPill from "@/components/DownloadPill";
 import Foot from "@/components/Foot";
 import Key, { Keys } from "@/components/Key";
-import { KeepDoor, SpeakDoor, SwitchDoor, WriteDoor, type RowKeys } from "@/components/home/Doors";
+import {
+  KeepDoor,
+  SpeakDoor,
+  SwitchDoor,
+  WriteDoor,
+  type RowKeys,
+} from "@/components/home/Doors";
 import Mark from "@/components/home/Mark";
 import { useMedia, useReducedMotion } from "@/components/home/hooks";
-import { namedHeight, tiles as layTiles, type Tile } from "@/components/home/wall";
+import {
+  namedHeight,
+  tiles as layTiles,
+  type Tile,
+} from "@/components/home/wall";
 import { doors } from "@/data/doors";
 import { facts, features, headline, subline, type Feature } from "@/data/home";
 import styles from "./Home.module.css";
@@ -47,7 +64,9 @@ const icons: Record<string, React.ReactNode> = {
   ),
   speak: <path d="M5 9v4M8 6v10M11 8v6M14 4v14M17 9v4" />,
   download: <path d="M11 3v11M6.5 9.5 11 14l4.5-4.5M4 18h14" />,
-  guide: <path d="M4 4.5h5.5a2 2 0 0 1 2 2V18a2 2 0 0 0-2-2H4zM18 4.5h-5.5a2 2 0 0 0-2 2V18a2 2 0 0 1 2-2H18z" />,
+  guide: (
+    <path d="M4 4.5h5.5a2 2 0 0 1 2 2V18a2 2 0 0 0-2-2H4zM18 4.5h-5.5a2 2 0 0 0-2 2V18a2 2 0 0 1 2-2H18z" />
+  ),
   changelog: <path d="M5 5h12M5 11h12M5 17h8" />,
   feature: (
     <>
@@ -63,13 +82,40 @@ const doorRows: Row[] = doors.map((door) => ({
   name: door.name,
   line: door.what,
   href: `/${door.slug}`,
-  alias: [door.slug, ...door.description.toLowerCase().split(/[^a-z]+/).filter((w) => w.length > 3)],
+  alias: [
+    door.slug,
+    ...door.description
+      .toLowerCase()
+      .split(/[^a-z]+/)
+      .filter((w) => w.length > 3),
+  ],
 }));
 
 const siteRows = (download: string): Row[] => [
-  { id: "download", kind: "site", name: "Download Lodestar", line: facts, href: download, alias: ["download", "get", "install", "free", "lodestar"] },
-  { id: "guide", kind: "site", name: "Guide", line: "Every key and every option", href: "/guide", alias: ["guide", "help", "keys", "how"] },
-  { id: "changelog", kind: "site", name: "Changelog", line: "What changed in each release", href: "/changelog", alias: ["changelog", "release", "notes", "new", "version"] },
+  {
+    id: "download",
+    kind: "site",
+    name: "Download Lodestar",
+    line: facts,
+    href: download,
+    alias: ["download", "get", "install", "free", "lodestar"],
+  },
+  {
+    id: "guide",
+    kind: "site",
+    name: "Guide",
+    line: "Every key and every option",
+    href: "/guide",
+    alias: ["guide", "help", "keys", "how"],
+  },
+  {
+    id: "changelog",
+    kind: "site",
+    name: "Changelog",
+    line: "What changed in each release",
+    href: "/changelog",
+    alias: ["changelog", "release", "notes", "new", "version"],
+  },
 ];
 
 const featureRows: Row[] = features.map((f) => ({
@@ -102,25 +148,54 @@ function find(query: string, download: string): Row[] {
 
 /** The keys on a row: a door's as its loop presses them, a feature's as
     typed. */
-function RowKeysOf({ row, down, letter }: { row: Row; down: Record<string, boolean>; letter: string }) {
+function RowKeysOf({
+  row,
+  down,
+  letter,
+}: {
+  row: Row;
+  down: Record<string, boolean>;
+  letter: string;
+}) {
   const k = (name: string, legend: string) => (
     <Key down={!!down[name]}>{legend}</Key>
   );
   switch (row.id) {
     case "write":
-      return <span className="inline-flex gap-1">{k("write-1", "lode")}{k("write-2", "⇥")}</span>;
+      return (
+        <span className="inline-flex gap-1">
+          {k("write-1", "lode")}
+          {k("write-2", "⇥")}
+        </span>
+      );
     case "switch":
-      return <span className="inline-flex gap-1">{k("switch-1", "lode")}{k("switch-2", letter)}</span>;
+      return (
+        <span className="inline-flex gap-1">
+          {k("switch-1", "lode")}
+          {k("switch-2", letter)}
+        </span>
+      );
     case "keep":
       return <span className="inline-flex gap-1">{k("keep-1", "⇧⌘V")}</span>;
     case "speak":
-      return <span className="inline-flex gap-1">{k("speak-1", "lode")}{k("speak-2", ".")}</span>;
+      return (
+        <span className="inline-flex gap-1">
+          {k("speak-1", "lode")}
+          {k("speak-2", ".")}
+        </span>
+      );
   }
   const f = features.find((x) => x.id === row.id);
   return f ? <FeatureKeys feature={f} /> : null;
 }
 
-function FeatureKeys({ feature, quiet = false }: { feature: Feature; quiet?: boolean }) {
+function FeatureKeys({
+  feature,
+  quiet = false,
+}: {
+  feature: Feature;
+  quiet?: boolean;
+}) {
   if (!feature.keys) return null;
   return (
     <span className="inline-flex items-center gap-2">
@@ -130,14 +205,25 @@ function FeatureKeys({ feature, quiet = false }: { feature: Feature; quiet?: boo
   );
 }
 
-const doorPictures: Record<Slug, (props: { active: boolean; rows: RowKeys }) => React.ReactNode> = {
+const doorPictures: Record<
+  Slug,
+  (props: { active: boolean; rows: RowKeys }) => React.ReactNode
+> = {
   write: WriteDoor,
   switch: SwitchDoor,
   keep: KeepDoor,
   speak: SpeakDoor,
 };
 
-export default function Home({ tag, nav, download }: { tag: string | null; nav: React.ReactNode; download: string }) {
+export default function Home({
+  tag,
+  nav,
+  download,
+}: {
+  tag: string | null;
+  nav: React.ReactNode;
+  download: string;
+}) {
   const wide = useMedia("(min-width: 1180px) and (min-height: 740px)");
   const phone = useMedia("(max-width: 640px)");
   const reduced = useReducedMotion();
@@ -162,11 +248,16 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
 
   const shown = useMemo(() => find(query, download), [query, download]);
   const chosen = shown[sel];
-  const active: Slug | null = chosen?.kind === "door" ? (chosen.id as Slug) : pinned;
+  const active: Slug | null =
+    chosen?.kind === "door" ? (chosen.id as Slug) : pinned;
   const lifted = chosen?.kind === "feature" ? chosen.id : null;
 
   const rows: RowKeys = useMemo(
-    () => ({ hold: (name, d) => setDown((s) => (s[name] === d ? s : { ...s, [name]: d })), letter: setLetter }),
+    () => ({
+      hold: (name, d) =>
+        setDown((s) => (s[name] === d ? s : { ...s, [name]: d })),
+      letter: setLetter,
+    }),
     [],
   );
   // A door put away lets go of every key on its row.
@@ -225,10 +316,17 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
     return () => observer.disconnect();
   }, [wide, pinned]);
 
-  const downloadNow = useCallback(() => get.current?.querySelector<HTMLElement>("a, button")?.click(), []);
+  const downloadNow = useCallback(
+    () => get.current?.querySelector<HTMLElement>("a, button")?.click(),
+    [],
+  );
 
   const go = useCallback(
-    (el: Element | null) => el?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" }),
+    (el: Element | null) =>
+      el?.scrollIntoView({
+        behavior: reduced ? "auto" : "smooth",
+        block: "center",
+      }),
     [reduced],
   );
 
@@ -245,7 +343,10 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
         go(document.getElementById(`more-${row.id}`));
         setSel(-1);
         setFlash(row.id);
-        window.setTimeout(() => setFlash((f) => (f === row.id ? null : f)), 2400);
+        window.setTimeout(
+          () => setFlash((f) => (f === row.id ? null : f)),
+          2400,
+        );
         return;
       }
       window.location.href = row.href;
@@ -259,13 +360,23 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       const typing = document.activeElement === input.current;
       if (!typing && document.activeElement instanceof HTMLInputElement) return;
-      if (!typing && event.key.length === 1 && /\S/.test(event.key)) input.current?.focus();
+      if (!typing && event.key.length === 1 && /\S/.test(event.key))
+        input.current?.focus();
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
         const n = shown.length;
         if (!n) return;
-        setSel((s) => (s < 0 ? (event.key === "ArrowDown" ? 0 : n - 1) : (s + (event.key === "ArrowDown" ? 1 : -1) + n) % n));
-      } else if (event.key === "Enter" && (typing || document.activeElement === document.body)) {
+        setSel((s) =>
+          s < 0
+            ? event.key === "ArrowDown"
+              ? 0
+              : n - 1
+            : (s + (event.key === "ArrowDown" ? 1 : -1) + n) % n,
+        );
+      } else if (
+        event.key === "Enter" &&
+        (typing || document.activeElement === document.body)
+      ) {
         event.preventDefault();
         if (shown[sel]) open(shown[sel]);
         else if (!query) downloadNow();
@@ -284,12 +395,19 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
   };
 
   return (
-    <div className={`${styles.page} ${short ? styles.short : ""}`} style={{ "--named": `${namedHeight}px` } as React.CSSProperties}>
+    <div
+      className={`${styles.page} ${short ? styles.short : ""}`}
+      style={{ "--named": `${namedHeight}px` } as React.CSSProperties}
+    >
       {nav}
       <main id="main" ref={stage} className={styles.stage}>
         <div className={styles.wall} aria-hidden="true">
           {wall.map((tile, i) => (
-            <WallTile key={i} tile={tile} lifted={!!tile.feature && tile.feature.id === lifted} />
+            <WallTile
+              key={i}
+              tile={tile}
+              lifted={!!tile.feature && tile.feature.id === lifted}
+            />
           ))}
         </div>
 
@@ -306,8 +424,15 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
             </div>
           </section>
 
-          <section className={styles.launcher} aria-label="Where to?" onMouseLeave={rest}>
-            <label className={`${styles.field} well`} data-typed={query ? "" : undefined}>
+          <section
+            className={styles.launcher}
+            aria-label="Where to?"
+            onMouseLeave={rest}
+          >
+            <label
+              className={`${styles.field} well`}
+              data-typed={query ? "" : undefined}
+            >
               <span className={styles.fakeCaret} aria-hidden="true" />
               <input
                 ref={input}
@@ -357,7 +482,9 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
                   </li>
                 ))
               ) : (
-                <li className={styles.none}>Nothing by that name. Try breaths, meetings or the coach</li>
+                <li className={styles.none}>
+                  Nothing by that name. Try breaths, meetings or the coach
+                </li>
               )}
             </ul>
             <div className={styles.barFoot}>
@@ -377,12 +504,36 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
 
         <div ref={left} className={styles.left}>
           {(["write", "speak"] as const).map((slug) => (
-            <DoorCard key={slug} slug={slug} active={active === slug} rows={rows} wide={wide} choose={setSel} shown={shown} query={query} pinned={pinned} setPinned={setPinned} rest={rest} />
+            <DoorCard
+              key={slug}
+              slug={slug}
+              active={active === slug}
+              rows={rows}
+              wide={wide}
+              choose={setSel}
+              shown={shown}
+              query={query}
+              pinned={pinned}
+              setPinned={setPinned}
+              rest={rest}
+            />
           ))}
         </div>
         <div ref={right} className={styles.right}>
           {(["switch", "keep"] as const).map((slug) => (
-            <DoorCard key={slug} slug={slug} active={active === slug} rows={rows} wide={wide} choose={setSel} shown={shown} query={query} pinned={pinned} setPinned={setPinned} rest={rest} />
+            <DoorCard
+              key={slug}
+              slug={slug}
+              active={active === slug}
+              rows={rows}
+              wide={wide}
+              choose={setSel}
+              shown={shown}
+              query={query}
+              pinned={pinned}
+              setPinned={setPinned}
+              rest={rest}
+            />
           ))}
         </div>
 
@@ -391,7 +542,11 @@ export default function Home({ tag, nav, download }: { tag: string | null; nav: 
           <ul className={styles.moreList}>
             {features.map((f) => (
               <li key={f.id}>
-                <a id={`more-${f.id}`} href={`/guide/${f.guide}`} className={`${styles.moreItem} ${flash === f.id ? styles.lit : ""}`}>
+                <a
+                  id={`more-${f.id}`}
+                  href={`/guide/${f.guide}`}
+                  className={`${styles.moreItem} ${flash === f.id ? styles.lit : ""}`}
+                >
                   <span className={styles.moreName}>{f.name}</span>
                   <p>{f.line}</p>
                   <FeatureKeys feature={f} quiet />
@@ -460,12 +615,30 @@ function WallTile({ tile, lifted }: { tile: Tile; lifted: boolean }) {
   const f = tile.feature;
   const style = { left: tile.x, top: tile.y, width: tile.w, height: tile.h };
   const wire = (
-    <div className={styles.tileBody} style={f ? (tile.low ? { top: 0, bottom: 120 } : { top: 120, bottom: 0 }) : { top: 36, bottom: 0 }}>
+    <div
+      className={styles.tileBody}
+      style={
+        f
+          ? tile.low
+            ? { top: 0, bottom: 120 }
+            : { top: 120, bottom: 0 }
+          : { top: 36, bottom: 0 }
+      }
+    >
       {tile.wire.map((p, i) =>
         p.kind === "r" ? (
           <i key={i} className={styles.r} style={{ left: p.x }} />
         ) : (
-          <i key={i} className={styles[p.kind]} style={{ left: p.x, top: p.y, width: p.w, height: p.kind === "b" ? p.h : undefined }} />
+          <i
+            key={i}
+            className={styles[p.kind]}
+            style={{
+              left: p.x,
+              top: p.y,
+              width: p.w,
+              height: p.kind === "b" ? p.h : undefined,
+            }}
+          />
         ),
       )}
     </div>

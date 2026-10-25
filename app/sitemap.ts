@@ -12,7 +12,11 @@ export const dynamic = "force-static";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { date } = await stableRelease();
   const lastModified = date ? new Date(date) : new Date();
-  const page = (path: string, priority: number) => ({ url: `${site}${path}`, lastModified, priority });
+  const page = (path: string, priority: number) => ({
+    url: `${site}${path}`,
+    lastModified,
+    priority,
+  });
   return [
     page("/", 1),
     ...doors.map((d) => page(`/${d.slug}`, 0.95)),

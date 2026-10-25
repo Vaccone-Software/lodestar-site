@@ -6,7 +6,14 @@ import Key, { Keys as KeyCaps } from "@/components/Key";
 
 // The launcher's idea, turned on the guide: type what you want to do, and
 // the lessons that answer it remain. Empty, it lists the pages.
-type Hit = { page: string; slug: string; title: string; keys: string[]; rule: string; hidden?: boolean };
+type Hit = {
+  page: string;
+  slug: string;
+  title: string;
+  keys: string[];
+  rule: string;
+  hidden?: boolean;
+};
 
 const index: Hit[] = guide.flatMap((page) =>
   [page.first, ...page.ready].map((l) => ({
@@ -20,7 +27,10 @@ const index: Hit[] = guide.flatMap((page) =>
 );
 
 function anchor(title: string): string {
-  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
 export default function GuideSearch() {
@@ -30,7 +40,11 @@ export default function GuideSearch() {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "/" || document.activeElement === field.current) return;
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement
+      )
+        return;
       event.preventDefault();
       field.current?.focus();
     };
@@ -41,7 +55,8 @@ export default function GuideSearch() {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean);
     if (words.length === 0) return [];
     return index.filter((h) => {
-      const hay = `${h.page} ${h.title} ${h.rule} ${h.keys.join(" ")}`.toLowerCase();
+      const hay =
+        `${h.page} ${h.title} ${h.rule} ${h.keys.join(" ")}`.toLowerCase();
       return words.every((w) => hay.includes(w));
     });
   }, [q]);
@@ -77,19 +92,32 @@ export default function GuideSearch() {
                 className="hover:bg-raised block rounded-[10px] px-4 py-4 transition-colors"
               >
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span className="text-dim text-[13px] font-medium">{h.page}</span>
-                  {h.hidden ? <span className="text-faint text-[13px]">Few know this</span> : null}
+                  <span className="text-dim text-[13px] font-medium">
+                    {h.page}
+                  </span>
+                  {h.hidden ? (
+                    <span className="text-faint text-[13px]">
+                      Few know this
+                    </span>
+                  ) : null}
                 </div>
                 <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <span className="text-ink text-[18px] font-semibold tracking-[-0.01em]">{h.title}</span>
+                  <span className="text-ink text-[18px] font-semibold tracking-[-0.01em]">
+                    {h.title}
+                  </span>
                   {h.keys.length ? <KeyCaps keys={h.keys} /> : null}
                 </div>
-                <p className="text-dim mt-2 max-w-[62ch] text-[16px] leading-[1.5]">{h.rule}</p>
+                <p className="text-dim mt-2 max-w-[62ch] text-[16px] leading-[1.5]">
+                  {h.rule}
+                </p>
               </a>
             </li>
           ))}
           {hits.length === 0 ? (
-            <li className="text-dim px-4 py-6 text-[16px]">Nothing answers that yet. Try a verb: open, copy, paste, undo, save.</li>
+            <li className="text-dim px-4 py-6 text-[16px]">
+              Nothing answers that yet. Try a verb: open, copy, paste, undo,
+              save.
+            </li>
           ) : null}
         </ul>
       ) : null}

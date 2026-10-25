@@ -18,7 +18,8 @@ export const metadata: Metadata = pageMetadata({
 // every claim that is not Lodestar's own carries its source.
 
 const label = "text-dim text-[13px] font-semibold";
-const link = "text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4";
+const link =
+  "text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4";
 const email = "research@vaccone.software";
 
 const sources = {
@@ -80,14 +81,23 @@ const record: { name: string; items: string[] }[] = [
   },
   {
     name: "About the person",
-    items: ["Year of birth, sex as assigned at birth, dominant hand and whether they touch type", "All optional"],
+    items: [
+      "Year of birth, sex as assigned at birth, dominant hand and whether they touch type",
+      "All optional",
+    ],
   },
 ];
 
 /** The published studies closest to Lodestar, and how its record compares.
     "Yes" means every measure the study used can be computed from the record;
     "Partly" says what is missing. */
-const studies: { name: string; href: string; condition: string; how: string; lodestar: string }[] = [
+const studies: {
+  name: string;
+  href: string;
+  condition: string;
+  how: string;
+  lodestar: string;
+}[] = [
   {
     name: "Giancardo et al. 2016",
     href: sources.giancardo,
@@ -128,7 +138,8 @@ const studies: { name: string; href: string; condition: string; how: string; lod
     href: sources.zulueta,
     condition: "Bipolar disorder",
     how: "Keystroke timing and corrections on a phone keyboard, over eight weeks",
-    lodestar: "Partly: the same kind of timing on a Mac keyboard, no phone sensors",
+    lodestar:
+      "Partly: the same kind of timing on a Mac keyboard, no phone sensors",
   },
   {
     name: "mPower (Bot et al. 2016)",
@@ -151,25 +162,33 @@ export default async function ResearchPage() {
             What Lodestar records
           </h1>
           <p className="text-dim mt-6 max-w-[62ch] text-[18px] leading-[1.55]">
-            Lodestar is a free Mac app people use all day for its own sake. While they do, it records how
-            their hands type and point, on their Mac, for as long as they use it. It is not a diagnostic.
+            Lodestar is a free Mac app people use all day for its own sake.
+            While they do, it records how their hands type and point, on their
+            Mac, for as long as they use it. It is not a diagnostic.
           </p>
 
           <section className="pane mt-10 p-6 md:p-8">
-            <h2 className="text-[18px] font-semibold">What we are looking for</h2>
+            <h2 className="text-[18px] font-semibold">
+              What we are looking for
+            </h2>
             <div className="text-dim mt-2 max-w-[62ch] space-y-3 text-[16px] leading-[1.6]">
               <p className="text-ink">
-                Research groups who want to find out whether this record can help identify conditions, and
-                follow them over time.
+                Research groups who want to find out whether this record can
+                help identify conditions, and follow them over time.
               </p>
               <p>
-                Parkinson&apos;s disease is where the published work is strongest, but the record is not
-                limited to it. A first study could be small: people with a diagnosis and people without,
-                recording for a few months alongside your clinical assessments. Lodestar is free, we would
-                build the consent and data export with you, and the data is yours to analyse.
+                Parkinson&apos;s disease is where the published work is
+                strongest, but the record is not limited to it. A first study
+                could be small: people with a diagnosis and people without,
+                recording for a few months alongside your clinical assessments.
+                Lodestar is free, we would build the consent and data export
+                with you, and the data is yours to analyse.
               </p>
             </div>
-            <a href={`mailto:${email}`} className={`${link} mt-5 inline-block text-[16px]`}>
+            <a
+              href={`mailto:${email}`}
+              className={`${link} mt-5 inline-block text-[16px]`}
+            >
               Write to Rocco Vaccone, {email}
             </a>
           </section>
@@ -178,9 +197,9 @@ export default async function ResearchPage() {
             <div className="pane p-6">
               <h2 className="text-[18px] font-semibold">Duration</h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.55]">
-                There is no task to do, so the record runs as long as the person keeps using it. Across
-                eight remote smartphone studies of more than 100,000 people, median retention was 5.5 days
-                (
+                There is no task to do, so the record runs as long as the person
+                keeps using it. Across eight remote smartphone studies of more
+                than 100,000 people, median retention was 5.5 days (
                 <a href={sources.pratap} className={link}>
                   Pratap et al. 2020
                 </a>
@@ -190,16 +209,20 @@ export default async function ResearchPage() {
             <div className="pane p-6">
               <h2 className="text-[18px] font-semibold">Breadth</h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.55]">
-                It keeps every keystroke and every pointer movement, not summaries, so the published keyboard
-                and mouse measures can be recomputed from it, and so can ones nobody has proposed yet.
+                It keeps every keystroke and every pointer movement, not
+                summaries, so the published keyboard and mouse measures can be
+                recomputed from it, and so can ones nobody has proposed yet.
               </p>
             </div>
           </section>
 
           <section className="border-hairline mt-14 border-t pt-10">
-            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">What it records</h2>
+            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">
+              What it records
+            </h2>
             <p className="text-dim mt-2 max-w-[62ch] text-[16px] leading-[1.6]">
-              As of Lodestar 0.54. Everything is kept on the Mac, sealed, and can be exported.
+              As of Lodestar 0.54. Everything is kept on the Mac, sealed, and
+              can be exported.
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {record.map((group) => (
@@ -207,8 +230,14 @@ export default async function ResearchPage() {
                   <h3 className="text-[16px] font-semibold">{group.name}</h3>
                   <ul className="mt-3 grid gap-2">
                     {group.items.map((item) => (
-                      <li key={item} className="text-dim flex gap-3 text-[14px] leading-[1.5]">
-                        <span aria-hidden="true" className="bg-faint mt-[9px] h-1 w-1 flex-none rounded-full" />
+                      <li
+                        key={item}
+                        className="text-dim flex gap-3 text-[14px] leading-[1.5]"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="bg-faint mt-[9px] h-1 w-1 flex-none rounded-full"
+                        />
                         {item}
                       </li>
                     ))}
@@ -217,16 +246,20 @@ export default async function ResearchPage() {
               ))}
             </div>
             <p className="text-ink mt-6 max-w-[62ch] text-[16px] leading-[1.6]">
-              The keystroke record never names a key, but the pattern of hand, finger and kind of key can
-              partly reconstruct what was typed. Treat it as sensitive.
+              The keystroke record never names a key, but the pattern of hand,
+              finger and kind of key can partly reconstruct what was typed.
+              Treat it as sensitive.
             </p>
           </section>
 
           <section className="border-hairline mt-14 border-t pt-10">
-            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">How it compares</h2>
+            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">
+              How it compares
+            </h2>
             <p className="text-dim mt-2 max-w-[62ch] text-[16px] leading-[1.6]">
-              The published studies closest to Lodestar. Several measured people once, in one typing session
-              or a short test. Lodestar records the same signals during ordinary work, every day.
+              The published studies closest to Lodestar. Several measured people
+              once, in one typing session or a short test. Lodestar records the
+              same signals during ordinary work, every day.
             </p>
             <div className="pane mt-6 overflow-x-auto">
               <table className="w-full min-w-[680px] text-left text-[14px] leading-[1.45]">
@@ -234,13 +267,20 @@ export default async function ResearchPage() {
                   <tr className="text-dim text-[13px]">
                     <th className="px-5 pt-5 pb-3 font-semibold">Study</th>
                     <th className="px-5 pt-5 pb-3 font-semibold">Condition</th>
-                    <th className="px-5 pt-5 pb-3 font-semibold">What it measured</th>
-                    <th className="px-5 pt-5 pb-3 font-semibold">In Lodestar&apos;s record</th>
+                    <th className="px-5 pt-5 pb-3 font-semibold">
+                      What it measured
+                    </th>
+                    <th className="px-5 pt-5 pb-3 font-semibold">
+                      In Lodestar&apos;s record
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {studies.map((s) => (
-                    <tr key={s.name} className="border-hairline border-t align-top">
+                    <tr
+                      key={s.name}
+                      className="border-hairline border-t align-top"
+                    >
                       <td className="px-5 py-3 font-medium whitespace-nowrap">
                         <a href={s.href} className={link}>
                           {s.name}
@@ -257,7 +297,9 @@ export default async function ResearchPage() {
           </section>
 
           <section className="border-hairline mt-14 border-t pt-10">
-            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">How far it has been checked</h2>
+            <h2 className="text-[23px] font-semibold tracking-[-0.01em]">
+              How far it has been checked
+            </h2>
             <dl className="mt-6 grid max-w-[65ch] gap-6 text-[16px] leading-[1.6]">
               <div>
                 <dt className="font-semibold">Against the MIT study</dt>
@@ -266,23 +308,27 @@ export default async function ResearchPage() {
                   <a href={sources.physionet} className={link}>
                     published data
                   </a>{" "}
-                  through Lodestar, on all 85 people, gives an AUC of 0.750 for Lan and Yeo&apos;s index computed
-                  their way, against their 0.752. Lodestar&apos;s own 90 second windows give 0.743. This shows the
-                  code computes the measure as published, nothing more.
+                  through Lodestar, on all 85 people, gives an AUC of 0.750 for
+                  Lan and Yeo&apos;s index computed their way, against their
+                  0.752. Lodestar&apos;s own 90 second windows give 0.743. This
+                  shows the code computes the measure as published, nothing
+                  more.
                 </dd>
               </div>
               <div>
                 <dt className="font-semibold">Its own timing</dt>
                 <dd className="text-dim mt-1">
-                  Lodestar measures itself as it records: it hears each key about 5 ms after the keyboard
-                  event&apos;s own stamp, and sees the hold of 99% of the keys struck.
+                  Lodestar measures itself as it records: it hears each key
+                  about 5 ms after the keyboard event&apos;s own stamp, and sees
+                  the hold of 99% of the keys struck.
                 </dd>
               </div>
               <div>
                 <dt className="font-semibold">Clinical validation</dt>
                 <dd className="text-dim mt-1">
-                  Not done. So far the record is one person, with no diagnosed participants and no clinical
-                  labels. That is what working with researchers is for.
+                  Not done. So far the record is one person, with no diagnosed
+                  participants and no clinical labels. That is what working with
+                  researchers is for.
                 </dd>
               </div>
             </dl>
@@ -290,16 +336,19 @@ export default async function ResearchPage() {
 
           <section className="border-hairline mt-14 grid gap-x-12 gap-y-6 border-t pt-10 md:grid-cols-2">
             <div>
-              <h2 className="text-[18px] font-semibold">What participants need</h2>
+              <h2 className="text-[18px] font-semibold">
+                What participants need
+              </h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.6]">
-                A Mac with Apple silicon and macOS 27 or later. Lodestar would be installed on the
-                participant&apos;s own Mac.
+                A Mac with Apple silicon and macOS 27 or later. Lodestar would
+                be installed on the participant&apos;s own Mac.
               </p>
             </div>
             <div>
               <h2 className="text-[18px] font-semibold">Who we are</h2>
               <p className="text-dim mt-2 text-[16px] leading-[1.6]">
-                Lodestar is built by Rocco Vaccone. The full design of the record is in the{" "}
+                Lodestar is built by Rocco Vaccone. The full design of the
+                record is in the{" "}
                 <a href={sources.design} className={link}>
                   design specification
                 </a>

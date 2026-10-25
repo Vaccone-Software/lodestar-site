@@ -61,7 +61,13 @@ function Row({ page }: { page: GuidePage }) {
 }
 
 /** The rows of one group, on one pane. */
-function Group({ pages, className = "" }: { pages: GuidePage[]; className?: string }) {
+function Group({
+  pages,
+  className = "",
+}: {
+  pages: GuidePage[];
+  className?: string;
+}) {
   return (
     <ol className={`pane mt-3 grid gap-0.5 p-2 ${className}`.trim()}>
       {pages.map((page) => (
@@ -82,7 +88,10 @@ export default async function GuideIndex() {
   return (
     <>
       <Nav tag={tag} current="guide" />
-      <main id="main" className="mx-auto max-w-[1080px] px-4 pt-10 pb-16 md:px-7">
+      <main
+        id="main"
+        className="mx-auto max-w-[1080px] px-4 pt-10 pb-16 md:px-7"
+      >
         <h1 className="font-display max-w-[18ch] text-[clamp(36px,4.6vw,56px)] leading-[1.02] font-bold tracking-[-0.03em] text-balance">
           Everything Lodestar does, and the keys for it
         </h1>
@@ -100,8 +109,13 @@ export default async function GuideIndex() {
           {doors.map((door) => (
             <div key={door.slug}>
               <div className="flex items-baseline justify-between px-1">
-                <h2 className="text-ink text-[18px] font-semibold">{door.name}</h2>
-                <a href={`/${door.slug}`} className="text-dim hover:text-ink text-[13px] transition-colors">
+                <h2 className="text-ink text-[18px] font-semibold">
+                  {door.name}
+                </h2>
+                <a
+                  href={`/${door.slug}`}
+                  className="text-dim hover:text-ink text-[13px] transition-colors"
+                >
                   The {door.name} page
                 </a>
               </div>
@@ -115,7 +129,9 @@ export default async function GuideIndex() {
         </section>
 
         <section className="mt-12">
-          <h2 className="text-ink px-1 text-[18px] font-semibold">Everything else</h2>
+          <h2 className="text-ink px-1 text-[18px] font-semibold">
+            Everything else
+          </h2>
           <Group pages={rest} className="md:grid-cols-2" />
         </section>
 

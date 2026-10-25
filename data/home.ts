@@ -8,7 +8,8 @@ export const subline = "Write, switch, keep and speak, anywhere on your Mac";
 export const facts = "Free · macOS 27 or later · Apple silicon";
 
 /** The wireframe a wall window draws beneath its words. */
-export type Kind = "sidebar" | "browser" | "code" | "calendar" | "photos" | "term";
+export type Kind =
+  "sidebar" | "browser" | "code" | "calendar" | "photos" | "term";
 
 export type Feature = {
   id: string;

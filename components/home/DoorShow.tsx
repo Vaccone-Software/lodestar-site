@@ -2,7 +2,13 @@
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import Key from "@/components/Key";
-import { KeepDoor, SpeakDoor, SwitchDoor, WriteDoor, type RowKeys } from "@/components/home/Doors";
+import {
+  KeepDoor,
+  SpeakDoor,
+  SwitchDoor,
+  WriteDoor,
+  type RowKeys,
+} from "@/components/home/Doors";
 import styles from "./Home.module.css";
 
 // A door's page shows the same window the homepage does, grown to fill its
@@ -11,9 +17,17 @@ import styles from "./Home.module.css";
 
 const base = { width: 340, height: 300 };
 
-const pictures = { write: WriteDoor, switch: SwitchDoor, keep: KeepDoor, speak: SpeakDoor };
+const pictures = {
+  write: WriteDoor,
+  switch: SwitchDoor,
+  keep: KeepDoor,
+  speak: SpeakDoor,
+};
 
-const gestures: Record<keyof typeof pictures, { name: string; legend: string }[]> = {
+const gestures: Record<
+  keyof typeof pictures,
+  { name: string; legend: string }[]
+> = {
   write: [
     { name: "write-1", legend: "lode" },
     { name: "write-2", legend: "⇥" },
@@ -29,13 +43,22 @@ const gestures: Record<keyof typeof pictures, { name: string; legend: string }[]
   ],
 };
 
-export default function DoorShow({ slug, name }: { slug: keyof typeof pictures; name: string }) {
+export default function DoorShow({
+  slug,
+  name,
+}: {
+  slug: keyof typeof pictures;
+  name: string;
+}) {
   const frame = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [down, setDown] = useState<Record<string, boolean>>({});
   const [letter, setLetter] = useState("m");
   const rows: RowKeys = useMemo(
-    () => ({ hold: (key, d) => setDown((s) => (s[key] === d ? s : { ...s, [key]: d })), letter: setLetter }),
+    () => ({
+      hold: (key, d) => setDown((s) => (s[key] === d ? s : { ...s, [key]: d })),
+      letter: setLetter,
+    }),
     [],
   );
 
@@ -52,7 +75,12 @@ export default function DoorShow({ slug, name }: { slug: keyof typeof pictures; 
   const Picture = pictures[slug];
   return (
     <figure className="m-0 grid w-full justify-items-center gap-5">
-      <div ref={frame} className="relative w-full" style={{ aspectRatio: `${base.width} / ${base.height}` }} aria-hidden="true">
+      <div
+        ref={frame}
+        className="relative w-full"
+        style={{ aspectRatio: `${base.width} / ${base.height}` }}
+        aria-hidden="true"
+      >
         <div
           className={`${styles.door} ${styles.chosen} clay absolute top-0 left-0 origin-top-left`}
           style={{ ...base, transform: `scale(${scale})`, cursor: "default" }}

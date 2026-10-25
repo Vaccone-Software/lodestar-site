@@ -30,7 +30,8 @@ type Result = {
 const results: Result[] = [
   {
     n: "01",
-    claim: "Window navigation is a small share of the day, even for a practised hand.",
+    claim:
+      "Window navigation is a small share of the day, even for a practised hand.",
     measurement:
       "On one fully instrumented day of 280 active minutes: typing 70.5 min, pointing 17.5 min, window navigation 2.6 min. Navigation is 2.8% of input time. Backspaces alone, at a 13.5% rate, cost 9.6 min, 3.7 times the navigation budget.",
     method:
@@ -40,7 +41,8 @@ const results: Result[] = [
   },
   {
     n: "02",
-    claim: "Practice does not make a gesture faster. Giving it a shorter address does.",
+    claim:
+      "Practice does not make a gesture faster. Giving it a shorter address does.",
     measurement:
       "A power law of practice fitted to each of 15 chains (98.4% of gestures) gives a mean exponent of −0.020 and a median R² of 0.0025: flat. The one accepted shortening on August 23 moved the median gesture from 152.8 ms to 97.0 ms (p = 0.0005), and no individual chain improved. A newly created bare letter ran 76 ms in its first 189 uses, faster than a chain with 3,798.",
     method:
@@ -80,7 +82,8 @@ const results: Result[] = [
   },
   {
     n: "06",
-    claim: "Where you go next is partly predictable, and one address would cover half of it.",
+    claim:
+      "Where you go next is partly predictable, and one address would cover half of it.",
     measurement:
       "The predictability ceiling of the transition sequence is 79.9%; a first-order model reaches 46.3%. A single back address would cover 49.2% of switches, and the three most recent applications cover 81.3%.",
     method:
@@ -90,7 +93,8 @@ const results: Result[] = [
   },
   {
     n: "07",
-    claim: "Selecting text by typing it is bound by keystrokes, not by choosing.",
+    claim:
+      "Selecting text by typing it is bound by keystrokes, not by choosing.",
     measurement:
       "Time to a selection scales with keys typed (R² 0.49) and barely with the number of candidates (R² 0.13), at about 410 ms per key.",
     method:
@@ -100,7 +104,8 @@ const results: Result[] = [
   },
   {
     n: "08",
-    claim: "Arranging two windows side by side dropped from seconds to under one.",
+    claim:
+      "Arranging two windows side by side dropped from seconds to under one.",
     measurement:
       "Before the chord, a beside arrangement took 2.1 s median from the first summon to the split standing. On the chord's first day, the whole phrase took 757 ms median, and joins fell from about 1 s to under 200 ms within twenty minutes of use.",
     method:
@@ -120,11 +125,11 @@ const results: Result[] = [
   },
   {
     n: "10",
-    claim: "Closing the old path is what makes a hand switch. A nudge does not.",
+    claim:
+      "Closing the old path is what makes a hand switch. A nudge does not.",
     measurement:
       "In Grossman, Dragicevic and Balakrishnan (CHI 2007, n = 42), expert-path use was 28.9% when both paths stayed open and 72.8% when the slow one was disabled. Seven of fourteen control participants never used the fast path at all. A purely visual cue tested below control.",
-    method:
-      "Published between-subjects study; not this hand.",
+    method: "Published between-subjects study; not this hand.",
     reading:
       "This is the evidence behind the coach reshaping the road on accept rather than reminding, and behind pricing the escape hatch in one deliberate confirm.",
   },
@@ -148,27 +153,27 @@ export default async function EvidencePage() {
             <h2 className={label}>Method</h2>
             <div className="text-dim max-w-[65ch] space-y-4 text-[16px] leading-[1.6]">
               <p>
-                Lodestar keeps an append-only log of how it is used, on the
-                Mac it runs on: which gesture, when, how long from the key
-                going down to the destination arriving, and what was
-                corrected. It never keeps content: no window titles, no
-                addresses, no text. The same file the coach reads is the file
-                these numbers were read from.
+                Lodestar keeps an append-only log of how it is used, on the Mac
+                it runs on: which gesture, when, how long from the key going
+                down to the destination arriving, and what was corrected. It
+                never keeps content: no window titles, no addresses, no text.
+                The same file the coach reads is the file these numbers were
+                read from.
               </p>
               <p>
-                The sample is one hand, the author&apos;s, over fourteen days
-                in August 2026: between seventy and seventy-five thousand
-                events. The typing and pointing minutes in the first result
-                come from two days of the health pulse and are estimates from
-                measured counts; navigation is timed directly. One day with a
-                logging artefact is excluded from rhythm figures. Result 10 is
-                a published study, not this hand.
+                The sample is one hand, the author&apos;s, over fourteen days in
+                August 2026: between seventy and seventy-five thousand events.
+                The typing and pointing minutes in the first result come from
+                two days of the health pulse and are estimates from measured
+                counts; navigation is timed directly. One day with a logging
+                artefact is excluded from rhythm figures. Result 10 is a
+                published study, not this hand.
               </p>
               <p className="text-ink">
-                A sample of one says nothing about people in general. It says
-                a great deal about whether the mechanisms Lodestar is built on
-                are real, because each was measured on the hand that built
-                them before it shipped.
+                A sample of one says nothing about people in general. It says a
+                great deal about whether the mechanisms Lodestar is built on are
+                real, because each was measured on the hand that built them
+                before it shipped.
               </p>
             </div>
           </section>
