@@ -1,8 +1,9 @@
 # lodestar-site
 
-The Lodestar product page: the homepage is a Lodestar room built from the
-app's own design rules (components/room), beside the guide, the changelog and
-a page for each door. Next.js, Tailwind.
+The Lodestar product page, in the app's own look (Ceramic, from the app's
+design/ contracts): the homepage is the launcher with the four doors beside
+it and the rest of Lodestar on a dimmed wall (components/home), beside the
+guide, the changelog and a page for each door. Next.js, Tailwind.
 
 ```sh
 bun install

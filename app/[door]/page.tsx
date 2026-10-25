@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import DownloadPill from "@/components/DownloadPill";
 import { KeySequence } from "@/components/Key";
-import Loop from "@/components/Loop";
+import DoorShow from "@/components/home/DoorShow";
+import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
@@ -34,16 +35,12 @@ export async function generateMetadata({
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-faint mb-3 text-[11.5px] font-semibold tracking-[0.14em] uppercase">
-      {children}
-    </h2>
-  );
+  return <h2 className="mb-4 text-[18px] font-semibold tracking-[-0.01em]">{children}</h2>;
 }
 
-// One screen: the promise and the picture, then everything else in a band
-// beneath them, so nothing waits below the fold. Short windows and phones
-// scroll instead.
+// One screen: the promise and the door's own window, then everything else
+// in three panes beneath them, so nothing waits below the fold. Short
+// windows and phones scroll instead.
 export default async function Page({
   params,
 }: {
@@ -67,101 +64,75 @@ export default async function Page({
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <Nav tag={tag} current={door.slug} />
-      <main
-        id="main"
-        className="mx-auto grid max-w-[1320px] px-4 pb-10 md:px-7 [@media(min-width:901px)_and_(min-height:701px)]:h-[calc(100svh-78px)] [@media(min-width:901px)_and_(min-height:701px)]:min-h-[640px] [@media(min-width:901px)_and_(min-height:701px)]:grid-rows-[minmax(0,1fr)_auto] [@media(min-width:901px)_and_(min-height:701px)]:pb-8"
-      >
-        <section className="grid min-h-0 items-center gap-6 [@media(min-width:901px)_and_(min-height:701px)]:grid-cols-[1fr_1.1fr]">
-          <div>
-            <p className="text-accent text-[12px] font-semibold tracking-[0.16em] uppercase">
-              {door.name}
-            </p>
-            <h1 className="mt-3 mb-3.5 text-[clamp(40px,4.6vw,68px)] leading-[0.98] font-semibold tracking-[-0.045em]">
+      <main id="main" className="mx-auto grid max-w-[1180px] gap-12 px-4 pt-8 pb-12 md:px-6 md:pt-12">
+        <section className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-14">
+          <div className="order-2 md:order-1">
+            <p className="text-dim text-[16px] font-medium">{door.name}</p>
+            <h1 className="font-display mt-2 mb-4 text-[clamp(36px,4.4vw,56px)] leading-[1.02] font-bold tracking-[-0.03em] text-balance">
               {door.h1}
             </h1>
-            <p className="mb-6 max-w-[28em] text-[clamp(16px,1.25vw,19px)] leading-[1.5] text-ink/80">
-              {door.lede}
-            </p>
-            <DownloadPill fallback={tag} />
-            <span className="text-faint mt-3 block text-[12.5px]">
-              Free · Apple silicon, macOS 27 or later
-            </span>
+            <p className="text-dim mb-8 max-w-[30em] text-[18px] leading-[1.45]">{door.lede}</p>
+            <div className="inline-grid justify-items-stretch gap-3">
+              <DownloadPill fallback={tag} />
+              <span className="text-dim text-center text-[13px]">Free · macOS 27 or later · Apple silicon</span>
+            </div>
           </div>
-          <div className="relative -order-1 mx-auto aspect-[4/3] w-full max-w-[520px] [@media(min-width:901px)_and_(min-height:701px)]:order-none [@media(min-width:901px)_and_(min-height:701px)]:aspect-auto [@media(min-width:901px)_and_(min-height:701px)]:h-full [@media(min-width:901px)_and_(min-height:701px)]:max-h-[520px] [@media(min-width:901px)_and_(min-height:701px)]:max-w-none">
-            <Loop
-              src={`/media/doors/${door.slug}`}
-              className="absolute inset-0 h-full w-full object-contain"
-            />
+          <div className="order-1 mx-auto w-full max-w-[520px] md:order-2">
+            <DoorShow slug={door.slug} name={door.name} />
           </div>
         </section>
-        <section className="border-hairline mt-6 grid gap-7 border-t pt-5 [@media(min-width:901px)_and_(min-height:701px)]:mt-0 [@media(min-width:901px)_and_(min-height:701px)]:grid-cols-[1.25fr_1fr_1.1fr] [@media(min-width:901px)_and_(min-height:701px)]:gap-9">
-          <div>
+
+        <section className="grid gap-6 md:grid-cols-[1.2fr_1fr_1.1fr]">
+          <div className="pane p-6">
             <div className="flex items-baseline justify-between gap-4">
               <Label>How it works</Label>
               {deeper ? (
-                <a
-                  href={`/guide/${deeper.slug}`}
-                  className="text-faint hover:text-ink mb-3 text-[12px] font-medium transition-colors"
-                >
-                  The full guide to {door.name} <span className="text-accent">→</span>
+                <a href={`/guide/${deeper.slug}`} className="text-dim hover:text-ink mb-4 text-[13px] font-medium transition-colors">
+                  The full guide to {door.name}
                 </a>
               ) : null}
             </div>
-            <ol className="grid gap-3">
+            <ol className="grid gap-4">
               {door.steps.map((step, i) => (
-                <li
-                  key={step.title}
-                  className="grid grid-cols-[22px_1fr_auto] items-baseline gap-x-2.5 gap-y-1"
-                >
-                  <span className="text-accent text-[12px] font-semibold">
-                    0{i + 1}
-                  </span>
-                  <b className="text-[15px] font-semibold tracking-[-0.005em]">
-                    {step.title}
-                  </b>
-                  <span className="text-[16px]">
-                    {step.keys ? <KeySequence keys={step.keys} /> : null}
-                  </span>
-                  <p className="text-dim col-span-2 col-start-2 text-[13.5px] leading-[1.45]">
-                    {step.line}
-                  </p>
+                <li key={step.title} className="grid grid-cols-[20px_1fr_auto] items-baseline gap-x-3 gap-y-1">
+                  <span className="text-faint text-[13px] font-semibold tabular-nums">{i + 1}</span>
+                  <b className="text-[16px] font-medium">{step.title}</b>
+                  <span>{step.keys ? <KeySequence keys={step.keys} lighting={false} /> : null}</span>
+                  <p className="text-dim col-span-2 col-start-2 text-[13px] leading-[1.45]">{step.line}</p>
                 </li>
               ))}
             </ol>
           </div>
-          <div>
+          <div className="pane p-6">
             <Label>What it will not do</Label>
             <ul>
               {door.never.map((line) => (
                 <li
                   key={line}
-                  className="border-hairline border-b py-[7px] text-[14px] leading-[1.4] text-ink/80 first:pt-0 last:border-b-0"
+                  className="border-hairline text-dim border-b py-2.5 text-[15px] leading-[1.4] first:pt-0 last:border-b-0 last:pb-0"
                 >
                   {line}
                 </li>
               ))}
             </ul>
           </div>
-          <div>
+          <div className="pane p-6">
             <Label>{door.detailTitle}</Label>
-            <div className="grid gap-[7px]">
+            <div className="grid gap-2">
               {door.detail.map((row) => (
                 <div
                   key={row.name}
-                  className="border-hairline grid grid-cols-[92px_1fr_auto] items-center gap-2.5 rounded-[9px] border bg-well px-2.5 py-[7px]"
+                  className="grid grid-cols-[88px_1fr_auto] items-center gap-3 rounded-[12px] bg-raised px-3 py-2.5"
                 >
-                  <b className="text-[13.5px] font-semibold">{row.name}</b>
-                  <span className="text-dim text-[13px] leading-[1.35]">
-                    {row.line}
-                  </span>
-                  <span className="text-[15px]">
-                    {row.keys ? <KeySequence keys={row.keys} /> : null}
-                  </span>
+                  <b className="text-[14px] font-semibold">{row.name}</b>
+                  <span className="text-dim text-[13px] leading-[1.35]">{row.line}</span>
+                  <span>{row.keys ? <KeySequence keys={row.keys} lighting={false} /> : null}</span>
                 </div>
               ))}
             </div>
           </div>
         </section>
+        <Foot />
       </main>
     </>
   );

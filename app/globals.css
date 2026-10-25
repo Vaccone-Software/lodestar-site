@@ -1,63 +1,51 @@
 @import "tailwindcss";
 
-/* The site wears the app's own palette, from DESIGN.md's "Objects in One
-   Light": one ground family warmed a few degrees toward the mark, Night
-   after dark and Clay by day, following the system. A surface is the pane,
-   the thing chosen is raised, and nothing else invents a colour.
+/* The site wears the app's own look, Ceramic (the app's design/ contracts):
+   matte, opaque, lit from above. Espresso is the one ground, since the site
+   is a place you visit at any hour and the orange reads best on it. A pane
+   is one colour with a rim along its top edge and a hairline round it; what
+   you can press stands on a visible side; a place you type into sinks; the
+   chosen thing is a slab in clay, the other look.
 
-   Three faces, one per speaker. The system sans is the interface and every
-   paragraph; mono is the hand, for keys and for what you type; the serif
-   is Lodestar's own voice, and appears where the page speaks as the app
-   does. No italic anywhere.
+   One family, the system's sans, on the app's four sizes. Mono only where
+   vim is: the draft. No serif, no italic, no letter-spaced capitals.
 
-   One accent, International Orange, deepened on clay so it reads as text,
-   as the app does. The homepage lets you wear your Mac's accent instead. */
+   One colour, International Orange, and it is rare: the one thing to press
+   on a page, the switch that is on, the caret. */
 :root {
-  --ground: #efe7de;
-  --pane: #f8efe7;
-  --raised: #fffbf6;
-  --ink: #221d19;
-  --dim: rgb(0 0 0 / 0.66);
-  --faint: rgb(0 0 0 / 0.56);
-  --hair: rgb(34 29 25 / 0.11);
-  --well: rgb(34 29 25 / 0.05);
-  --edge: rgb(69 43 26 / 0.13);
-  --shade: 89 59 33;
-  --key: #2e2926;
-  --key-ink: #e6dfd6;
-  --key-top: rgb(255 255 255 / 0.18);
-  --key-lip: rgb(0 0 0 / 0.3);
-  --accent: #c43b00;
-  --on-accent: #fff;
-  --accent-top: #dc8966;
-  --accent-lip: #6e2100;
-  --control: 6.4px;
-  --surface: 16.8px;
+  /* Espresso */
+  --ground: #120f0c;
+  --pane: #1d1916;
+  --raised: #2b2622;
+  --side: #110e0c;
+  --ink: #f1ebe2;
+  --dim: #a99f92;
+  --faint: #8c8277;
+  --hair: rgb(241 235 226 / 0.08);
+  --rim: rgb(241 235 226 / 0.1);
+  --well: #14100d;
+  --well-edge: rgb(241 235 226 / 0.12);
+  --edge: rgb(241 235 226 / 0.08);
+  --shade: 8 6 4;
+  /* The chosen thing: a slab of clay */
+  --slab: #f1e8df;
+  --slab-side: #ada093;
+  /* Keys */
+  --key: #2b2622;
+  --key-ink: #f1ebe2;
+  --key-top: rgb(241 235 226 / 0.1);
+  --key-lip: #110e0c;
+  /* International Orange, at night */
+  --accent: #fa5617;
+  --on-accent: #1e1814;
+  --accent-top: #ff8a5c;
+  --accent-lip: #a93608;
+  /* The ladder: the pill's end, then over φ² */
+  --surface: 22px;
+  --control: 8.4px;
+  --mark: 3.2px;
   --curve: cubic-bezier(0.25, 0.1, 0.25, 1);
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ground: #18130e;
-    --pane: #221d19;
-    --raised: #2e2925;
-    --ink: #ece5dc;
-    --dim: rgb(236 229 220 / 0.6);
-    --faint: rgb(236 229 220 / 0.5);
-    --hair: rgb(236 229 220 / 0.08);
-    --well: rgb(236 229 220 / 0.05);
-    --edge: rgb(255 237 219 / 0.11);
-    --shade: 14 7 2;
-    --key: rgb(255 255 255 / 0.08);
-    --key-ink: #ece5dc;
-    --key-top: rgb(255 255 255 / 0.11);
-    --key-lip: rgb(0 0 0 / 0.6);
-    --accent: #ff4f00;
-    --on-accent: #fff;
-    --accent-top: #ff9566;
-    --accent-lip: #8f2c00;
-    color-scheme: dark;
-  }
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -74,142 +62,234 @@
 
 @theme {
   --font-sans:
-    -apple-system, BlinkMacSystemFont, var(--font-inter), "Helvetica Neue",
-    Arial, sans-serif;
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-inter),
+    "Helvetica Neue", Arial, sans-serif;
+  --font-display:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", var(--font-inter),
+    "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", var(--font-jetbrains), Menlo, monospace;
-  --font-voice: ui-serif, "New York", var(--font-newsreader), Georgia, serif;
 }
 
-/* The ground is painted on the root, so it is also what the rubber-band
-   shows past either end of a page. */
-html {
-  background-color: var(--ground);
-  color: var(--ink);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  background: transparent;
-  min-height: 100svh;
-}
-
-::selection {
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
-/* A keyboard-first product's site should feel designed under the Tab key. */
-:focus-visible {
-  outline: 1px solid var(--accent);
-  outline-offset: 3px;
-}
-
-@media (prefers-reduced-motion: no-preference) {
+/* Base and components sit in their layers, so a Tailwind utility on an
+   element still has the last word. */
+@layer base {
+  /* The ground is painted on the root, so it is also what the rubber-band
+     shows past either end of a page. */
   html {
-    scroll-behavior: smooth;
+    background-color: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: transparent;
+    min-height: 100svh;
+  }
+
+  ::selection {
+    background: var(--slab);
+    color: #1e1814;
+  }
+
+  /* A keyboard-first product's site should feel designed under the Tab key. */
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: var(--control);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 }
 
-/* A key on the page: the app's one keycap, drawn and never typed. A resting
-   key stands on its lip, the lit key wears the accent. The same object on
-   the homepage, the door pages, in the guide and in its scenes, so the eye
-   learns it once. */
-.key {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.9em;
-  height: 1.9em;
-  padding: 0 0.5em;
-  border-radius: var(--control);
-  background: var(--key);
-  color: var(--key-ink);
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 0.74em;
-  line-height: 1;
-  white-space: nowrap;
-  box-shadow:
-    inset 0 1px 0 var(--key-top),
-    0 0 0 0.5px var(--edge),
-    0 1.5px 0 var(--key-lip);
-}
-.key.lit {
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow:
-    inset 0 1px 0 var(--accent-top),
-    0 1.5px 0 var(--accent-lip);
-}
-.key.down {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 var(--accent-top),
-    0 0.5px 0 var(--accent-lip);
-}
+@layer components {
+  /* Clay, for what stands inside a slab: the other look, whole. */
+  .clay {
+    --pane: #f1e8df;
+    --raised: #fcf8f4;
+    --side: #dccec1;
+    --ink: #1e1814;
+    --dim: #66584e;
+    --faint: #66584e;
+    --hair: rgb(30 24 20 / 0.1);
+    --rim: #fcf8f4;
+    --well: #e6ded6;
+    --well-edge: rgb(30 24 20 / 0.14);
+    --edge: rgb(30 24 20 / 0.1);
+    --key: #fcf8f4;
+    --key-ink: #1e1814;
+    --key-top: #fcf8f4;
+    --key-lip: #dccec1;
+    --accent: #c83500;
+    --on-accent: #fcf8f4;
+    --accent-top: #e2622f;
+    --accent-lip: #7e2200;
+    color: var(--ink);
+  }
 
-/* The same keycap grown to a link or a button: the bar's resting
-   "Download", and the lit one that is a page's one action. */
-.key.cap {
-  gap: 0.6em;
-  height: 28px;
-  min-width: 0;
-  padding: 0 12px;
-  border: 0;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 14px;
-  text-decoration: none;
-  cursor: pointer;
-}
-.key.cap:active {
-  transform: translateY(1px);
-}
-.key.cap.big {
-  height: 52px;
-  padding: 0 30px;
-  border-radius: 13px;
-  font-weight: 600;
-  font-size: 18px;
-  box-shadow:
-    inset 0 1.5px 0 var(--accent-top),
-    0 4px 0 var(--accent-lip),
-    0 10px 22px rgb(var(--shade) / 0.28);
-}
-.key.cap.big:active {
-  transform: translateY(3px);
-  box-shadow:
-    inset 0 1.5px 0 var(--accent-top),
-    0 1px 0 var(--accent-lip),
-    0 4px 10px rgb(var(--shade) / 0.24);
-}
-.key.cap.big:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 5px;
-}
-.key.cap svg {
-  width: 15px;
-  height: 18px;
-}
+  /* Espresso again, for what is chosen inside a clay slab. */
+  .night {
+    --pane: #1d1916;
+    --raised: #2b2622;
+    --side: #110e0c;
+    --ink: #f1ebe2;
+    --dim: #a99f92;
+    --faint: #8c8277;
+    --hair: rgb(241 235 226 / 0.08);
+    --rim: rgb(241 235 226 / 0.1);
+    --key: #2b2622;
+    --key-ink: #f1ebe2;
+    --key-top: rgb(241 235 226 / 0.1);
+    --key-lip: #110e0c;
+    color: var(--ink);
+  }
 
-/* Scroll reveal: the rows arrive as the eye does. Off under reduced motion. */
-.reveal {
-  opacity: 0;
-  transform: translateY(14px);
-  transition:
-    opacity 700ms var(--curve),
-    transform 700ms var(--curve);
-}
-.reveal.in {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  /* A pane: one opaque colour, a rim along its top edge that thins round the
+     corners, a hairline round it, and one soft shadow. */
+  .pane {
+    position: relative;
+    background: var(--pane);
+    border-radius: var(--surface);
+    box-shadow: 0 8px 24px rgb(var(--shade) / 0.45);
+  }
+  .pane::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 0 1.5px 0 var(--rim),
+      inset 0 0 0 0.5px var(--hair);
+  }
+
+  /* A well: a place you put something, one step below the pane, no side. */
+  .well {
+    background: var(--well);
+    border-radius: var(--control);
+    box-shadow: inset 0 0 0 0.5px var(--well-edge);
+  }
+
+  /* The chosen thing: a slab of clay on its side. */
+  .slab {
+    background: var(--slab);
+    box-shadow:
+      inset 0 1.5px 0 #fcf8f4,
+      inset 0 0 0 0.5px rgb(30 24 20 / 0.1),
+      0 4px 0 var(--slab-side);
+  }
+
+  /* A key, as design/10-key.md draws it: a 21 point face on a 3 point side,
+     as wide as its legend plus 8 each side and never narrower than tall, its
+     legend the key as typed. A legend is centred by its band, never by its
+     ink: the cap band for capitals, digits, symbols and punctuation, the
+     x-height band for a legend that is all lowercase, so ' and ` sit high and
+     . sits low, as on a real keycap, and a row of keys shares a baseline. */
+  .key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 21px;
+    min-width: 24px;
+    margin-bottom: 3px;
+    padding: 0 8px;
+    border-radius: var(--control);
+    background: var(--key);
+    color: var(--key-ink);
+    font: 600 13px/1 var(--font-sans);
+    white-space: nowrap;
+    vertical-align: middle;
+    flex: none;
+    text-box: trim-both cap alphabetic;
+    box-shadow:
+      inset 0 1px 0 var(--key-top),
+      0 0 0 0.5px var(--edge),
+      0 3px 0 var(--key-lip);
+  }
+  .key.x {
+    text-box: trim-both ex alphabetic;
+  }
+  .key.punct {
+    font-size: 18px;
+  }
+  .key.lit {
+    background: var(--accent);
+    color: var(--on-accent);
+    box-shadow:
+      inset 0 1px 0 var(--accent-top),
+      0 3px 0 var(--accent-lip);
+  }
+  .key.quiet {
+    background: transparent;
+    color: var(--dim);
+    box-shadow:
+      inset 0 0 0 0.5px currentColor,
+      0 3px 0 var(--hair);
+  }
+  /* Pressed is the pointer's response, or a demo's: the side gives up the
+     rest and the face goes down by it, at once. */
+  .key.down {
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 1px 0 var(--key-top),
+      0 0 0 0.5px var(--edge),
+      0 1px 0 var(--key-lip);
+  }
+  .key.lit.down {
+    box-shadow:
+      inset 0 1px 0 var(--accent-top),
+      0 1px 0 var(--accent-lip);
+  }
+  /* A double tap: the key, then ×2 in quiet ink at the meta size. */
+  .twice {
+    margin-left: 4px;
+    color: var(--dim);
+    font-size: 13px;
+  }
+
+  /* The same key grown to a link or a button: the bar's resting Download,
+     and the lit one that is a page's one action. */
+  .key.cap {
+    height: 28px;
+    min-width: 0;
+    margin-bottom: 0;
+    padding: 0 12px;
+    border: 0;
+    font: 500 14px/1 var(--font-sans);
+    text-box: normal;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .key.cap:active {
+    transform: translateY(2px);
+  }
+  .key.cap.big {
+    height: 52px;
+    min-width: 196px;
+    margin-bottom: 5px;
+    padding: 0 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 18px;
+    box-shadow:
+      inset 0 1.5px 0 var(--accent-top),
+      0 5px 0 var(--accent-lip),
+      0 12px 28px rgb(var(--shade) / 0.55);
+  }
+  .key.cap.big:active {
+    transform: translateY(4px);
+    box-shadow:
+      inset 0 1.5px 0 var(--accent-top),
+      0 1px 0 var(--accent-lip),
+      0 8px 20px rgb(var(--shade) / 0.5);
+  }
+  .key.cap.big:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 5px;
   }
 }

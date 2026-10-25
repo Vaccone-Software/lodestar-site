@@ -1,12 +1,12 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 // Self-hosted at build, with metric-matched fallbacks, so the page never
 // shifts when the faces arrive. On a Mac the system faces answer first (SF
-// for the interface, SF Mono for the hand, New York for the voice); these
-// stand in where the system has none of them.
+// for every word, SF Mono for the draft); these stand in where the system
+// has neither.
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -21,14 +21,8 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  axes: ["opsz"],
-  variable: "--font-newsreader",
-  display: "swap",
-});
 
-// The room runs to the screen's edges, so a notch is the page's to respect.
+// The wall runs to the screen's edges, so a notch is the page's to respect.
 export const viewport: Viewport = { viewportFit: "cover" };
 
 // The page speaks in its own voice; the title and description speak in
@@ -74,7 +68,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${jetbrains.variable} ${newsreader.variable}`}
+      className={`${inter.variable} ${jetbrains.variable}`}
     >
       <body>
         <a

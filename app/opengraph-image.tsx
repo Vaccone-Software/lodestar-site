@@ -1,3 +1,4 @@
+import { headline, subline } from "@/data/home";
 import { card, cardSize } from "@/lib/card";
 
 // The front page's card: the headline, and the line under it.
@@ -9,8 +10,8 @@ export const contentType = "image/png";
 export default function Image() {
   return card({
     eyebrow: "Lodestar",
-    title: "Everything one key away",
+    title: headline,
     oneLine: true,
-    line: "Free tools that stay on your Mac",
+    line: subline,
   });
 }

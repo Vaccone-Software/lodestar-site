@@ -1,4 +1,6 @@
-import Room from "@/components/room/Room";
+import Home from "@/components/home/Home";
+import Nav from "@/components/Nav";
+import { downloadFor } from "@/lib/releases";
 import { stableRelease } from "@/lib/server/stable";
 import { appJsonLd, graph } from "@/lib/seo";
 
@@ -10,7 +12,7 @@ export default async function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: graph(appJsonLd(tag)) }}
       />
-      <Room tag={tag} />
+      <Home tag={tag} download={downloadFor(tag)} nav={<Nav tag={tag} withDoors={false} />} />
     </>
   );
 }

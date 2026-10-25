@@ -1,10 +1,32 @@
 // The mark's geometry, built as Mark.swift builds it: a dodecahedron with a
 // five-sided spike raised on every face, twelve points in all. Each face
 // takes its value only from how it faces the light, so the one colour is
-// the accent and nothing is painted. Pure maths, safe anywhere; the canvas
-// drawing is components/room/Mark.tsx.
+// International Orange and nothing is painted. Pure maths, safe anywhere;
+// the canvas drawing is components/home/Mark.tsx.
 
-import { mix, parseHex, toHex, type Rgb } from "@/lib/room/accent";
+export type Rgb = readonly [number, number, number];
+
+export function parseHex(hex: string): Rgb {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return [r, g, b];
+}
+
+export function toHex(color: Rgb): string {
+  return (
+    "#" +
+    color
+      .map((v) =>
+        Math.round(Math.max(0, Math.min(255, v)))
+          .toString(16)
+          .padStart(2, "0"),
+      )
+      .join("")
+  );
+}
+
+function mix(a: Rgb, b: Rgb, t: number): Rgb {
+  return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+}
 
 export type Vec = readonly [number, number, number];
 export type Triangle = readonly [Vec, Vec, Vec];
@@ -19,9 +41,6 @@ export type Face = {
   angle: number;
 };
 
-/** A download's progress when there is none: every face stands in the accent,
-    and 0..1 lights them one by one. */
-export const standing = -1;
 
 /** How far the mark leans toward a door, as a rotation about x and y. */
 export type Lean = readonly [number, number];
@@ -144,11 +163,6 @@ export function faces(spin: number, lean: Lean): Face[] {
   return seen.sort((p, q) => p.depth - q.depth);
 }
 
-/** The faces a download has lit so far, clockwise from the top. */
-export function lit(seen: readonly Face[], progress: number): Set<Face> {
-  const clockwise = seen.slice().sort((p, q) => p.angle - q.angle);
-  return new Set(clockwise.slice(0, Math.floor(progress * clockwise.length)));
-}
 
 /** Where the light comes from: above, to the left, toward the viewer. */
 const light = unit([-0.55, 0.7, 0.9]);
@@ -164,10 +178,6 @@ export function paint(face: Face, base: Rgb): string {
   );
 }
 
-/** What an unlit face stands in while a download lights the others. */
-export function stone(night: boolean): Rgb {
-  return parseHex(night ? "#6e655e" : "#b9aea4");
-}
 
 /** A corner's place on a square canvas of the given side. */
 export function project(v: Vec, side: number): [number, number] {

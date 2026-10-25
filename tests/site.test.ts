@@ -10,9 +10,7 @@ import { existsSync } from "node:fs";
 import { chromium, type Browser } from "playwright";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
-
-const headline = "Everything one key away";
-const subline = "Write, switch, keep and speak, anywhere on your Mac";
+import { features, headline, subline } from "@/data/home";
 
 let server: ReturnType<typeof Bun.spawn>;
 let origin = "";
@@ -64,6 +62,13 @@ describe("the front page", () => {
     for (const path of ["/", ...doors.map((door) => `/${door.slug}`)]) {
       expect(text((await page(path)).html)).not.toMatch(/Master your Mac|second nature/i);
     }
+  });
+
+  test("the launcher asks where to, and names the doors and the eight", async () => {
+    const { html } = await page("/");
+    expect(html).toContain('placeholder="Where to?"');
+    for (const door of doors) expect(text(html)).toContain(door.what);
+    for (const feature of features) expect(text(html)).toContain(feature.line);
   });
 
   test("the link card is drawn", async () => {
@@ -163,11 +168,13 @@ describe("layout", () => {
   }, 30_000);
   afterAll(async () => browser?.close());
 
+  // A big display shows the whole room on one screen; a laptop shows the
+  // line, the download, the launcher and the doors on its first screen and
+  // scrolls to the eight; narrower windows stack.
   const widths: [number, number][] = [[1920, 1080], [1440, 900], [1024, 768], [390, 844], [320, 640]];
   for (const [width, height] of widths) {
-    test(`at ${width} wide the headline is one line and nothing scrolls`, async () => {
+    test(`at ${width} wide the headline is one line and nothing scrolls sideways`, async () => {
       const tab = await browser.newPage({ viewport: { width, height } });
-      // The loops never finish loading; the words are what is measured.
       await tab.goto(origin, { waitUntil: "domcontentloaded" });
       await tab.waitForSelector("h1");
       const measure = await tab.evaluate(() => {
@@ -175,25 +182,47 @@ describe("layout", () => {
         const range = document.createRange();
         range.selectNodeContents(h1);
         const lines = new Set([...range.getClientRects()].map((rect) => Math.round(rect.top)));
-        const box = h1.getBoundingClientRect();
         const words = range.getBoundingClientRect();
+        const download = document.querySelector("a.key.big, button.key.big")!.getBoundingClientRect();
+        const bar = document.querySelector('input[aria-label="Where to?"]')!.getBoundingClientRect();
         return {
           lines: lines.size,
           left: words.left,
           right: words.right,
-          inside: box.width,
           page: document.documentElement.scrollWidth,
           tall: document.documentElement.scrollHeight,
           viewport: window.innerWidth,
           height: window.innerHeight,
+          download: download.bottom,
+          bar: bar.bottom,
         };
       });
       expect(measure.lines).toBe(1);
       expect(measure.left).toBeGreaterThanOrEqual(0);
       expect(measure.right).toBeLessThanOrEqual(measure.viewport);
       expect(measure.page).toBeLessThanOrEqual(measure.viewport);
-      // The room fits the window: nothing on the homepage scrolls.
-      expect(measure.tall).toBeLessThanOrEqual(measure.height);
+      // The download is always on the first screen.
+      expect(measure.download).toBeLessThanOrEqual(measure.height);
+      if (width >= 1180) expect(measure.bar).toBeLessThanOrEqual(measure.height);
+      if (width >= 1920) expect(measure.tall).toBeLessThanOrEqual(measure.height);
+      await tab.close();
+    }, 30_000);
+  }
+
+  // Orange is rare: at rest, the download is the one lit thing.
+  for (const [width, height] of [[1920, 1080], [1440, 900]] as const) {
+    test(`at ${width} wide one thing on the page is lit`, async () => {
+      const tab = await browser.newPage({ viewport: { width, height } });
+      await tab.goto(origin, { waitUntil: "domcontentloaded" });
+      await tab.waitForSelector("h1");
+      await tab.mouse.move(0, height - 1);
+      const lit = await tab.evaluate(
+        () =>
+          [...document.querySelectorAll("body *")].filter(
+            (el) => el.getClientRects().length > 0 && getComputedStyle(el).backgroundColor === "rgb(250, 86, 23)",
+          ).length,
+      );
+      expect(lit).toBe(1);
       await tab.close();
     }, 30_000);
   }
