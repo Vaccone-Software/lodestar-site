@@ -1,5 +1,6 @@
 "use client";
 
+import Key from "@/components/Key";
 import {
   apps,
   AskBar,
@@ -20,6 +21,10 @@ import {
 
 // The guide's scenes. Same stage as the front page, one script per
 // lesson, and each plays only while it is on screen.
+
+/** The chosen row in a bar: a slab of clay, everything on it in clay. */
+const chosen =
+  "bg-[#f1e8df] shadow-[0_2px_0_#ada093] [&_span]:text-[#1e1814] [&_.q]:text-[#66584e] [&_.chip]:bg-[#fcf8f4] [&_.chip]:shadow-[0_1.5px_0_#dccec1]";
 
 /** A lesson with no motion to show: the keys lit, and a line. */
 export function Keys({ lit, caption }: { lit: string[]; caption: string }) {
@@ -64,9 +69,9 @@ export function SceneLauncher() {
       <Display title={f.focus ? "Calendar" : "Finder"}>
         {pile(f.focus)}
         <Glass show={f.open} className="inset-x-[18%] top-[22%] px-[3%] py-[2.4%] text-[10px]">
-          <div className="flex items-center gap-2 border-b border-white/10 pb-[2%]">
-            <span className="text-white/90">
-              {f.query || <span className="text-white/30">type an app</span>}
+          <div className="flex items-center gap-2 border-b border-[rgba(241,235,226,0.08)] pb-[2%]">
+            <span className="text-[#f1ebe2]">
+              {f.query || <span className="text-[#8c8277]">type an app</span>}
             </span>
             <span className="bg-accent inline-block h-[1.1em] w-[2px] translate-y-[2px]" />
           </div>
@@ -74,15 +79,15 @@ export function SceneLauncher() {
             {shown.map(([name, letter], i) => (
               <li
                 key={name}
-                className={`flex items-center justify-between rounded-[4px] px-[6px] py-[3px] ${i === 0 ? "bg-white/[0.08]" : ""}`}
+                className={`flex items-center justify-between rounded-[4px] px-[6px] py-[3px] ${i === 0 ? chosen : ""}`}
               >
-                <span className="text-white/85">{name}</span>
+                <span className="text-[#f1ebe2]">{name}</span>
                 {letter ? (
-                  <span className="rounded-[3px] border border-white/10 bg-white/[0.06] px-[5px] py-[1px] text-[8.5px] text-white/70">
-                    {letter}
+                  <span className="chip rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] text-[8.5px] font-semibold text-[#f1ebe2] shadow-[0_1.5px_0_#110e0c]">
+                    {letter.toLowerCase()}
                   </span>
                 ) : (
-                  <span className="text-[8px] text-white/35">⌘K add a letter</span>
+                  <span className="q text-[8px] text-[#8c8277]">⌘K add a letter</span>
                 )}
               </li>
             ))}
@@ -139,21 +144,21 @@ export function SceneChord() {
 function WinLite({ name, tone, style }: { name: string; tone: string; style: React.CSSProperties }) {
   return (
     <div
-      className="absolute overflow-hidden rounded-[6px] border border-white/[0.09] bg-[#1b1b20] shadow-[0_18px_40px_-16px_rgba(0,0,0,0.8)] transition-[left,top,width,height,opacity,transform] duration-[520ms] ease-[cubic-bezier(0.2,0.7,0.2,1)]"
+      className="absolute overflow-hidden rounded-[8px] bg-[#1d1916] shadow-[inset_0_1px_0_rgba(241,235,226,0.1),inset_0_0_0_0.5px_rgba(241,235,226,0.08),0_10px_24px_-10px_rgba(8,6,4,0.7)] transition-[left,top,width,height,opacity] duration-[160ms] ease-out"
       style={style}
     >
-      <div className="flex h-[16px] items-center gap-[4px] border-b border-white/[0.06] bg-white/[0.035] px-[7px]">
-        <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-        <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-        <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-        <span className="ml-[6px] font-mono text-[8px] text-white/55">{name}</span>
+      <div className="flex h-[16px] items-center gap-[4px] border-b border-[rgba(241,235,226,0.06)] px-[7px]">
+        <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+        <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+        <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+        <span className="ml-[6px] text-[8px] font-medium text-[#a99f92]">{name}</span>
       </div>
       <div className="flex h-[calc(100%-16px)]">
         <Sidebar tone={tone} />
         <div className="flex-1 space-y-[7px] p-[8px]">
-          <div className="h-[5px] w-[30%] rounded-full" style={{ background: tone, opacity: 0.65 }} />
+          <div className="h-[5px] w-[30%] rounded-full" style={{ background: "#524840" }} />
           {[80, 55, 68, 74, 42].map((w, i) => (
-            <div key={i} className="h-[3px] rounded-full bg-white/10" style={{ width: `${w}%` }} />
+            <div key={i} className="h-[3px] rounded-full bg-[#3a332d]" style={{ width: `${w}%` }} />
           ))}
         </div>
       </div>
@@ -168,12 +173,12 @@ const breathStill: BreathFrame = { ...breathRest, caption: "Restored, apps relau
 const breathScript: Step<BreathFrame>[] = [
   [1200, { held: true, caption: "Hold lode" }],
   [600, { keys: ["'"] }],
-  [500, { keys: ["⇧", "w"], caption: "' then ⇧W saves this world at W" }],
+  [500, { keys: ["⇧", "w"], caption: "' then ⇧W saves this world at w" }],
   [400, { keys: [], held: false }],
   [1800, { world: false, caption: "Later. Everything closed or moved" }],
   [1600, { held: true, caption: "Hold lode" }],
   [600, { keys: ["'"] }],
-  [500, { keys: ["w"], caption: "' then W" }],
+  [500, { keys: ["w"], caption: "' then w" }],
   [200, { world: true, caption: "Restored, apps relaunched if they had to be" }],
   [400, { keys: [], held: false }],
   [3400, { ...breathRest }],
@@ -216,12 +221,12 @@ export function SceneChooser() {
       <Display title="Mail">
         <WinLite name={`Mail · ${f.open ? titles[0] : titles[f.pick]}`} tone="#c9c9d1" style={full} />
         <Glass show={f.open} className="inset-x-[24%] top-[24%] px-[3%] py-[2.4%] text-[10px]">
-          <div className="text-white/40">Mail · windows</div>
+          <div className="text-[#8c8277]">Mail · windows</div>
           <ul className="mt-[2%] space-y-[1.5%]">
             {titles.map((t, i) => (
-              <li key={t} className={`rounded-[4px] px-[6px] py-[3px] ${i === f.pick ? "bg-white/[0.08] text-white/90" : "text-white/70"}`}>
+              <li key={t} className={`rounded-[4px] px-[6px] py-[3px] ${i === f.pick ? `${chosen} text-[#1e1814]` : "text-[#cfc6ba]"}`}>
                 {t}
-                {i === 0 ? <span className="ml-2 text-[8px] text-white/35">most recent</span> : null}
+                {i === 0 ? <span className="q ml-2 text-[8px] text-[#8c8277]">most recent</span> : null}
               </li>
             ))}
           </ul>
@@ -290,22 +295,22 @@ export function SceneCommands() {
       <Display title="Mail">
         <WinLite name="Mail" tone="#c9c9d1" style={full} />
         <Glass show={f.open} className="inset-x-[18%] top-[22%] px-[3%] py-[2.4%] text-[10px]">
-          <div className="flex items-center gap-2 border-b border-white/10 pb-[2%]">
-            <span className="text-white/40">commands</span>
-            <span className="text-white/90">{f.query}</span>
+          <div className="flex items-center gap-2 border-b border-[rgba(241,235,226,0.08)] pb-[2%]">
+            <span className="text-[#8c8277]">commands</span>
+            <span className="text-[#f1ebe2]">{f.query}</span>
             <span className="bg-accent inline-block h-[1.1em] w-[2px] translate-y-[2px]" />
           </div>
           <ul className="mt-[2%] space-y-[1.5%]">
             {(f.query ? items : [["Archive", "⌃⌘A"], ["Reply", "⌘R"], ["Forward", "⇧⌘F"]] as [string, string][]).map(([name, sc], i) => (
-              <li key={name} className={`flex items-center justify-between rounded-[4px] px-[6px] py-[3px] ${i === 0 ? "bg-white/[0.08]" : ""}`}>
-                <span className="text-white/85">Message › {name}</span>
-                {sc ? <span className="text-[8.5px] text-white/45">{sc}</span> : null}
+              <li key={name} className={`flex items-center justify-between rounded-[4px] px-[6px] py-[3px] ${i === 0 ? chosen : ""}`}>
+                <span className="text-[#f1ebe2]">Message › {name}</span>
+                {sc ? <span className="q text-[8.5px] text-[#a99f92]">{sc}</span> : null}
               </li>
             ))}
           </ul>
         </Glass>
         <Glass show={f.done} className="right-[3%] bottom-[4%] px-[10px] py-[5px] text-[9px]">
-          <span className="text-white/70">Archive</span>
+          <span className="text-[#cfc6ba]">Archive</span>
         </Glass>
       </Display>
       <Foot lit={lodeLit(f.held, f.key)} caption={f.caption} />
@@ -335,12 +340,12 @@ export function SceneScroll() {
   return (
     <div ref={ref} className="select-none">
       <Display title="Browser">
-        <div className="absolute overflow-hidden rounded-[6px] border border-white/[0.09] bg-[#1b1b20]" style={full}>
-          <div className="flex h-[16px] items-center gap-[4px] border-b border-white/[0.06] bg-white/[0.035] px-[7px]">
-            <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-            <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-            <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-            <span className="ml-[6px] font-mono text-[8px] text-white/55">Browser</span>
+        <div className="absolute overflow-hidden rounded-[8px] bg-[#1d1916] shadow-[inset_0_1px_0_rgba(241,235,226,0.1),inset_0_0_0_0.5px_rgba(241,235,226,0.08),0_10px_24px_-10px_rgba(8,6,4,0.7)]" style={full}>
+          <div className="flex h-[16px] items-center gap-[4px] border-b border-[rgba(241,235,226,0.06)] px-[7px]">
+            <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+            <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+            <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+            <span className="ml-[6px] text-[8px] font-medium text-[#a99f92]">Browser</span>
           </div>
           <div className="relative h-[calc(100%-16px)] overflow-hidden">
             <div
@@ -348,18 +353,18 @@ export function SceneScroll() {
               style={{ transform: `translateY(-${f.offset}%)` }}
             >
               {Array.from({ length: 22 }).map((_, i) => (
-                <div key={i} className="h-[3px] rounded-full bg-white/10" style={{ width: `${45 + ((i * 37) % 45)}%` }} />
+                <div key={i} className="h-[3px] rounded-full bg-[#3a332d]" style={{ width: `${45 + ((i * 37) % 45)}%` }} />
               ))}
             </div>
             <div
-              className="absolute top-[4px] right-[3px] w-[3px] rounded-full bg-white/25 transition-[top] duration-[1300ms] ease-linear"
+              className="absolute top-[4px] right-[3px] w-[3px] rounded-full bg-[#3d3630] transition-[top] duration-[1300ms] ease-linear"
               style={{ height: "30%", top: `${4 + f.offset * 0.6}%` }}
             />
           </div>
         </div>
         <Glass show={f.mode} className="right-[3%] bottom-[4%] px-[10px] py-[5px] text-[9px]">
-          <span className="text-white/40">scroll</span>
-          <span className="ml-2 text-white/70">j k · d u · gg ⇧G · ⇥ panes</span>
+          <span className="text-[#8c8277]">scroll</span>
+          <span className="ml-2 text-[#cfc6ba]">j k · d u · gg ⇧G · ⇥ panes</span>
         </Glass>
       </Display>
       <Foot lit={lodeLit(f.held, f.key)} caption={f.caption} />
@@ -414,31 +419,31 @@ export function SceneEdit() {
   return (
     <div ref={ref} className="select-none">
       <Display title="Notes">
-        <div className="absolute overflow-hidden rounded-[6px] border border-white/[0.09] bg-[#1b1b20]" style={full}>
-          <div className="flex h-[16px] items-center gap-[4px] border-b border-white/[0.06] bg-white/[0.035] px-[7px]">
-            <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-            <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-            <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-            <span className="ml-[6px] font-mono text-[8px] text-white/55">Notes</span>
+        <div className="absolute overflow-hidden rounded-[8px] bg-[#1d1916] shadow-[inset_0_1px_0_rgba(241,235,226,0.1),inset_0_0_0_0.5px_rgba(241,235,226,0.08),0_10px_24px_-10px_rgba(8,6,4,0.7)]" style={full}>
+          <div className="flex h-[16px] items-center gap-[4px] border-b border-[rgba(241,235,226,0.06)] px-[7px]">
+            <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+            <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+            <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+            <span className="ml-[6px] text-[8px] font-medium text-[#a99f92]">Notes</span>
           </div>
           <div className="flex h-[calc(100%-16px)]">
             <Sidebar tone="#d8c98f" />
-            <div className="flex-1 p-[10px] font-mono text-[9.5px] leading-[1.9] text-white/70">
-              <p className={draft ? "text-white/30" : "text-white/85"}>{st === "placed" ? edited : original}</p>
+            <div className="flex-1 p-[10px] text-[9.5px] leading-[1.9] text-[#cfc6ba]">
+              <p className={draft ? "text-[#8c8277]" : "text-[#f1ebe2]"}>{st === "placed" ? edited : original}</p>
             </div>
           </div>
         </div>
         <Glass show={draft} className="inset-x-[6%] bottom-[5%] px-[3%] py-[2.4%] text-[10px]">
           <div className="flex items-center justify-between">
-            <span className="text-white/40">draft</span>
-            <span className="text-[8px] text-white/40">{st === "insert" || st === "changed" ? "insert" : "normal"}</span>
+            <span className="text-[#8c8277]">draft</span>
+            <span className="text-[8px] text-[#8c8277]">{st === "insert" || st === "changed" ? "insert" : "normal"}</span>
           </div>
-          <p className="mt-[1.5%] leading-[1.6] text-white/90">
+          <p className="mt-[1.5%] font-mono leading-[1.6] text-[#f1ebe2]">
             {shown.split("").flatMap((c, i) => {
               const node = (
                 <span
                   key={i}
-                  className={i === block ? "bg-white/90 text-[#17171b]" : lights.has(i) ? "text-accent font-medium" : ""}
+                  className={i === block ? "bg-[#f1ebe2] text-[#1e1814]" : lights.has(i) ? "text-accent font-medium" : ""}
                 >
                   {c}
                 </span>
@@ -447,7 +452,7 @@ export function SceneEdit() {
             })}
             {block < 0 && insertAt >= shown.length ? caret : null}
           </p>
-          <div className="mt-[1.5%] text-[8px] text-white/40">⏎ put it back · esc close</div>
+          <div className="mt-[1.5%] text-[8px] text-[#8c8277]">⏎ put it back · esc close</div>
         </Glass>
       </Display>
       <Foot lit={[...(f.held ? ["lode"] : []), ...f.keys]} caption={f.caption} />
@@ -477,12 +482,12 @@ export function SceneMeeting() {
         <WinLite name="Weekly sync · Work" tone="#8fb6d8" style={{ ...full, opacity: f.joined ? 1 : 0, zIndex: 21 }} />
         <Glass show={f.chip} className="inset-x-[22%] bottom-[6%] px-[2.6%] py-[2%] text-[10px]">
           <div className="flex items-center justify-between">
-            <span className="text-white/90">
-              <span className="text-white/40">meeting </span>Weekly sync · in 4:52
+            <span className="text-[#f1ebe2]">
+              <span className="text-[#8c8277]">meeting </span>Weekly sync · in 4:52
             </span>
-            <span className={`rounded-[3px] border px-[6px] py-[1px] ${f.held ? "border-accent/70 bg-accent/25 text-[#ffd9c2]" : "border-white/10 bg-white/[0.06] text-white/80"}`}>lode lode</span>
+            <span className={`px-[6px] ${f.held ? "rounded-[4px] bg-accent px-[5px] py-[1px] font-semibold text-[#1e1814] shadow-[0_1.5px_0_#a93608]" : "rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold shadow-[0_1.5px_0_#110e0c] text-[#f1ebe2]"}`}>lode lode</span>
           </div>
-          <div className="mt-[1.6%] text-[8.5px] text-white/50">opens in Work · matched calendar · lode ⌫ not this one</div>
+          <div className="mt-[1.6%] text-[8.5px] text-[#a99f92]">opens in Work · matched calendar · lode ⌫ not this one</div>
         </Glass>
       </Display>
       <Foot lit={f.held || f.key === "lode" ? ["lode"] : []} caption={f.caption} />
@@ -514,10 +519,10 @@ export function ScenePromote() {
         <WinLite name="Mail" tone="#c9c9d1" style={full} />
         <AskBar text={f.ask} hint="docs.example.com" profile="Work" />
         <Glass show={f.card} className="inset-x-[30%] top-[52%] px-[3%] py-[2.4%] text-[9.5px]">
-          <div className="text-white/40">docs.example.com</div>
-          <ul className="mt-[2%] space-y-[2%] text-white/80">
-            <li><span className="key mr-2 text-[10px]">a</span>Add link · docs</li>
-            <li><span className="key mr-2 text-[10px]">r</span>Route this host · Work</li>
+          <div className="text-[#8c8277]">docs.example.com</div>
+          <ul className="mt-[2%] space-y-[2%] text-[#f1ebe2]">
+            <li className="flex items-center gap-2"><Key>a</Key>Add link · docs</li>
+            <li className="flex items-center gap-2"><Key>r</Key>Route this host · Work</li>
           </ul>
         </Glass>
       </Display>

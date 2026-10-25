@@ -49,12 +49,12 @@ export default function Options({ keys }: { keys: string[] }) {
   const rows = keys.map((k) => [k, lookup(k)] as const).filter(([, n]) => n);
   if (rows.length === 0) return null;
   return (
-    <dl className="border-hairline mt-6 border-t">
+    <dl className="pane mt-6 grid p-2">
       {rows.map(([path, node]) => (
-        <div key={path} className="border-hairline grid gap-x-8 gap-y-2 border-b py-5 lg:grid-cols-[18rem_1fr]">
+        <div key={path} className="border-hairline grid gap-x-8 gap-y-2 border-b px-3 py-5 last:border-b-0 lg:grid-cols-[18rem_1fr]">
           <dt>
-            <code className="font-mono text-[13px] text-ink">{path}</code>
-            <div className="text-faint mt-1 font-mono text-[11px]">
+            <code className="text-ink font-mono text-[13px] font-medium">{path}</code>
+            <div className="text-faint mt-1 text-[13px]">
               {typeOf(node!)}
               {node!.default !== undefined && node!.default !== null && typeof node!.default !== "object"
                 ? ` · default ${String(node!.default)}`
@@ -62,9 +62,9 @@ export default function Options({ keys }: { keys: string[] }) {
             </div>
           </dt>
           <dd>
-            <p className="text-dim text-[15px] leading-[1.6]">{node!.description}</p>
-            <code className="text-faint mt-2 block font-mono text-[11.5px]">
-              <span className="text-accent">$ </span>
+            <p className="text-dim text-[16px] leading-[1.55]">{node!.description}</p>
+            <code className="well text-dim mt-3 block px-3 py-2 font-mono text-[13px] break-all">
+              <span className="text-faint">$ </span>
               {example(path, node!)}
             </code>
           </dd>

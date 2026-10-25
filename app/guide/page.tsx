@@ -22,37 +22,50 @@ const byDoor: Record<string, string[]> = {
   speak: ["say"],
 };
 
+// A page of the guide, as a row in a pane: its name, what it covers, and
+// how much is in it. The row the pointer rests on stands on the key step.
 function Row({ page }: { page: GuidePage }) {
   const n = guide.indexOf(page) + 1;
   const lessons = 1 + page.ready.length;
   const few = [page.first, ...page.ready].filter((l) => l.hidden).length;
   return (
-    <li className="border-hairline border-b">
+    <li>
       <a
         href={`/guide/${page.slug}`}
-        className="group grid grid-cols-[2.5rem_1fr_auto] items-baseline gap-x-3 py-4"
+        className="hover:bg-raised grid grid-cols-[2rem_1fr_auto] items-baseline gap-x-3 rounded-[10px] px-4 py-4 transition-colors"
       >
-        <span className="text-faint text-[12px] font-semibold tabular-nums">
+        <span className="text-faint text-[13px] font-medium tabular-nums">
           {String(n).padStart(2, "0")}
         </span>
         <span>
-          <span className="text-ink block text-[19px] font-semibold tracking-[-0.01em]">
+          <span className="text-ink block text-[18px] font-semibold tracking-[-0.01em]">
             {page.name}
           </span>
-          <span className="text-dim mt-0.5 block text-[14.5px] leading-[1.5]">
+          <span className="text-dim mt-1 block text-[16px] leading-[1.45]">
             {page.blurb}
           </span>
-          <span className="text-faint mt-1.5 block text-[12px]">
+          <span className="text-faint mt-2 block text-[13px]">
             {lessons} lessons
             {few ? ` · ${few} few know` : ""}
             {page.options.length ? ` · ${page.options.length} settings` : ""}
           </span>
         </span>
-        <span className="text-accent text-[18px] transition-transform group-hover:translate-x-1">
+        <span aria-hidden="true" className="text-faint text-[16px]">
           →
         </span>
       </a>
     </li>
+  );
+}
+
+/** The rows of one group, on one pane. */
+function Group({ pages, className = "" }: { pages: GuidePage[]; className?: string }) {
+  return (
+    <ol className={`pane mt-3 grid gap-0.5 p-2 ${className}`.trim()}>
+      {pages.map((page) => (
+        <Row key={page.slug} page={page} />
+      ))}
+    </ol>
   );
 }
 
@@ -67,14 +80,11 @@ export default async function GuideIndex() {
   return (
     <>
       <Nav tag={tag} current="guide" />
-      <main id="main" className="mx-auto max-w-[1080px] px-4 pt-8 pb-16 md:px-7">
-        <p className="text-accent text-[12px] font-semibold tracking-[0.16em] uppercase">
-          Guide
-        </p>
-        <h1 className="mt-3 max-w-[18ch] text-[clamp(38px,5vw,60px)] leading-[1] font-semibold tracking-[-0.04em]">
+      <main id="main" className="mx-auto max-w-[1080px] px-4 pt-10 pb-16 md:px-7">
+        <h1 className="font-display max-w-[18ch] text-[clamp(36px,4.6vw,56px)] leading-[1.02] font-bold tracking-[-0.03em] text-balance">
           Everything Lodestar does, and the keys for it
         </h1>
-        <p className="text-dim mt-5 max-w-[56ch] text-[17px] leading-[1.55]">
+        <p className="text-dim mt-5 max-w-[56ch] text-[18px] leading-[1.5]">
           One page per destination. Each starts with the first minute, then the
           lessons for when you are ready, the fine print nobody finds by
           pressing keys, and the settings behind it.
@@ -84,41 +94,30 @@ export default async function GuideIndex() {
           <GuideSearch />
         </div>
 
-        <section className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2">
+        <section className="mt-12 grid gap-x-6 gap-y-10 md:grid-cols-2">
           {doors.map((door) => (
             <div key={door.slug}>
-              <div className="flex items-baseline justify-between">
-                <h2 className="text-[13px] font-semibold tracking-[0.14em] uppercase">
-                  <span className="text-accent">{door.name}</span>
-                </h2>
-                <a href={`/${door.slug}`} className="text-faint hover:text-dim text-[12.5px]">
-                  The {door.name} page →
+              <div className="flex items-baseline justify-between px-1">
+                <h2 className="text-ink text-[18px] font-semibold">{door.name}</h2>
+                <a href={`/${door.slug}`} className="text-dim hover:text-ink text-[13px] transition-colors">
+                  The {door.name} page
                 </a>
               </div>
-              <ol className="border-hairline mt-3 border-t">
-                {byDoor[door.slug]
+              <Group
+                pages={byDoor[door.slug]
                   .map((slug) => guide.find((p) => p.slug === slug))
-                  .filter((p): p is GuidePage => !!p)
-                  .map((page) => (
-                    <Row key={page.slug} page={page} />
-                  ))}
-              </ol>
+                  .filter((p): p is GuidePage => !!p)}
+              />
             </div>
           ))}
         </section>
 
-        <section className="mt-14">
-          <h2 className="text-faint text-[13px] font-semibold tracking-[0.14em] uppercase">
-            Everything else
-          </h2>
-          <ol className="border-hairline mt-3 grid border-t md:grid-cols-2 md:gap-x-10">
-            {rest.map((page) => (
-              <Row key={page.slug} page={page} />
-            ))}
-          </ol>
+        <section className="mt-12">
+          <h2 className="text-ink px-1 text-[18px] font-semibold">Everything else</h2>
+          <Group pages={rest} className="md:grid-cols-2" />
         </section>
 
-        <p className="text-faint mt-10 text-[12.5px]">
+        <p className="text-faint mt-10 text-[13px]">
           {guide.length} pages · {hidden} things few know · the{" "}
           <a
             href="https://github.com/Vaccone-Software/lodestar/blob/main/GUIDE.md"

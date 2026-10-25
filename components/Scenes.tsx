@@ -85,19 +85,8 @@ export function Display({
 }) {
   return (
     <div
-      className="border-hairline relative aspect-[16/10] w-full overflow-hidden rounded-[10px] border bg-[#0e0e12]"
-      style={{
-        boxShadow:
-          "0 30px 80px -30px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(255,255,255,0.02)",
-      }}
+      className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px] bg-[#0d0b09] shadow-[inset_0_0_0_0.5px_rgba(241,235,226,0.08)]"
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 90% at 30% 0%, rgba(58,64,92,0.45), transparent 60%), radial-gradient(90% 70% at 90% 100%, rgba(255,79,0,0.10), transparent 60%)",
-        }}
-      />
       {children}
     </div>
   );
@@ -126,14 +115,14 @@ export function Win({
 }) {
   return (
     <div
-      className="absolute overflow-hidden rounded-[6px] border border-white/[0.09] bg-[#1b1b20] shadow-[0_18px_40px_-16px_rgba(0,0,0,0.8)] transition-[left,top,width,height,opacity,transform] duration-[520ms] ease-[cubic-bezier(0.2,0.7,0.2,1)]"
+      className="absolute overflow-hidden rounded-[8px] bg-[#1d1916] shadow-[inset_0_1px_0_rgba(241,235,226,0.1),inset_0_0_0_0.5px_rgba(241,235,226,0.08),0_10px_24px_-10px_rgba(8,6,4,0.7)] transition-[left,top,width,height,opacity] duration-[160ms] ease-out"
       style={style}
     >
-      <div className="flex h-[16px] items-center gap-[4px] border-b border-white/[0.06] bg-white/[0.035] px-[7px]">
-        <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-        <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-        <span className="h-[5px] w-[5px] rounded-full bg-white/20" />
-        <span className="ml-[6px] font-mono text-[8px] text-white/55">
+      <div className="flex h-[16px] items-center gap-[4px] border-b border-[rgba(241,235,226,0.06)] px-[7px]">
+        <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+        <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+        <span className="h-[5px] w-[5px] rounded-full shadow-[inset_0_0_0_0.5px_#8c8277]" />
+        <span className="ml-[6px] text-[8px] font-medium text-[#a99f92]">
           {name}
         </span>
       </div>
@@ -148,11 +137,11 @@ export function Body({ tone, rows = [80, 55, 68, 74, 42, 63, 58] }: { tone: stri
     <div className="flex h-[calc(100%-16px)]">
       <Sidebar tone={tone} />
       <div className="flex-1 space-y-[7px] p-[8px]">
-        <div className="h-[5px] w-[30%] rounded-full" style={{ background: tone, opacity: 0.65 }} />
+        <div className="h-[5px] w-[30%] rounded-full" style={{ background: "#524840" }} />
         {rows.map((w, i) => (
           <div key={i} className="flex items-center gap-[6px]">
-            <div className="h-[7px] w-[7px] shrink-0 rounded-full bg-white/[0.07]" />
-            <div className="h-[3px] rounded-full bg-white/10" style={{ width: `${w}%` }} />
+            <div className="h-[7px] w-[7px] shrink-0 rounded-full bg-[#332c27]" />
+            <div className="h-[3px] rounded-full bg-[#3a332d]" style={{ width: `${w}%` }} />
           </div>
         ))}
       </div>
@@ -162,17 +151,18 @@ export function Body({ tone, rows = [80, 55, 68, 74, 42, 63, 58] }: { tone: stri
 
 export function Sidebar({ tone }: { tone: string }) {
   return (
-    <div className="w-[22%] shrink-0 space-y-[6px] border-r border-white/[0.06] bg-white/[0.02] p-[7px]">
-      <div className="h-[5px] w-[70%] rounded-full" style={{ background: tone, opacity: 0.7 }} />
-      <div className="h-[3px] w-[85%] rounded-full bg-white/10" />
-      <div className="h-[3px] w-[60%] rounded-full bg-white/10" />
-      <div className="h-[3px] w-[75%] rounded-full bg-white/10" />
-      <div className="h-[3px] w-[50%] rounded-full bg-white/10" />
+    <div className="w-[22%] shrink-0 space-y-[6px] border-r border-[rgba(241,235,226,0.06)] bg-[#191512] p-[7px]">
+      <div className="h-[5px] w-[70%] rounded-full" style={{ background: "#524840" }} />
+      <div className="h-[3px] w-[85%] rounded-full bg-[#3a332d]" />
+      <div className="h-[3px] w-[60%] rounded-full bg-[#3a332d]" />
+      <div className="h-[3px] w-[75%] rounded-full bg-[#3a332d]" />
+      <div className="h-[3px] w-[50%] rounded-full bg-[#3a332d]" />
     </div>
   );
 }
 
-/** A glass bar or chip inside the display. */
+/** One of Lodestar's own surfaces inside the display: a bar, a chip, the
+    draft. A Ceramic pane, opaque, there or not there, never fading in. */
 export function Glass({
   show,
   className = "",
@@ -184,12 +174,8 @@ export function Glass({
 }) {
   return (
     <div
-      className={`absolute z-30 rounded-[8px] border border-white/10 bg-[#17171b]/95 font-mono shadow-2xl backdrop-blur transition-[opacity,transform] duration-200 ${className}`}
-      style={{
-        opacity: show ? 1 : 0,
-        transform: show ? "translateY(0)" : "translateY(4px)",
-        pointerEvents: "none",
-      }}
+      className={`absolute z-30 rounded-[12px] bg-[#1d1916] shadow-[inset_0_1px_0_rgba(241,235,226,0.1),inset_0_0_0_0.5px_rgba(241,235,226,0.1),0_12px_28px_rgba(8,6,4,0.65)] ${className}`}
+      style={{ opacity: show ? 1 : 0, pointerEvents: "none" }}
     >
       {children}
     </div>
@@ -212,14 +198,14 @@ export function Label({
 }) {
   return (
     <span
-      className={`absolute z-30 rounded-[3px] border px-[4px] py-[1px] font-mono text-[8px] leading-none transition-opacity duration-150 ${
+      className={`absolute z-30 rounded-[3px] px-[4px] py-[1.5px] text-[8px] font-semibold leading-none ${
         lit
-          ? "border-accent bg-accent text-[#1a0a00]"
-          : "border-[#ffb38a]/60 bg-[#2a1a10] text-[#ffd9c2]"
+          ? "bg-accent text-[#1e1814] shadow-[0_1.5px_0_#a93608]"
+          : "bg-[#2b2622] text-[#f1ebe2] shadow-[0_1.5px_0_#110e0c,inset_0_0_0_0.5px_rgba(241,235,226,0.14)]"
       } ${className}`}
       style={{ opacity: show ? 1 : 0, ...style }}
     >
-      {children}
+      {children.replace(/^[A-Z](?= |$)/, (letter) => letter.toLowerCase())}
     </span>
   );
 }
@@ -257,7 +243,7 @@ export function Keyboard({ lit }: { lit: string[] }) {
   if (set.has("⌘")) set.add("⌘l");
   if (set.has("⌥")) set.add(`⌥${opposite}`.toLowerCase());
   return (
-    <div className="border-hairline mt-4 space-y-[3px] rounded-[8px] border bg-white/[0.02] p-[6px]" aria-hidden="true">
+    <div className="mt-4 space-y-[3px] rounded-[14px] bg-[#171310] p-[8px] shadow-[inset_0_0_0_0.5px_rgba(241,235,226,0.06)]" aria-hidden="true">
       {keyboardRows.map((row, r) => (
         <div key={r} className="flex gap-[3px]">
           {row.map(([label, w, id], i) => {
@@ -268,8 +254,8 @@ export function Keyboard({ lit }: { lit: string[] }) {
                   {(["▲", "▼"] as const).map((arrow) => (
                     <div
                       key={arrow}
-                      className={`flex h-[calc((clamp(14px,2.4vw,22px)-2px)/2)] items-center justify-center rounded-[3px] border font-mono text-[clamp(5px,0.7vw,7px)] leading-none transition-colors duration-100 ${
-                        set.has(arrow) ? "border-accent/80 bg-accent/25 text-[#ffd9c2]" : "border-white/[0.08] bg-white/[0.035] text-white/45"
+                      className={`flex h-[calc((clamp(14px,2.4vw,22px)-2px)/2)] items-center justify-center rounded-[3px] text-[clamp(5px,0.7vw,7px)] font-semibold leading-none ${
+                        set.has(arrow) ? "bg-accent text-[#1e1814] shadow-[0_2px_0_#a93608]" : "bg-[#211d19] text-[#8c8277] shadow-[0_2px_0_#0b0907]"
                       }`}
                     >
                       {arrow}
@@ -285,12 +271,12 @@ export function Keyboard({ lit }: { lit: string[] }) {
             return (
               <div
                 key={`${r}-${i}`}
-                className={`flex h-[clamp(14px,2.4vw,22px)] items-center justify-center rounded-[3px] border font-mono text-[clamp(6px,0.9vw,9px)] leading-none transition-colors duration-100 ${
+                className={`flex h-[clamp(14px,2.4vw,22px)] items-center justify-center rounded-[4px] text-[clamp(6px,0.9vw,9px)] font-semibold leading-none ${
                   on
-                    ? "border-accent/80 bg-accent/25 text-[#ffd9c2]"
+                    ? "bg-accent text-[#1e1814] shadow-[0_2px_0_#a93608]"
                     : isLode
-                      ? "border-white/[0.08] bg-white/[0.035] text-accent/80"
-                      : "border-white/[0.08] bg-white/[0.035] text-white/45"
+                      ? "bg-[#2b2622] text-[#f1ebe2] shadow-[0_2px_0_#0b0907]"
+                      : "bg-[#211d19] text-[#8c8277] shadow-[0_2px_0_#0b0907]"
                 }`}
                 style={{ flex: `${w} ${w} 0%` }}
               >
@@ -358,16 +344,16 @@ export function nameOf(id: string | null) {
 export function PageBody({ tone }: { tone: string }) {
   return (
     <div className="space-y-[7px] p-[8px]">
-      <div className="h-[6px] w-[34%] rounded-full" style={{ background: tone, opacity: 0.7 }} />
+      <div className="h-[6px] w-[34%] rounded-full" style={{ background: "#524840" }} />
       <div className="grid grid-cols-3 gap-[5px] pt-[3px]">
-        <div className="h-[22px] rounded-[3px] bg-white/[0.05]" />
-        <div className="h-[22px] rounded-[3px] bg-white/[0.05]" />
-        <div className="h-[22px] rounded-[3px] bg-white/[0.05]" />
+        <div className="h-[22px] rounded-[3px] bg-[#211d19]" />
+        <div className="h-[22px] rounded-[3px] bg-[#211d19]" />
+        <div className="h-[22px] rounded-[3px] bg-[#211d19]" />
       </div>
-      <div className="h-[3px] w-[70%] rounded-full bg-white/10" />
-      <div className="h-[3px] w-[62%] rounded-full bg-white/10" />
-      <div className="h-[3px] w-[74%] rounded-full bg-white/10" />
-      <div className="h-[3px] w-[48%] rounded-full bg-white/10" />
+      <div className="h-[3px] w-[70%] rounded-full bg-[#3a332d]" />
+      <div className="h-[3px] w-[62%] rounded-full bg-[#3a332d]" />
+      <div className="h-[3px] w-[74%] rounded-full bg-[#3a332d]" />
+      <div className="h-[3px] w-[48%] rounded-full bg-[#3a332d]" />
     </div>
   );
 }
@@ -384,15 +370,15 @@ export function AskBar({
   return (
     <Glass show={text !== null} className="inset-x-[16%] top-[30%] px-[3%] py-[2.2%] text-[11px]">
       <div className="flex items-center gap-2">
-        <span className="text-white/40">ask</span>
-        <span className="text-white/90">
+        <span className="text-[#8c8277]">ask</span>
+        <span className="text-[#f1ebe2]">
           {text}
-          <span className="bg-accent ml-[1px] inline-block h-[1.1em] w-[2px] translate-y-[2px] animate-pulse" />
+          <span className="bg-accent ml-[1px] inline-block h-[1.1em] w-[2px] translate-y-[2px]" />
         </span>
       </div>
-      <div className="mt-[2%] flex items-center justify-between text-[9px] text-white/50">
+      <div className="mt-[2%] flex items-center justify-between text-[9px] text-[#a99f92]">
         <span>{text && hint.startsWith(text) && text.length > 0 ? hint : "search"}</span>
-        <span className="rounded-[3px] border border-white/10 px-[6px] py-[1px]">
+        <span className="rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold shadow-[0_1.5px_0_#110e0c] text-[#f1ebe2]">
           {profile}
         </span>
       </div>
@@ -403,15 +389,15 @@ export function AskBar({
 // An application: the letter, and the arrival.
 type AppFrame = { held: boolean; key: string | null; focus: string | null; caption: string };
 const appRest: AppFrame = { held: false, key: null, focus: null, caption: "Windows, wherever the day left them" };
-const appStill: AppFrame = { ...appRest, focus: "mail", caption: "M is always Mail" };
+const appStill: AppFrame = { ...appRest, focus: "mail", caption: "m is always Mail" };
 const appScript: Step<AppFrame>[] = [
   [1200, { held: true, caption: "Hold lode" }],
   [800, { key: "M" }],
-  [180, { focus: "mail", caption: "M is always Mail" }],
+  [180, { focus: "mail", caption: "m is always Mail" }],
   [420, { held: false, key: null }],
   [2600, { held: true }],
   [700, { key: "N" }],
-  [180, { focus: "notes", caption: "N is always Notes, even when it has to launch" }],
+  [180, { focus: "notes", caption: "n is always Notes, even when it has to launch" }],
   [420, { held: false, key: null }],
   [3000, { ...appRest }],
 ];
@@ -489,8 +475,8 @@ export function SceneButton() {
                 {buttons.map(([k]) => (
                   <div
                     key={k}
-                    className={`h-[14px] w-[15%] rounded-[3px] border transition-colors duration-150 ${
-                      f.pressed === k ? "border-accent bg-accent/30" : "border-white/10 bg-white/[0.06]"
+                    className={`h-[14px] w-[15%] rounded-[3px] border ${
+                      f.pressed === k ? "border-transparent bg-[#f1e8df]" : "border-transparent bg-[#2b2622]"
                     }`}
                   />
                 ))}
@@ -498,12 +484,12 @@ export function SceneButton() {
               <div className="mt-[12px] space-y-[9px]">
                 {links.map(([k, w]) => (
                   <div key={k} className="flex items-center gap-[6px]">
-                    <div className="h-[7px] w-[7px] rounded-full bg-white/[0.07]" />
-                    <div className="h-[3px] rounded-full bg-[#8fb6d8]/50" style={{ width: w }} />
+                    <div className="h-[7px] w-[7px] rounded-full bg-[#332c27]" />
+                    <div className="h-[3px] rounded-full bg-[#524840]" style={{ width: w }} />
                   </div>
                 ))}
-                <div className="h-[3px] w-[70%] rounded-full bg-white/10" />
-                <div className="h-[3px] w-[58%] rounded-full bg-white/10" />
+                <div className="h-[3px] w-[70%] rounded-full bg-[#3a332d]" />
+                <div className="h-[3px] w-[58%] rounded-full bg-[#3a332d]" />
               </div>
               {buttons.map(([k], i) => (
                 <Label
@@ -564,14 +550,14 @@ export function SceneText() {
   const f = useScript(textRest, textStill, textScript, active);
   const marking = f.stage === "typing" || f.stage === "start" || f.stage === "end";
   const selected = f.stage === "end" || f.stage === "done";
-  const sel = selected ? "bg-accent/40 text-white" : "";
+  const sel = selected ? "bg-[#f1e8df] text-[#1e1814]" : "";
   return (
     <div ref={ref} className="select-none">
       <Display title="Notes">
         <Win name="Notes" tone="#d8c98f" style={full}>
           <div className="flex h-[calc(100%-16px)]">
             <Sidebar tone="#d8c98f" />
-            <div className="relative flex-1 p-[10px] font-mono text-[9.5px] leading-[2] text-white/70">
+            <div className="relative flex-1 p-[10px] text-[9.5px] leading-[2] text-[#cfc6ba]">
               <p>Launch review moves to Thursday.</p>
               <p>
                 Bring the{" "}
@@ -589,10 +575,10 @@ export function SceneText() {
                 </span>
                 , the contract renews on the first.
               </p>
-              <p className="text-white/40">Ask design for the venue photos.</p>
+              <p className="text-[#8c8277]">Ask design for the venue photos.</p>
               <Glass show={marking} className="right-[8px] bottom-[8px] px-[8px] py-[4px] text-[9px]">
-                <span className="text-white/40">select </span>
-                <span className="text-white/90">{f.query}</span>
+                <span className="text-[#8c8277]">select </span>
+                <span className="text-[#f1ebe2]">{f.query}</span>
                 <span className="bg-accent ml-[1px] inline-block h-[1em] w-[2px] translate-y-[1px]" />
               </Glass>
             </div>
@@ -627,28 +613,28 @@ export function SceneClipboard() {
         <Win name="Mail" tone="#c9c9d1" style={full}>
           <div className="flex h-[calc(100%-16px)]">
             <Sidebar tone="#c9c9d1" />
-            <div className="flex-1 p-[10px] font-mono text-[9.5px] leading-[1.9] text-white/70">
+            <div className="flex-1 p-[10px] text-[9.5px] leading-[1.9] text-[#cfc6ba]">
               <p>Hi Dana,</p>
               <p>
                 Send the invoice to{" "}
-                <span className={f.pasted ? "text-white" : ""}>{f.pasted ? "hello@example.com" : ""}</span>
+                <span className={f.pasted ? "text-[#f1ebe2]" : ""}>{f.pasted ? "hello@example.com" : ""}</span>
                 <span className="bg-accent ml-[1px] inline-block h-[1em] w-[2px] translate-y-[1px]" />
               </p>
             </div>
           </div>
         </Win>
         <div
-          className="absolute inset-x-[3%] bottom-[4%] z-30 grid grid-cols-5 gap-[6px] transition-[opacity,transform] duration-200"
-          style={{ opacity: f.strip ? 1 : 0, transform: f.strip ? "translateY(0)" : "translateY(6px)" }}
+          className="absolute inset-x-[3%] bottom-[4%] z-30 grid grid-cols-5 gap-[6px]"
+          style={{ opacity: f.strip ? 1 : 0 }}
         >
           {cards.map(([k, text]) => (
             <div
               key={k}
-              className={`rounded-[6px] border p-[6px] font-mono text-[7.5px] leading-snug backdrop-blur transition-colors ${
-                f.key === k ? "border-accent/70 bg-[#2a1a10]/95 text-[#ffd9c2]" : "border-white/10 bg-[#17171b]/95 text-white/70"
+              className={`rounded-[6px] p-[6px] text-[7.5px] leading-snug ${
+                f.key === k ? "bg-[#f1e8df] text-[#1e1814] shadow-[0_2px_0_#ada093]" : "bg-[#2b2622] text-[#cfc6ba] shadow-[0_2px_0_#110e0c,inset_0_1px_0_rgba(241,235,226,0.08)]"
               }`}
             >
-              <div className="mb-[4px] text-[8px] text-white/90">{k}</div>
+              <div className="mb-[4px] text-[8px] font-semibold">{k.toLowerCase()}</div>
               <div className="line-clamp-2">{text}</div>
             </div>
           ))}
@@ -735,10 +721,10 @@ export function SceneSpeech() {
         <Win name="Mail" tone="#c9c9d1" style={full}>
           <div className="flex h-[calc(100%-16px)]">
             <Sidebar tone="#c9c9d1" />
-            <div className="flex-1 p-[10px] font-mono text-[9.5px] leading-[1.9] text-white/70">
+            <div className="flex-1 p-[10px] text-[9.5px] leading-[1.9] text-[#cfc6ba]">
               <p>Hi Dana,</p>
               <p>
-                <span className="text-white">{st === "pasted" ? fixedText : ""}</span>
+                <span className="text-[#f1ebe2]">{st === "pasted" ? fixedText : ""}</span>
                 <span className="bg-accent ml-[1px] inline-block h-[1em] w-[2px] translate-y-[1px]" />
               </p>
             </div>
@@ -747,21 +733,21 @@ export function SceneSpeech() {
         <Glass show={f.draft} className="inset-x-[6%] bottom-[5%] px-[3%] py-[2.4%] text-[10px]">
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2">
-              <span className={`inline-block h-[6px] w-[6px] rounded-full ${st === "dictating" ? "bg-accent animate-pulse" : "bg-white/20"}`} />
-              <span className="text-white/40">draft</span>
+              <span className={`inline-block h-[6px] w-[6px] rounded-full ${st === "dictating" ? "bg-accent" : "bg-[#3d3630]"}`} />
+              <span className="text-[#8c8277]">draft</span>
             </span>
-            <span className="text-[8px] text-white/40">
+            <span className="text-[8px] text-[#8c8277]">
               {st === "dictating" ? "listening" : st === "changed" || st === "typed" ? "insert" : "normal"}
             </span>
           </div>
-          <p className="mt-[1.5%] min-h-[2.6em] leading-[1.6] text-white/90">
+          <p className="mt-[1.5%] min-h-[2.6em] font-mono leading-[1.6] text-[#f1ebe2]">
             {shown.split("").flatMap((c, i) => {
               const node = (
                 <span
                   key={i}
                   className={
                     i === block
-                      ? "bg-white/90 text-[#17171b]"
+                      ? "bg-[#f1ebe2] text-[#1e1814]"
                       : lights.has(i)
                         ? "text-accent font-medium"
                         : ""
@@ -774,7 +760,7 @@ export function SceneSpeech() {
             })}
             {block < 0 && insertAt >= shown.length ? caret : null}
           </p>
-          <div className="mt-[1.5%] text-[8px] text-white/40">
+          <div className="mt-[1.5%] text-[8px] text-[#8c8277]">
             {st === "dictating" ? "⏎ paste · ⇧⏎ new line · esc edit" : "⏎ paste · esc close"}
           </div>
         </Glass>
@@ -793,7 +779,7 @@ const coachScript: Step<CoachFrame>[] = [
   [3200, { held: true, caption: "Tap lode twice to take it" }],
   [220, { held: false }],
   [180, { key: "lode" }],
-  [220, { key: null, chip: "bound", caption: "M is Mail. The launcher will say so until your hand knows" }],
+  [220, { key: null, chip: "bound", caption: "m is Mail. The launcher will say so until your hand knows" }],
   [3400, { chip: "none" }],
   [1200, { ...coachRest }],
 ];
@@ -807,25 +793,25 @@ export function SceneCoach() {
         <Glass show={f.chip !== "none"} className="inset-x-[8%] bottom-[6%] px-[2.6%] py-[2%] text-[10px]">
           {f.chip === "bound" ? (
             <div className="flex items-center justify-between">
-              <span className="text-white/90">
-                <span className="text-white/40">coach </span>
-                <span className="rounded-[3px] border border-white/10 bg-white/[0.06] px-[5px] py-[1px]">M</span>
-                <span className="mx-[6px] text-white/50">→</span>Mail
+              <span className="text-[#f1ebe2]">
+                <span className="text-[#8c8277]">coach </span>
+                <span className="rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold shadow-[0_1.5px_0_#110e0c] text-[#f1ebe2]">m</span>
+                <span className="mx-[6px] text-[#a99f92]">→</span>Mail
               </span>
-              <span className="text-[#ffd9c2]">bound</span>
+              <span className="text-[#f1ebe2]">bound</span>
             </div>
           ) : (
             <>
               <div className="flex items-center justify-between">
-                <span className="text-white/90">
-                  <span className="text-white/40">coach </span>
-                  lode M <span className="text-white/50">→</span> Mail
+                <span className="text-[#f1ebe2]">
+                  <span className="text-[#8c8277]">coach </span>
+                  lode m <span className="text-[#a99f92]">→</span> Mail
                 </span>
-                <span className={`rounded-[3px] border px-[6px] py-[1px] ${f.held ? "border-accent/70 bg-accent/25 text-[#ffd9c2]" : "border-white/10 bg-white/[0.06] text-white/80"}`}>
+                <span className={`px-[6px] ${f.held ? "rounded-[4px] bg-accent px-[5px] py-[1px] font-semibold text-[#1e1814] shadow-[0_1.5px_0_#a93608]" : "rounded-[4px] bg-[#2b2622] px-[5px] py-[1px] font-semibold shadow-[0_1.5px_0_#110e0c] text-[#f1ebe2]"}`}>
                   lode lode
                 </span>
               </div>
-              <div className="mt-[1.6%] text-[8.5px] text-white/50">
+              <div className="mt-[1.6%] text-[8.5px] text-[#a99f92]">
                 you searched for it 31 times across 6 weeks · about 40 seconds a week · tap lode twice to bind it · lode ⌫ not this one
               </div>
             </>
@@ -854,9 +840,9 @@ const editScript: Step<EditFrame>[] = [
 function Marked({ word, fixed, fix, letter, labels, lit }: { word: string; fixed: boolean; fix: string; letter: string; labels: boolean; lit: boolean }) {
   return (
     <span className="relative">
-      <span className={fixed ? "text-white/85" : ""}>{fixed ? fix : word}</span>
+      <span className={fixed ? "text-[#f1ebe2]" : ""}>{fixed ? fix : word}</span>
       <span
-        className="bg-accent absolute right-0 -bottom-[1px] left-0 h-[1.5px] rounded-full transition-opacity duration-200"
+        className="absolute right-0 -bottom-[1px] left-0 h-[1.5px] rounded-full bg-[#a99f92]"
         style={{ opacity: fixed ? 0 : 0.9 }}
       />
       <Label show={labels && !fixed} lit={lit} className="-top-[10px] -left-[2px] whitespace-nowrap">
@@ -874,8 +860,8 @@ export function SceneEditor() {
         <Win name="Mail" tone="#9fc3a0" style={full}>
           <div className="flex h-[calc(100%-16px)]">
             <Sidebar tone="#9fc3a0" />
-            <div className="relative flex-1 p-[10px] font-mono text-[9.5px] leading-[2.1] text-white/70">
-              <p className="text-white/40">To: Sam · Re: the vendor contract</p>
+            <div className="relative flex-1 p-[10px] text-[9.5px] leading-[2.1] text-[#cfc6ba]">
+              <p className="text-[#8c8277]">To: Sam · Re: the vendor contract</p>
               <p className="mt-[4px]">Hi Sam,</p>
               <p>
                 <Marked word="Their" fix="They're" letter="A" fixed={f.fixedA} labels={f.labels} lit={f.key === "a"} />

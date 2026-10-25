@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { guide } from "@/data/guide";
-import { Keys as KeyCaps } from "@/components/Key";
+import Key, { Keys as KeyCaps } from "@/components/Key";
 
 // The launcher's idea, turned on the guide: type what you want to do, and
 // the lessons that answer it remain. Empty, it lists the pages.
@@ -25,6 +25,18 @@ function anchor(title: string): string {
 
 export default function GuideSearch() {
   const [q, setQ] = useState("");
+  const field = useRef<HTMLInputElement>(null);
+  // Slash searches, as it does in Keep and the draft.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "/" || document.activeElement === field.current) return;
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+      event.preventDefault();
+      field.current?.focus();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   const hits = useMemo(() => {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean);
     if (words.length === 0) return [];
@@ -35,41 +47,49 @@ export default function GuideSearch() {
   }, [q]);
   return (
     <div>
-      <label className="border-hairline flex items-center gap-3 rounded-[12px] border bg-well px-4 py-3 focus-within:border-ink/40">
-        <span className="text-accent font-mono text-[13px]">/</span>
+      <label className="well flex h-[52px] items-center gap-3 px-4 focus-within:outline-1 focus-within:-outline-offset-1 focus-within:outline-[rgb(241_235_226/0.24)] focus-within:outline-solid">
         <input
+          ref={field}
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="What do you want to do?"
-          className="text-ink placeholder:text-faint w-full bg-transparent text-[16px] outline-none"
+          className="text-ink placeholder:text-dim caret-accent w-full bg-transparent text-[16px] outline-none"
+          // The well shows the focus with its deeper edge; the page's
+          // focus outline is unlayered and would draw a second ring.
+          style={{ outline: "none" }}
           autoComplete="off"
           spellCheck={false}
         />
         {q ? (
-          <span className="text-faint text-[12px]">
+          <span className="text-dim shrink-0 text-[13px]">
             {hits.length === 1 ? "1 lesson" : `${hits.length} lessons`}
           </span>
-        ) : null}
+        ) : (
+          <Key quiet>/</Key>
+        )}
       </label>
       {q ? (
-        <ul className="border-hairline mt-6 border-t">
+        <ul className="pane mt-4 grid gap-0.5 p-2">
           {hits.map((h) => (
-            <li key={`${h.slug}-${h.title}`} className="border-hairline border-b">
-              <a href={`/guide/${h.slug}#${anchor(h.title)}`} className="group block py-4">
-                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <span className="text-faint text-[11.5px] font-semibold tracking-[0.14em] uppercase">{h.page}</span>
-                  {h.hidden ? <span className="text-accent text-[11px] font-semibold">Few know this</span> : null}
+            <li key={`${h.slug}-${h.title}`}>
+              <a
+                href={`/guide/${h.slug}#${anchor(h.title)}`}
+                className="hover:bg-raised block rounded-[10px] px-4 py-4 transition-colors"
+              >
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span className="text-dim text-[13px] font-medium">{h.page}</span>
+                  {h.hidden ? <span className="text-faint text-[13px]">Few know this</span> : null}
                 </div>
-                <div className="mt-1 flex flex-wrap items-baseline gap-x-4 gap-y-2">
-                  <span className="text-ink text-[19px] font-semibold tracking-[-0.01em] group-hover:underline group-hover:decoration-ink/40 group-hover:underline-offset-4">{h.title}</span>
-                  {h.keys.length ? <KeyCaps keys={h.keys} className="text-[14px]" /> : null}
+                <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <span className="text-ink text-[18px] font-semibold tracking-[-0.01em]">{h.title}</span>
+                  {h.keys.length ? <KeyCaps keys={h.keys} /> : null}
                 </div>
-                <p className="text-dim mt-2 max-w-[62ch] text-[15px] leading-[1.6]">{h.rule}</p>
+                <p className="text-dim mt-2 max-w-[62ch] text-[16px] leading-[1.5]">{h.rule}</p>
               </a>
             </li>
           ))}
           {hits.length === 0 ? (
-            <li className="text-dim py-6 text-[15px]">Nothing answers that yet. Try a verb: open, copy, paste, undo, save.</li>
+            <li className="text-dim px-4 py-6 text-[16px]">Nothing answers that yet. Try a verb: open, copy, paste, undo, save.</li>
           ) : null}
         </ul>
       ) : null}

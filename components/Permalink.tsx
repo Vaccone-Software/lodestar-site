@@ -23,11 +23,11 @@ export default function Permalink({ anchor }: { anchor: string }) {
           })
           .catch(() => {});
       }}
-      className="text-faint hover:text-dim ml-3 inline-flex items-baseline gap-1.5 font-mono text-[11px] tracking-[0.06em] transition-colors"
+      className="text-faint hover:text-ink ml-3 inline-flex items-baseline gap-1.5 text-[13px] font-medium transition-colors"
       aria-label="Copy a link to this lesson"
       title="Copy a link to this lesson"
     >
-      <span className={copied ? "text-accent" : ""}>{copied ? "copied" : "link"}</span>
+      <span className={copied ? "text-ink" : ""}>{copied ? "Copied" : "Link"}</span>
     </a>
   );
 }

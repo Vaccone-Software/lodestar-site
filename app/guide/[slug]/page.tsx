@@ -6,7 +6,6 @@ import GuideScene from "@/components/GuideScene";
 import { Keys as KeyCaps } from "@/components/Key";
 import Options from "@/components/Options";
 import Permalink from "@/components/Permalink";
-import Reveal from "@/components/Reveal";
 import { guide, type Lesson } from "@/data/guide";
 import { doors } from "@/data/doors";
 import { stableRelease } from "@/lib/server/stable";
@@ -71,23 +70,24 @@ function spoken(keys: string[]): string {
 
 function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
   return (
-    <Reveal
-      as="li"
+    <li
       className="border-hairline grid items-start gap-x-14 gap-y-7 border-t py-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
     >
       <div id={anchor(lesson.title)} className="scroll-mt-24">
-        <p className="text-faint text-[12px] font-semibold tabular-nums">
-          <span className="text-accent">{n}</span>
+        <p className="text-faint flex items-center text-[13px] font-medium tabular-nums">
+          <span>{n}</span>
           {lesson.hidden ? (
-            <span className="text-accent ml-3">Few know this</span>
+            <span className="text-dim ml-3 rounded-[var(--control)] px-2 py-0.5 shadow-[inset_0_0_0_0.5px_currentColor]">
+              Few know this
+            </span>
           ) : null}
           <Permalink anchor={anchor(lesson.title)} />
         </p>
-        <h3 className="text-ink mt-2.5 text-[clamp(1.45rem,2.4vw,1.9rem)] leading-[1.1] font-semibold tracking-[-0.025em]">
+        <h3 className="font-display text-ink mt-3 text-[clamp(1.45rem,2.4vw,1.9rem)] leading-[1.1] font-bold tracking-[-0.02em]">
           {lesson.title}
         </h3>
         {lesson.keys.length ? (
-          <div className="mt-4 text-[17px]">
+          <div className="mt-4">
             <KeyCaps keys={lesson.keys} />
           </div>
         ) : null}
@@ -97,14 +97,14 @@ function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
       </div>
       <div>
         {lesson.table ? (
-          <dl className="border-hairline border-t">
+          <dl className="pane grid p-2">
             {lesson.table.map(([keys, meaning]) => (
               <div
                 key={keys}
-                className="border-hairline grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b py-3"
+                className="border-hairline grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b px-3 py-3 last:border-b-0"
               >
-                <dt className="font-mono text-[13px] font-medium text-ink">{keys}</dt>
-                <dd className="text-dim text-[15px] leading-[1.55]">{meaning}</dd>
+                <dt className="text-ink text-[13px] font-semibold">{keys}</dt>
+                <dd className="text-dim text-[16px] leading-[1.5]">{meaning}</dd>
               </div>
             ))}
           </dl>
@@ -112,7 +112,7 @@ function LessonBlock({ lesson, n }: { lesson: Lesson; n: string }) {
           <GuideScene scene={lesson.scene} lit={litFor(lesson)} caption={spoken(lesson.keys)} />
         )}
       </div>
-    </Reveal>
+    </li>
   );
 }
 
@@ -145,21 +145,19 @@ export default async function Page({
       { name: page.name, path: `/guide/${page.slug}` },
     ]),
   );
-  const section = (n: string, label: string) => (
-    <p className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-      <span className="text-accent">{n}</span>
-      <span className="mx-2">·</span>
-      {label}
-    </p>
+  // A section's name, said once, at the meta size in quiet ink: the page's
+  // order is already its reading order, so it wears no number.
+  const section = (_n: string, label: string) => (
+    <p className="text-dim text-[13px] font-semibold">{label}</p>
   );
-  const h2 = "text-ink mt-3 max-w-[18ch] text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.06] font-semibold tracking-[-0.03em]";
+  const h2 = "font-display text-ink mt-2 max-w-[18ch] text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.06] font-bold tracking-[-0.025em]";
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <Nav tag={tag} current="guide" />
-      <main id="main" className="mx-auto max-w-[1240px] px-4 pt-8 pb-16 md:px-7">
-        <p className="text-faint text-[12px] font-semibold tracking-[0.14em] uppercase">
-          <a href="/guide" className="text-accent hover:text-ink">Guide</a>
+      <main id="main" className="mx-auto max-w-[1240px] px-4 pt-10 pb-16 md:px-7">
+        <p className="text-dim text-[13px] font-medium tabular-nums">
+          <a href="/guide" className="text-ink hover:text-dim transition-colors">Guide</a>
           <span className="mx-2">·</span>
           {String(index + 1).padStart(2, "0")} of {guide.length}
           {door ? (
@@ -171,28 +169,28 @@ export default async function Page({
             </>
           ) : null}
         </p>
-        <h1 className="mt-3 text-[clamp(38px,5vw,64px)] leading-[1] font-semibold tracking-[-0.04em]">
+        <h1 className="font-display mt-3 text-[clamp(38px,5vw,60px)] leading-[1.02] font-bold tracking-[-0.03em]">
           {page.name}
         </h1>
-        <p className="text-dim mt-4 max-w-[52ch] text-[18px] leading-[1.55]">
+        <p className="text-dim mt-4 max-w-[52ch] text-[18px] leading-[1.5]">
           {page.blurb}
         </p>
 
         {/* At a glance: every lesson on the page, with its keys, one line
             each, for the hand that only needs reminding. */}
-        <nav aria-label="Lessons" className="border-hairline mt-10 rounded-[14px] border bg-well p-2">
-          <ol className="grid md:grid-cols-2">
+        <nav aria-label="Lessons" className="pane mt-10 p-2">
+          <ol className="grid gap-0.5 md:grid-cols-2">
             {lessons.map((lesson, i) => (
               <li key={lesson.title}>
                 <a
                   href={`#${anchor(lesson.title)}`}
-                  className="grid grid-cols-[1.9rem_1fr_auto] items-center gap-2 rounded-[10px] px-3 py-2.5 hover:bg-well"
+                  className="hover:bg-raised grid min-h-[48px] grid-cols-[2rem_1fr_auto] items-center gap-2 rounded-[10px] px-3 py-2 transition-colors"
                 >
-                  <span className="text-faint text-[12px] font-semibold tabular-nums">
+                  <span className="text-faint text-[13px] font-medium tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-[14.5px] leading-snug">{lesson.title}</span>
-                  <span className="text-[14px]">
+                  <span className="text-[16px] leading-snug">{lesson.title}</span>
+                  <span>
                     {lesson.keys.length ? <KeyCaps keys={lesson.keys} /> : null}
                   </span>
                 </a>
@@ -218,44 +216,44 @@ export default async function Page({
         </section>
 
         <section className="border-hairline mt-10 grid gap-x-16 gap-y-6 border-t pt-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-          <Reveal>
+          <div>
             {section("03", "The fine print")}
             <h2 className={h2}>What nobody finds by pressing keys</h2>
-          </Reveal>
-          <Reveal delay={80}>
+          </div>
+          <div>
             <ul className="border-hairline border-t">
               {page.finePrint.map((line) => (
-                <li key={line} className="border-hairline text-dim border-b py-3.5 text-[15.5px] leading-[1.6]">
+                <li key={line} className="border-hairline text-dim border-b py-3.5 text-[16px] leading-[1.6]">
                   {line}
                 </li>
               ))}
             </ul>
-          </Reveal>
+          </div>
         </section>
 
         <section className="border-hairline mt-10 grid gap-x-16 gap-y-6 border-t pt-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-          <Reveal>
+          <div>
             {section("04", "Why")}
             <h2 className={h2}>Why it works this way</h2>
-          </Reveal>
-          <Reveal delay={80}>
+          </div>
+          <div>
             <p className="text-dim max-w-[60ch] text-[17px] leading-[1.6]">{page.why}</p>
-          </Reveal>
+          </div>
         </section>
 
         <section className="border-hairline mt-10 border-t pt-10">
-          <Reveal>
+          <div>
             {section("05", "Settings")}
             <h2 className={h2}>The settings behind this page</h2>
-            <p className="text-dim mt-3 max-w-[60ch] text-[15.5px] leading-[1.6]">
+            <p className="text-dim mt-3 max-w-[60ch] text-[16px] leading-[1.6]">
               Read from the schema Lodestar itself emits. The settings window
               shows the same rows, and each wears the path it writes.
             </p>
-          </Reveal>
+          </div>
           <Options keys={page.options} />
         </section>
 
-        <nav className="mt-14 flex items-baseline justify-between text-[14px] font-medium">
+        <nav className="mt-14 flex items-baseline justify-between text-[16px] font-medium">
           {prev ? (
             <a href={`/guide/${prev.slug}`} className="text-dim hover:text-ink">
               ← {prev.name}
