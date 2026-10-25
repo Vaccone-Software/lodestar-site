@@ -218,6 +218,17 @@ export default async function EvidencePage() {
                 European Journal of Social Psychology, 2010.
               </li>
               <li>
+                For clinical researchers: what the record holds and how far it
+                has been validated, on the{" "}
+                <a
+                  href="/research"
+                  className="text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4"
+                >
+                  research page
+                </a>
+                .
+              </li>
+              <li>
                 The instrument itself: the observation layer is documented in
                 the repository&apos;s{" "}
                 <a
