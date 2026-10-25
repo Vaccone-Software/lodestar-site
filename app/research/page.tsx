@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 const label = "text-dim text-[13px] font-semibold";
 const link = "text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4";
-const email = "rocco@vaccone.us";
+const email = "research@vaccone.software";
 
 const sources = {
   pratap: "https://doi.org/10.1038/s41746-020-0224-8",
