@@ -132,7 +132,7 @@ export const doors: Door[] = [
     detailTitle: "Edit without the mouse",
     detail: [
       { name: "Edit", line: "Stop typing, start moving", keys: ["esc"] },
-      { name: "Find", line: "Jump to a letter", keys: ["F", "b"] },
+      { name: "Find", line: "Jump to a letter", keys: ["⇧F", "b"] },
       { name: "Change", line: "Replace a word, keep talking", keys: ["c", "w"] },
       { name: "Send", line: "From anywhere in the draft", keys: ["⏎"] },
     ],

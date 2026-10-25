@@ -386,7 +386,7 @@ export const guide: GuidePage[] = [
       },
       {
         title: "Fix a word without leaving the keys",
-        keys: ["esc", "F", "b", "c", "w"],
+        keys: ["esc", "⇧F", "b", "c", "w"],
         lit: ["esc"],
         rule: "esc makes the draft an editor. F and a letter jumps back to that letter, with every letter you can reach lit. c w changes the word under the cursor. Type the right one, and return.",
       },
