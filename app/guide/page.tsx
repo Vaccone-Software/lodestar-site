@@ -5,13 +5,15 @@ import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide, type GuidePage } from "@/data/guide";
 import { stableRelease } from "@/lib/server/stable";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Guide: Every Feature and Keyboard Shortcut for Mac",
   description:
-    "The Lodestar guide: one page per destination, each lesson shown before it is described, with the parts nobody finds by pressing keys and the config line behind every behaviour.",
-  alternates: { canonical: "/guide" },
-};
+    "The Lodestar guide: every feature and keyboard shortcut, one page per destination, each lesson shown before it is described, with the setting behind it.",
+  path: "/guide",
+  social: "Lodestar · Everything Lodestar does, and the keys for it",
+});
 
 // The guide is read by destination, and found by door: each door names
 // the pages that teach it, and everything past the doors follows.

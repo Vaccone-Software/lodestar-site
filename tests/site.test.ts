@@ -125,6 +125,39 @@ describe("the doors", () => {
   });
 });
 
+// MARK: - Every page is its own search result and its own preview
+
+describe("search", () => {
+  test("every page in the sitemap has its own title, description and preview", async () => {
+    const { html: xml } = await page("/sitemap.xml");
+    const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+    expect(urls.length).toBeGreaterThan(8);
+    const titles = new Set<string>();
+    const problems: string[] = [];
+    for (const url of urls) {
+      const path = new URL(url).pathname;
+      const same = (other?: string) => other?.replace(/\/$/, "") === url.replace(/\/$/, "");
+      const { status, html } = await page(path);
+      const title = text(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "");
+      const description = text(meta(html, "description") ?? "");
+      const say = (problem: string) => problems.push(`${path}: ${problem}`);
+      if (status !== 200) say(`answers ${status}`);
+      if (titles.has(title)) say(`shares its title "${title}"`);
+      titles.add(title);
+      if (title.length > 70) say(`title is ${title.length} characters`);
+      if (!description || description.length > 160) say(`description is ${description.length} characters`);
+      if (!same(html.match(/<link rel="canonical" href="([^"]*)"/)?.[1])) say("canonical is another page");
+      // Next replaces a page's openGraph and twitter whole, so a page that
+      // forgets them previews as the homepage.
+      if (!same(meta(html, "og:url"))) say(`og:url is ${meta(html, "og:url")}`);
+      if (path !== "/" && meta(html, "og:title") === `Lodestar · ${headline}`) say("previews as the homepage");
+      if (meta(html, "twitter:title") !== meta(html, "og:title")) say("twitter and og titles differ");
+      if (text(meta(html, "og:description") ?? "") !== description) say("og description differs");
+    }
+    expect(problems).toEqual([]);
+  }, 60_000);
+});
+
 // MARK: - Nothing leads nowhere
 
 describe("links", () => {

@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import { stableRelease } from "@/lib/server/stable";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy",
+export const metadata: Metadata = pageMetadata({
+  title: "Privacy Policy",
   description:
     "Lodestar keeps what it records on your Mac. It has no account and no server that receives your data. What leaves your Mac, and when, is listed here.",
-  alternates: { canonical: "/privacy" },
-};
+  path: "/privacy",
+  social: "Lodestar · What you do stays on your Mac",
+});
 
 // What Lodestar keeps, what leaves the Mac and when, and what the site
 // itself sees. Every line here is checked against the app's code: the

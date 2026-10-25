@@ -4,12 +4,15 @@ import Nav from "@/components/Nav";
 import Releases from "@/components/Releases";
 import { parseReleases, releasesUrl, type Release } from "@/lib/releases";
 import { stableRelease } from "@/lib/server/stable";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Changelog",
-  description: "Every Lodestar release, in the words it shipped with.",
-  alternates: { canonical: "/changelog" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Changelog and Release Notes",
+  description:
+    "Every release of Lodestar, the free Mac app, in the words it shipped with: what is new, what changed and what was fixed, version by version.",
+  path: "/changelog",
+  social: "Lodestar · Every release, as it shipped",
+});
 
 // Built once and rebuilt in the background at most ten minutes after a
 // release, so a new release reaches the page without a deploy; the client

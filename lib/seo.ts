@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { downloadFor } from "@/lib/releases";
 
 // What search engines are told, in their own vocabulary. The app is
@@ -25,6 +26,44 @@ export function appJsonLd(tag: string | null, features?: string[]) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     author: { "@type": "Organization", name: "Vaccone Software" },
     ...(features ? { featureList: features } : {}),
+  };
+}
+
+/** The site and its maker, said once on the homepage, so a search engine
+    names results "Lodestar" and knows who makes it. */
+export function siteJsonLd() {
+  return {
+    "@type": "WebSite",
+    "@id": `${site}/#site`,
+    name: "Lodestar",
+    url: `${site}/`,
+    publisher: { "@type": "Organization", name: "Vaccone Software" },
+  };
+}
+
+/** A page's metadata, with its link preview made from the same words. Next
+    replaces openGraph and twitter whole rather than merging them, so a page
+    that sets neither previews as the homepage, and one that sets only
+    openGraph keeps the homepage's twitter lines. `social` is the preview's
+    title when it should differ from the search title. */
+export function pageMetadata({
+  title,
+  description,
+  path,
+  social,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  social?: string;
+}): Metadata {
+  const preview = social ?? `Lodestar · ${title}`;
+  return {
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: { title: preview, description, url: path, siteName: "Lodestar", type: "website", locale: "en_US" },
+    twitter: { card: "summary_large_image", title: preview, description },
   };
 }
 

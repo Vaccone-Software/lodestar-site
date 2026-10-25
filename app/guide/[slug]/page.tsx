@@ -9,7 +9,7 @@ import Permalink from "@/components/Permalink";
 import { guide, type Lesson } from "@/data/guide";
 import { doors } from "@/data/doors";
 import { stableRelease } from "@/lib/server/stable";
-import { appId, breadcrumbs, graph, site } from "@/lib/seo";
+import { appId, breadcrumbs, graph, pageMetadata, site } from "@/lib/seo";
 
 export function generateStaticParams() {
   return guide.map((p) => ({ slug: p.slug }));
@@ -23,11 +23,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const page = guide.find((p) => p.slug === slug);
   if (!page) return {};
-  return {
-    title: page.title,
-    description: `${page.title}, with Lodestar: ${page.blurb} Every lesson with its keys, the fine print, and the settings behind it.`,
-    alternates: { canonical: `/guide/${slug}` },
-  };
+  return pageMetadata({ title: page.title, description: page.description, path: `/guide/${slug}` });
 }
 
 function anchor(title: string): string {

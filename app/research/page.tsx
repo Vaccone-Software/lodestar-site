@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import { stableRelease } from "@/lib/server/stable";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Research",
+export const metadata: Metadata = pageMetadata({
+  title: "Research: Typing, Pointer and Voice Data from the Mac",
   description:
-    "What Lodestar records for research: every keystroke's timing, every pointer movement, voice features when dictating and daily rhythm, on the Mac, for as long as a person uses it. Looking for research groups to find out whether it can help identify and follow conditions.",
-  alternates: { canonical: "/research" },
-};
+    "What Lodestar records for research: keystroke timing, pointer movement, voice features and daily rhythm, on the Mac, for as long as a person uses it.",
+  path: "/research",
+  social: "Lodestar · What Lodestar records, for research",
+});
 
 // For clinical researchers meeting Lodestar for the first time: what it is,
 // what we are looking for, what it records, how that compares with the

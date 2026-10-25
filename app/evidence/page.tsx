@@ -3,13 +3,15 @@ import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
 import Permalink from "@/components/Permalink";
 import { stableRelease } from "@/lib/server/stable";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Evidence",
+export const metadata: Metadata = pageMetadata({
+  title: "Evidence: The Measurements Behind Every Claim",
   description:
-    "Every claim on the Lodestar front page, and the measurement behind it: keyboard navigation timing, practice versus re-encoding, misfire rates, and the research behind the coach. One hand, fourteen days, seventy thousand events.",
-  alternates: { canonical: "/evidence" },
-};
+    "The measurements behind Lodestar's claims: keyboard navigation timing, misfire rates and the research behind the coach, from over seventy thousand events.",
+  path: "/evidence",
+  social: "Lodestar · Every claim, and its measurement",
+});
 
 // The results section to the front page's abstract. Every number here
 // was read from the event log Lodestar keeps on its author's Mac, and

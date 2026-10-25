@@ -8,7 +8,7 @@ import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
 import { stableRelease } from "@/lib/server/stable";
-import { appJsonLd, breadcrumbs, graph } from "@/lib/seo";
+import { appJsonLd, breadcrumbs, graph, pageMetadata } from "@/lib/seo";
 
 // The four doors and nothing else: any other name is a 404, and the guide,
 // the evidence and the changelog keep their own routes.
@@ -26,12 +26,12 @@ export async function generateMetadata({
   const { door: slug } = await params;
   const door = doors.find((d) => d.slug === slug);
   if (!door) return {};
-  return {
+  return pageMetadata({
     title: door.title,
     description: door.description,
-    alternates: { canonical: `/${door.slug}` },
-    openGraph: { title: `Lodestar · ${door.h1}`, description: door.description, url: `/${door.slug}` },
-  };
+    path: `/${door.slug}`,
+    social: `Lodestar · ${door.h1}`,
+  });
 }
 
 function Label({ children }: { children: React.ReactNode }) {

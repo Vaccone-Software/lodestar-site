@@ -28,6 +28,9 @@ export type GuidePage = {
   /** The door this page teaches, when it teaches one. */
   door?: "write" | "switch" | "keep" | "speak";
   blurb: string;
+  /** The line under the title in search results: what the page teaches, in
+      a search's words, at most 160 characters so it is never cut. */
+  description: string;
   first: Lesson;
   ready: Lesson[];
   finePrint: string[];
@@ -42,6 +45,8 @@ export const guide: GuidePage[] = [
     door: "switch",
     name: "An application",
     blurb: "Letters, the launcher, chains, and the map.",
+    description:
+      "Open any app or window on your Mac with one key and a letter. Give apps their letters, find the ones without, and reach a window you lost.",
     first: {
       title: "Get to an app",
       keys: ["lode", "M"],
@@ -104,6 +109,8 @@ export const guide: GuidePage[] = [
     door: "switch",
     name: "A layout",
     blurb: "Side by side, saved worlds, positions, displays, and undo.",
+    description:
+      "Put two windows side by side, save a set of windows and bring it back with a letter, send windows to another display, and undo, from the Mac keyboard.",
     first: {
       title: "Put two apps side by side",
       keys: ["lode", "M", "B"],
@@ -171,6 +178,8 @@ export const guide: GuidePage[] = [
     title: "Open Websites and Browser Profiles from the Keyboard on Mac",
     name: "A page",
     blurb: "Ask, saved names, profiles, and links clicked anywhere.",
+    description:
+      "Open sites and searches in the right browser profile from the keyboard, give sites short names, and send every link you click to the profile it belongs in.",
     first: {
       title: "Open a site",
       keys: ["lode", "⏎"],
@@ -220,6 +229,8 @@ export const guide: GuidePage[] = [
     title: "Click Buttons and Links from the Keyboard on Mac",
     name: "A button",
     blurb: "Letters on everything pressable, menus under search, and scrolling.",
+    description:
+      "Click any button or link on your Mac by typing its letters. Right-click, fill in forms, run menu commands by name and scroll, without the mouse.",
     first: {
       title: "Press a button",
       keys: ["lode", ";"],
@@ -269,6 +280,8 @@ export const guide: GuidePage[] = [
     title: "Select Text on Screen from the Keyboard on Mac",
     name: "Text on screen",
     blurb: "Highlight by typing, one word or a whole passage, in any app.",
+    description:
+      "Select text anywhere on your Mac by typing a few letters of it: one word, several lines or a whole passage, in any app, without the mouse.",
     first: {
       title: "Highlight text by typing it",
       keys: ["lode", "/"],
@@ -313,6 +326,8 @@ export const guide: GuidePage[] = [
     door: "keep",
     name: "What you copied",
     blurb: "Recents under letters, pins under numbers, and a search that reads screenshots.",
+    description:
+      "Free clipboard history for Mac: paste a recent copy with a letter, pin what you paste often, search everything you copied and find screenshots by their words.",
     first: {
       title: "Paste something from earlier",
       keys: ["⇧⌘V", "S"],
@@ -371,6 +386,8 @@ export const guide: GuidePage[] = [
     door: "speak",
     name: "What you say",
     blurb: "Dictation into any field, editing from the keys, and the dozen moves the draft uses.",
+    description:
+      "Dictation for Mac you can edit before it lands. Speak into any field, fix a word from the keys, revise what a field holds and teach it names, all on your Mac.",
     first: {
       title: "Dictate into any field",
       keys: ["lode", "."],
@@ -443,6 +460,8 @@ export const guide: GuidePage[] = [
     door: "write",
     name: "What you write",
     blurb: "A line under what reads wrong, and a letter to fix it.",
+    description:
+      "Free spelling and grammar checking for Mac as you type, in any app. A line under what reads wrong, and a letter to fix it, keep it, or take the fix back.",
     first: {
       title: "Fix a mistake",
       keys: ["lode", "⇥"],
@@ -495,6 +514,8 @@ export const guide: GuidePage[] = [
     title: "Keyboard Shortcut Suggestions That Learn From You",
     name: "The coach",
     blurb: "What it can offer, what it records, and how to say no.",
+    description:
+      "Lodestar's coach notices what you do the long way on your Mac and offers the shortcut. What it can offer, what it records, and how to turn it down.",
     first: {
       title: "Take an offer",
       keys: ["lode", "lode"],
@@ -550,6 +571,8 @@ export const guide: GuidePage[] = [
     title: "Settings, the Config File and Every Option",
     name: "Settings",
     blurb: "The window, the file, the shell, and every option.",
+    description:
+      "Every Lodestar setting: the settings window, the plain text config file, the command line, a different lode key, updates and starting at login.",
     first: {
       title: "Change anything",
       keys: ["lode", ","],
