@@ -264,8 +264,9 @@ export default async function ResearchPage() {
                   <a href={sources.physionet} className={link}>
                     published data
                   </a>{" "}
-                  through Lodestar&apos;s own 90 second window code gives an AUC of 0.743 for Lan and
-                  Yeo&apos;s index, against their 0.741. This shows the code computes the measure as published, nothing more.
+                  through Lodestar, on all 85 people, gives an AUC of 0.750 for Lan and Yeo&apos;s index computed
+                  their way, against their 0.752. Lodestar&apos;s own 90 second windows give 0.743. This shows the
+                  code computes the measure as published, nothing more.
                 </dd>
               </div>
               <div>
