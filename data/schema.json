@@ -683,6 +683,15 @@
       ],
       "title": "Draft",
       "properties": {
+        "editing-style": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "vim"
+          ],
+          "description": "How the draft is edited: standard, as in any Mac text field, or vim, the modal editor (esc leaves typing for normal mode).",
+          "default": "standard"
+        },
         "input": {
           "type": "string",
           "description": "The microphone the draft listens to, by its name in Sound settings. Empty follows the system default input.",
@@ -718,6 +727,7 @@
       "additionalProperties": false,
       "description": "The draft: lode . speaks, lode ⇧. revises.",
       "default": {
+        "editing-style": "standard",
         "input": "",
         "model": "",
         "words": {}
@@ -732,12 +742,7 @@
       "properties": {
         "born": {
           "type": "string",
-          "description": "The year you were born, four digits. Age is the first thing a reading of the hands is adjusted for. Optional."
-        },
-        "exact-keyboards": {
-          "type": "boolean",
-          "description": "Charge each press to the keyboard that sent it, by matching it to that keyboard's own report. Needs Input Monitoring. Off by default; without it a press two keyboards could have sent is charged to neither.",
-          "default": false
+          "description": "Moved to the health record, sealed. A year written here is moved there at launch and taken out of this file."
         },
         "hand": {
           "type": "string",
@@ -746,7 +751,7 @@
             "right",
             "either"
           ],
-          "description": "The hand you write with. Fine motor signs are often one sided and the record keeps each hand apart. Optional."
+          "description": "Moved to the health record, sealed. A hand written here is moved there at launch and taken out of this file."
         },
         "keyboards": {
           "type": "object",
@@ -775,7 +780,6 @@
       "additionalProperties": false,
       "description": "About you, for the health record. Local, optional, never sent.",
       "default": {
-        "exact-keyboards": false,
         "keyboards": {}
       }
     },
