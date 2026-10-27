@@ -783,6 +783,34 @@
         "keyboards": {}
       }
     },
+    "mice": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Mice",
+      "properties": {
+        "reversed-wheels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "description": "The name it is listed by in Settings, Input, Mice."
+          },
+          "x-stoic-lossy": true,
+          "x-stoic-transform": {
+            "name": "lossy dictionary",
+            "description": "an object whose invalid entries are dropped"
+          },
+          "description": "Source → name. Each source listed has its wheel scrolling opposite to the Mac's setting, and nothing else is turned: a mouse by its id (vendor:product:hash, as Settings, Input, Mice shows it), or an app that posts a mouse's scrolls as app:<bundle id>. The trackpad is never touched.",
+          "default": {}
+        }
+      },
+      "additionalProperties": false,
+      "description": "The mice you use.",
+      "default": {
+        "reversed-wheels": {}
+      }
+    },
     "$schema": {
       "type": "string"
     },
