@@ -8,7 +8,13 @@ import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
 import { stableRelease } from "@/lib/server/stable";
-import { appJsonLd, breadcrumbs, graph, pageMetadata } from "@/lib/seo";
+import {
+  appJsonLd,
+  breadcrumbs,
+  graph,
+  makerJsonLd,
+  pageMetadata,
+} from "@/lib/seo";
 
 // The four doors and nothing else: any other name is a 404, and the guide,
 // the evidence and the changelog keep their own routes.
@@ -66,6 +72,7 @@ export default async function Page({
       { name: "Lodestar", path: "/" },
       { name: door.name, path: `/${door.slug}` },
     ]),
+    makerJsonLd(),
   );
   return (
     <>

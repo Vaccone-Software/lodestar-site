@@ -9,7 +9,15 @@ import Permalink from "@/components/Permalink";
 import { guide, type Lesson } from "@/data/guide";
 import { doors } from "@/data/doors";
 import { stableRelease } from "@/lib/server/stable";
-import { appId, breadcrumbs, graph, pageMetadata, site } from "@/lib/seo";
+import {
+  appId,
+  breadcrumbs,
+  graph,
+  makerId,
+  makerJsonLd,
+  pageMetadata,
+  site,
+} from "@/lib/seo";
 
 export function generateStaticParams() {
   return guide.map((p) => ({ slug: p.slug }));
@@ -149,23 +157,30 @@ export default async function Page({
   const page = guide[index];
   const prev = guide[index - 1];
   const next = guide[index + 1];
-  const { tag } = await stableRelease();
+  const { tag, date } = await stableRelease();
   const lessons = [page.first, ...page.ready];
   const door = doors.find((d) => d.slug === page.door);
   const jsonLd = graph(
     {
       "@type": "TechArticle",
       headline: page.title,
-      description: page.blurb,
+      description: page.description,
       url: `${site}/guide/${page.slug}`,
+      mainEntityOfPage: `${site}/guide/${page.slug}`,
+      image: `${site}/guide/${page.slug}/opengraph-image`,
+      // The guide documents the release, so it changes when one ships.
+      ...(date ? { dateModified: date } : {}),
+      inLanguage: "en",
       about: { "@id": appId },
-      author: { "@type": "Organization", name: "Vaccone Software" },
+      author: { "@id": makerId },
+      publisher: { "@id": makerId },
     },
     breadcrumbs([
       { name: "Lodestar", path: "/" },
       { name: "Guide", path: "/guide" },
       { name: page.name, path: `/guide/${page.slug}` },
     ]),
+    makerJsonLd(),
   );
   // A section's name, said once, at the meta size in quiet ink: the page's
   // order is already its reading order, so it wears no number.

@@ -5,7 +5,7 @@ import Nav from "@/components/Nav";
 import { doors } from "@/data/doors";
 import { guide, type GuidePage } from "@/data/guide";
 import { stableRelease } from "@/lib/server/stable";
-import { pageMetadata } from "@/lib/seo";
+import { breadcrumbs, graph, pageMetadata, site } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Guide: Every Feature and Keyboard Shortcut for Mac",
@@ -85,8 +85,33 @@ export default async function GuideIndex() {
     (n, p) => n + [p.first, ...p.ready].filter((l) => l.hidden).length,
     0,
   );
+  // The index as a list a search engine can walk, in the order it reads.
+  const jsonLd = graph(
+    {
+      "@type": "CollectionPage",
+      name: "The Lodestar guide",
+      url: `${site}/guide`,
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: guide.map((p, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: p.title,
+          url: `${site}/guide/${p.slug}`,
+        })),
+      },
+    },
+    breadcrumbs([
+      { name: "Lodestar", path: "/" },
+      { name: "Guide", path: "/guide" },
+    ]),
+  );
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       <Nav tag={tag} current="guide" />
       <main
         id="main"

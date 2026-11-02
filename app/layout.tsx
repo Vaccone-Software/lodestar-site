@@ -34,6 +34,9 @@ const description =
 // GitHub could not be reached links to the releases page until then.
 export const revalidate = 300;
 
+// The canonical address is each page's own to say: one said here would
+// fall to any page that forgot, and to the 404, which would then name the
+// homepage as itself.
 export const metadata: Metadata = {
   metadataBase: new URL("https://lodestar.vaccone.software"),
   title: {
@@ -41,11 +44,9 @@ export const metadata: Metadata = {
     template: "%s · Lodestar",
   },
   description,
-  alternates: { canonical: "/" },
   openGraph: {
     title: "Lodestar · Everything one key away",
     description,
-    url: "/",
     siteName: "Lodestar",
     type: "website",
     locale: "en_US",

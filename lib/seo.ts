@@ -8,6 +8,24 @@ import { downloadFor } from "@/lib/releases";
 
 export const site = "https://lodestar.vaccone.software";
 const appId = `${site}/#app`;
+const makerId = `${site}/#maker`;
+
+/** Who makes it, said once with the places it is known, so a search
+    engine can tell this Lodestar from the others of the name. Everything
+    else names the maker by its id. */
+export function makerJsonLd() {
+  return {
+    "@type": "Organization",
+    "@id": makerId,
+    name: "Vaccone Software",
+    url: "https://www.vaccone.software/",
+    logo: `${site}/apple-icon`,
+    sameAs: [
+      "https://github.com/Vaccone-Software",
+      "https://github.com/Vaccone-Software/lodestar",
+    ],
+  };
+}
 
 export function appJsonLd(tag: string | null, features?: string[]) {
   return {
@@ -25,7 +43,9 @@ export function appJsonLd(tag: string | null, features?: string[]) {
     license:
       "https://github.com/Vaccone-Software/lodestar/blob/main/LICENSE.md",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    author: { "@type": "Organization", name: "Vaccone Software" },
+    author: { "@id": makerId },
+    publisher: { "@id": makerId },
+    sameAs: ["https://github.com/Vaccone-Software/lodestar"],
     ...(features ? { featureList: features } : {}),
   };
 }
@@ -38,7 +58,7 @@ export function siteJsonLd() {
     "@id": `${site}/#site`,
     name: "Lodestar",
     url: `${site}/`,
-    publisher: { "@type": "Organization", name: "Vaccone Software" },
+    publisher: { "@id": makerId },
   };
 }
 
@@ -92,4 +112,4 @@ export function graph(...nodes: object[]) {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": nodes });
 }
 
-export { appId };
+export { appId, makerId };
