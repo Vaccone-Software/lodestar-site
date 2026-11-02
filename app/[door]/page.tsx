@@ -5,8 +5,9 @@ import { KeySequence } from "@/components/Key";
 import DoorShow from "@/components/home/DoorShow";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
-import { doors, shared } from "@/data/doors";
+import { doors, plain, shared } from "@/data/doors";
 import { guide } from "@/data/guide";
+import { rivals } from "@/data/rivals";
 import { stableRelease } from "@/lib/server/stable";
 import {
   appJsonLd,
@@ -64,6 +65,7 @@ export default async function Page({
   // the depth is one link away, for readers and for search engines alike.
   const deeper = guide.find((page) => page.slug === door.guide[0]);
   const questions = [...door.questions, ...shared];
+  const compared = rivals.filter((r) => r.door === door.slug);
   const jsonLd = graph(
     appJsonLd(tag, [
       door.lede,
@@ -79,7 +81,7 @@ export default async function Page({
       mainEntity: questions.map(({ q, a }) => ({
         "@type": "Question",
         name: q,
-        acceptedAnswer: { "@type": "Answer", text: a },
+        acceptedAnswer: { "@type": "Answer", text: plain(a) },
       })),
     },
   );
@@ -191,13 +193,35 @@ export default async function Page({
         {/* What people ask before they download, below the one screen:
             the answers a search lands on, each said in its first sentence. */}
         <section className="pane p-6">
-          <Label>Questions</Label>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+            <Label>Questions</Label>
+            {compared.map((r) => (
+              <a
+                key={r.slug}
+                href={`/vs/${r.slug}`}
+                className="text-dim hover:text-ink mb-4 text-[13px] font-medium transition-colors"
+              >
+                Lodestar and {r.name}, side by side
+              </a>
+            ))}
+          </div>
           <div className="grid gap-x-10 gap-y-6 md:grid-cols-2">
             {questions.map(({ q, a }) => (
               <div key={q}>
                 <h3 className="text-[16px] font-medium">{q}</h3>
                 <p className="text-dim mt-1.5 max-w-[52ch] text-[15px] leading-[1.5]">
-                  {a}
+                  {a.split("`").map((part, i) =>
+                    i % 2 ? (
+                      <code
+                        key={i}
+                        className="text-ink font-mono text-[14px] break-all"
+                      >
+                        {part}
+                      </code>
+                    ) : (
+                      part
+                    ),
+                  )}
                 </p>
               </div>
             ))}

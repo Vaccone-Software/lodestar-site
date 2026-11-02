@@ -1,5 +1,6 @@
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
+import { rivals } from "@/data/rivals";
 import { site } from "@/lib/seo";
 
 // The site in the shape a language model reads (llmstxt.org): what Lodestar
@@ -22,6 +23,12 @@ export function GET() {
     "## What it does",
     "",
     ...doors.map((d) => `- [${d.title}](${site}/${d.slug}): ${d.description}`),
+    "",
+    "## Compared",
+    "",
+    ...rivals.map(
+      (r) => `- [${r.title}](${site}/vs/${r.slug}): ${r.description}`,
+    ),
     "",
     "## Guide",
     "",

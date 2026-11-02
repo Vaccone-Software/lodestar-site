@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { doors } from "@/data/doors";
 import { guide } from "@/data/guide";
+import { rivals } from "@/data/rivals";
 import { stableRelease } from "@/lib/server/stable";
 import { site } from "@/lib/seo";
 
@@ -20,6 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     page("/", 1),
     ...doors.map((d) => page(`/${d.slug}`, 0.95)),
+    ...rivals.map((r) => page(`/vs/${r.slug}`, 0.7)),
     page("/guide", 0.9),
     ...guide.map((p) => page(`/guide/${p.slug}`, 0.8)),
     page("/evidence", 0.8),

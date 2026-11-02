@@ -10,6 +10,7 @@ import { existsSync } from "node:fs";
 import { chromium, type Browser } from "playwright";
 import { doors, shared } from "@/data/doors";
 import { guide } from "@/data/guide";
+import { rivals } from "@/data/rivals";
 import { features, headline, subline } from "@/data/home";
 
 let server: ReturnType<typeof Bun.spawn>;
@@ -164,6 +165,32 @@ describe("the doors", () => {
       const { html } = await page(`/${door.slug}`);
       expect(text(html)).toContain(door.questions[0].q);
       expect(html).toContain('"@type":"FAQPage"');
+    }
+  });
+});
+
+// MARK: - Lodestar beside the apps people search for instead
+
+describe("comparisons", () => {
+  // Fair, or not at all: every page says what the other app does better
+  // and where each fact about it came from, in the voice.
+  test("each says what the other does better, and where it read it", async () => {
+    for (const rival of rivals) {
+      expect(rival.theirs.length).toBeGreaterThanOrEqual(2);
+      expect(rival.sources.length).toBeGreaterThanOrEqual(1);
+      const words = [
+        rival.h1,
+        rival.answer,
+        ...rival.theirs,
+        ...rival.ours,
+        ...rival.rows.flatMap((r) => [r.fact, r.lodestar, r.rival]),
+      ];
+      for (const line of words) expect(line).not.toMatch(/[—–;]/);
+      const { status, html } = await page(`/vs/${rival.slug}`);
+      expect(status).toBe(200);
+      expect(heading(html)).toBe(rival.h1);
+      const door = await page(`/${rival.door}`);
+      expect(door.html).toContain(`href="/vs/${rival.slug}"`);
     }
   });
 });

@@ -6,6 +6,9 @@ export type Keys = string[];
 
 export type Question = { q: string; a: string };
 
+/** An answer as plain words, for search engines and llms.txt. */
+export const plain = (a: string) => a.replaceAll("`", "");
+
 export type Door = {
   slug: "write" | "switch" | "keep" | "speak";
   name: string;
@@ -34,7 +37,8 @@ export type Door = {
   questions: Question[];
 };
 
-/** Asked on every door, after its own. */
+/** Asked on every door, after its own. A command in an answer stands
+    between backticks, drawn as code on the page and plain elsewhere. */
 export const shared: Question[] = [
   {
     q: "What does it cost, and which Macs run it?",
@@ -42,7 +46,7 @@ export const shared: Question[] = [
   },
   {
     q: "Can I install it with Homebrew?",
-    a: "Yes. Run brew install --cask vaccone-software/tap/lodestar, and Lodestar keeps itself up to date from then on.",
+    a: "Yes. Run `brew install --cask vaccone-software/tap/lodestar`, and Lodestar keeps itself up to date from then on.",
   },
 ];
 
