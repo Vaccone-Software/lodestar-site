@@ -8,7 +8,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { chromium, type Browser } from "playwright";
-import { doors } from "@/data/doors";
+import { doors, shared } from "@/data/doors";
 import { guide } from "@/data/guide";
 import { features, headline, subline } from "@/data/home";
 
@@ -139,10 +139,31 @@ describe("the doors", () => {
   // and carries no dash or semicolon.
   test("each door's short lines keep the voice", () => {
     for (const door of doors) {
-      for (const line of [door.name, door.what, door.h1, door.lede]) {
+      for (const line of [
+        door.name,
+        door.kind,
+        door.what,
+        door.h1,
+        door.lede,
+      ]) {
         expect(line).not.toMatch(/\.$/);
         expect(line).not.toMatch(/[—–;]/);
       }
+    }
+  });
+
+  // An answer is prose, so it keeps its periods, but never a dash or a
+  // semicolon, and every door answers its own questions before the shared.
+  test("each door answers what people ask, in the voice", async () => {
+    for (const door of doors) {
+      expect(door.questions.length).toBeGreaterThanOrEqual(3);
+      for (const { q, a } of [...door.questions, ...shared]) {
+        expect(q).toMatch(/\?$/);
+        expect(`${q} ${a}`).not.toMatch(/[—–;]/);
+      }
+      const { html } = await page(`/${door.slug}`);
+      expect(text(html)).toContain(door.questions[0].q);
+      expect(html).toContain('"@type":"FAQPage"');
     }
   });
 });

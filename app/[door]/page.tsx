@@ -5,7 +5,7 @@ import { KeySequence } from "@/components/Key";
 import DoorShow from "@/components/home/DoorShow";
 import Foot from "@/components/Foot";
 import Nav from "@/components/Nav";
-import { doors } from "@/data/doors";
+import { doors, shared } from "@/data/doors";
 import { guide } from "@/data/guide";
 import { stableRelease } from "@/lib/server/stable";
 import {
@@ -63,6 +63,7 @@ export default async function Page({
   // The guide page that goes deeper: the door page stays one screen, and
   // the depth is one link away, for readers and for search engines alike.
   const deeper = guide.find((page) => page.slug === door.guide[0]);
+  const questions = [...door.questions, ...shared];
   const jsonLd = graph(
     appJsonLd(tag, [
       door.lede,
@@ -73,6 +74,14 @@ export default async function Page({
       { name: door.name, path: `/${door.slug}` },
     ]),
     makerJsonLd(),
+    {
+      "@type": "FAQPage",
+      mainEntity: questions.map(({ q, a }) => ({
+        "@type": "Question",
+        name: q,
+        acceptedAnswer: { "@type": "Answer", text: a },
+      })),
+    },
   );
   return (
     <>
@@ -87,7 +96,9 @@ export default async function Page({
       >
         <section className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-14">
           <div className="order-2 md:order-1">
-            <p className="text-dim text-[16px] font-medium">{door.name}</p>
+            <p className="text-dim text-[16px] font-medium">
+              {door.name} · {door.kind}
+            </p>
             <h1 className="font-display mt-2 mb-4 text-[clamp(36px,4.4vw,56px)] leading-[1.02] font-bold tracking-[-0.03em] text-balance">
               {door.h1}
             </h1>
@@ -174,6 +185,22 @@ export default async function Page({
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* What people ask before they download, below the one screen:
+            the answers a search lands on, each said in its first sentence. */}
+        <section className="pane p-6">
+          <Label>Questions</Label>
+          <div className="grid gap-x-10 gap-y-6 md:grid-cols-2">
+            {questions.map(({ q, a }) => (
+              <div key={q}>
+                <h3 className="text-[16px] font-medium">{q}</h3>
+                <p className="text-dim mt-1.5 max-w-[52ch] text-[15px] leading-[1.5]">
+                  {a}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
         <Foot />
