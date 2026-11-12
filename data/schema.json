@@ -63,6 +63,11 @@
           "description": "Which releases updates follow. Stable takes a build once it has run on preview Macs for a few days. Preview takes every build as it ships.",
           "default": "stable"
         },
+        "daily-count": {
+          "type": "boolean",
+          "description": "Once a day, tell the Lodestar site that this Mac used Lodestar: the version, the update channel and how long ago it was installed, with no ID and no tracker. Its own switch, apart from updates (installed app only).",
+          "default": true
+        },
         "show-menu-bar": {
           "type": "boolean",
           "description": "Show the status item permanently; false hides it until lodestar is picked in the launcher.",
@@ -95,6 +100,7 @@
         "active-display": "pointer",
         "auto-update": true,
         "channel": "stable",
+        "daily-count": true,
         "show-menu-bar": true,
         "sounds": true,
         "start-at-login": true,
@@ -588,7 +594,7 @@
         }
       },
       "additionalProperties": false,
-      "description": "What Lodestar observes, in two records with their own switches. Nothing leaves the machine.",
+      "description": "What Lodestar observes, in two records with their own switches. Nothing it observes leaves the machine.",
       "default": {
         "health": true,
         "health-mb": 1024,
