@@ -18,6 +18,19 @@ export const feedback = Config.all({
   from: Config.NonEmptyString("FEEDBACK_FROM"),
 });
 
+/** Where the daily count is kept: an Upstash Redis database, reached over
+    its REST API. The names Upstash gives are read first, then the ones
+    Vercel's marketplace integration sets for the same database, so either
+    way of connecting it works. */
+export const countStore = Config.all({
+  url: Config.NonEmptyString("UPSTASH_REDIS_REST_URL").pipe(
+    Config.orElse(() => Config.NonEmptyString("KV_REST_API_URL")),
+  ),
+  token: Config.Redacted("UPSTASH_REDIS_REST_TOKEN").pipe(
+    Config.orElse(() => Config.Redacted("KV_REST_API_TOKEN")),
+  ),
+});
+
 /** Whether this is Next's server or build (Next sets NEXT_RUNTIME), where
     the releases list goes through Next's cache, rather than the tests. */
 export const insideNext = Config.option(

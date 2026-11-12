@@ -14,15 +14,15 @@ export const metadata: Metadata = pageMetadata({
 
 // What Lodestar keeps, what leaves the Mac and when, and what the site
 // itself sees. Every line here is checked against the app's code: the
-// network calls are the update check, the downloads the person agrees to
-// and the feedback note they send, and nothing else. Change this page when
+// network calls are the update check, the daily count, the downloads the
+// person agrees to and the feedback note they send, and nothing else. Change this page when
 // any of that changes.
 
 const label = "text-dim text-[13px] font-semibold";
 const link =
   "text-ink decoration-ink/40 hover:decoration-ink underline underline-offset-4";
 const email = "privacy@vaccone.software";
-const updated = "25 October 2026";
+const updated = "12 November 2026";
 
 const kept = [
   "Your settings, saved breaths and parked windows",
@@ -36,6 +36,10 @@ const leaves: { name: string; line: string }[] = [
   {
     name: "Update checks",
     line: "Lodestar asks this site, or GitHub for preview builds, for the newest version, and downloads updates from GitHub. The request carries Lodestar's version number and nothing about you, though like any web request it shows the server your IP address.",
+  },
+  {
+    name: "Daily count",
+    line: "Once a day, after you first use Lodestar, it tells this site that a Mac used it. It sends the Lodestar version, the update channel and roughly how long ago Lodestar was installed, and nothing else: no ID and nothing about what you did. The site adds to daily totals and does not keep your IP address. Turn it off in Settings under Daily count.",
   },
   {
     name: "Models you turn on",
@@ -53,7 +57,7 @@ const leaves: { name: string; line: string }[] = [
 
 const never = [
   "No account and no sign in",
-  "No analytics or tracking in the app",
+  "No tracking in the app: no ID and no analytics service",
   "No ads",
   "Nothing sold, and nothing shared with anyone",
 ];
