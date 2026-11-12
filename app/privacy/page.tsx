@@ -127,13 +127,6 @@ export default async function PrivacyPage() {
               Sites and searches you open with Lodestar open in your browser, so
               the site you chose sees that visit as it would any other.
             </p>
-            <p className="text-dim mt-3 max-w-[66ch] text-[16px] leading-[1.6]">
-              Every number the daily count keeps is shown on the{" "}
-              <a href="/count" className={link}>
-                daily count page
-              </a>
-              .
-            </p>
           </section>
 
           <section className="border-hairline mt-14 grid gap-10 border-t pt-10 md:grid-cols-2">

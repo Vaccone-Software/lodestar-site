@@ -1,19 +1,12 @@
-// POST /api/count's answers and the reading behind the public page
-// (lib/server/count.ts), with Upstash played by a stand-in fetch and the
-// store's settings handed over through a ConfigProvider, never written into
-// process.env: what a post adds, every post it refuses, and every answer
-// the app reads.
+// POST /api/count's answers (lib/server/count.ts), with Upstash played by a
+// stand-in fetch and the store's settings handed over through a
+// ConfigProvider, never written into process.env: what a post adds, every
+// post it refuses, and every answer the app reads.
 // Runs without a build: `bun test tests/count.test.ts`.
 
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { ConfigProvider, Effect } from "effect";
-import {
-  daysBefore,
-  dayOf,
-  parsePost,
-  readDays,
-  respond,
-} from "@/lib/server/count";
+import { parsePost, respond } from "@/lib/server/count";
 import { HttpLive, fetchAtCallTime } from "@/lib/server/http";
 
 const realFetch = globalThis.fetch;
@@ -209,64 +202,5 @@ describe("parsePost", () => {
     expect(
       parsePost({ age: "90+", version: "1.0.0", channel: "preview" }),
     ).toEqual({ version: "1.0.0", channel: "preview", age: "90+" });
-  });
-});
-
-describe("reading the count", () => {
-  test("the days read are the whole UTC days before now, oldest first", () => {
-    expect(daysBefore(now, 3)).toEqual([
-      "2026-11-09",
-      "2026-11-10",
-      "2026-11-11",
-    ]);
-    expect(dayOf(now)).toBe("2026-11-12");
-  });
-
-  test("each day's flat answer becomes its counters, versions newest first", async () => {
-    upstash((commands) => {
-      expect(commands).toEqual([
-        ["HGETALL", "count:2026-11-10"],
-        ["HGETALL", "count:2026-11-11"],
-      ]);
-      return Response.json([
-        { result: [] },
-        {
-          result: [
-            "total",
-            "7",
-            "version:0.54.9",
-            "1",
-            "version:0.54.25",
-            "4",
-            "version:0.55.0",
-            "2",
-            "channel:stable",
-            "5",
-            "channel:preview",
-            "2",
-            "age:30-89",
-            "7",
-            "unknown",
-            "3",
-          ],
-        },
-      ]);
-    });
-    const days = await run(readDays(now, 2));
-    expect(days[0]).toEqual({
-      day: "2026-11-10",
-      total: 0,
-      versions: [],
-      channel: { stable: 0, preview: 0 },
-      age: { "0": 0, "1-6": 0, "7-29": 0, "30-89": 0, "90+": 0 },
-    });
-    expect(days[1].total).toBe(7);
-    expect(days[1].versions).toEqual([
-      { version: "0.55.0", count: 2 },
-      { version: "0.54.25", count: 4 },
-      { version: "0.54.9", count: 1 },
-    ]);
-    expect(days[1].channel).toEqual({ stable: 5, preview: 2 });
-    expect(days[1].age["30-89"]).toBe(7);
   });
 });
