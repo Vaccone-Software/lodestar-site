@@ -32,7 +32,7 @@ export const rivals: Rival[] = [
     door: "write",
     title: "Grammarly Alternative for Mac: Free and On-Device",
     description:
-      "Lodestar is a free Grammarly alternative for Mac: spelling and grammar checked as you type, on your Mac, with no account and nothing sent to a server.",
+      "Lodestar is a free Grammarly alternative for Mac: spelling and grammar checked as you type, on your Mac, with no account and nothing you write sent to a server.",
     h1: "A Grammarly alternative that stays on your Mac",
     answer:
       "Lodestar checks spelling and grammar as you type in your Mac apps, for free, on your Mac and with no account. Grammarly checks your writing on its servers and needs an account, and in return it does more: it rewrites sentences and drafts with generative AI. If you want corrections and nothing else, Lodestar is the lighter choice.",

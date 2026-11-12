@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/evidence", 0.8),
     page("/research", 0.6),
     page("/privacy", 0.4),
+    page("/count", 0.3),
     page("/changelog", 0.5),
   ];
 }
