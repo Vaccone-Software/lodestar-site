@@ -1,17 +1,19 @@
 // The daily count: how many Macs used Lodestar today, and nothing more.
 //
 // The app posts once in a UTC day, after the first time its person uses it,
-// with exactly two facts: its update channel and a coarse install age. It
-// sends no ID, no version and no date, and the Mac remembers which day it
-// last sent, so this side has nothing that could tie one day's post to
-// another's. The day is the server's, read when the post arrives.
+// with exactly three facts: its Lodestar version, its update channel and a
+// coarse install age. It sends no ID and no date, and the Mac remembers
+// which day it last sent, so this side has nothing that could tie one day's
+// post to another's or to a Mac. The day is the server's, read when the
+// post arrives.
 //
-// Each post adds one to three counters of that day's hash, kept apart on
-// purpose: the total, the channel and the age. The store never holds a
-// channel and an age together, so no row in it describes one Mac. The IP
-// address a request shows is not read, logged or kept.
+// Each post adds one to four counters of that day's hash: the total, the
+// version, the channel and the age, each on its own. That answers every
+// question the count is for (how many, on which builds, how new) without
+// a row per Mac. The IP address a request shows is not read, logged or
+// kept.
 //
-// The body must be exactly those two fields with known values. Anything
+// The body must be exactly those three fields with known shapes. Anything
 // else is refused, which keeps junk out without keeping addresses to rate
 // limit by, and makes a mistake in a future app build loud rather than
 // quietly counted.
@@ -29,7 +31,11 @@ export type Channel = (typeof channels)[number];
 export type Age = (typeof ages)[number];
 
 /** A post the count takes. */
-export type Post = { channel: Channel; age: Age };
+export type Post = { version: string; channel: Channel; age: Age };
+
+/** A release's version as the app reports it: three plain numbers, no "v"
+    and no suffix, bounded so junk cannot mint endless counters. */
+const versionShape = /^\d{1,4}\.\d{1,4}\.\d{1,4}$/;
 
 class NotFromLodestar extends Schema.TaggedError<NotFromLodestar>()(
   "NotFromLodestar",
@@ -48,23 +54,25 @@ export const dayOf = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 const keyOf = (day: string) => `count:${day}`;
 
 /** The post a body is, or undefined for anything that is not exactly the
-    two fields with values the app can send. */
+    three fields with values the app can send. */
 export function parsePost(body: unknown): Post | undefined {
   if (!Predicate.isObject(body) || Array.isArray(body)) return undefined;
   const fields = body as Record<string, unknown>;
   const keys = Object.keys(fields).sort();
-  if (keys.length !== 2 || keys[0] !== "age" || keys[1] !== "channel")
+  if (keys.join(",") !== "age,channel,version") return undefined;
+  const { version, channel, age } = fields;
+  if (!Predicate.isString(version) || !versionShape.test(version))
     return undefined;
-  const { channel, age } = fields;
   if (!channels.includes(channel as Channel)) return undefined;
   if (!ages.includes(age as Age)) return undefined;
-  return { channel: channel as Channel, age: age as Age };
+  return { version, channel: channel as Channel, age: age as Age };
 }
 
-/** The three increments one post makes, as Upstash's pipeline takes them. */
+/** The four increments one post makes, as Upstash's pipeline takes them. */
 export const increments = (post: Post, day: string) =>
   [
     ["HINCRBY", keyOf(day), "total", "1"],
+    ["HINCRBY", keyOf(day), `version:${post.version}`, "1"],
     ["HINCRBY", keyOf(day), `channel:${post.channel}`, "1"],
     ["HINCRBY", keyOf(day), `age:${post.age}`, "1"],
   ] as const;
@@ -152,8 +160,16 @@ export const respond = (request: Request, now: number) =>
 export type Day = {
   day: string;
   total: number;
+  /** Every version that posted that day, newest first. */
+  versions: { version: string; count: number }[];
   channel: Record<Channel, number>;
   age: Record<Age, number>;
+};
+
+const newestFirst = (a: string, b: string) => {
+  const [x, y] = [a, b].map((v) => v.split(".").map(Number));
+  for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return y[i] - x[i];
+  return 0;
 };
 
 const toDay = (day: string, fields: unknown): Day => {
@@ -169,6 +185,13 @@ const toDay = (day: string, fields: unknown): Day => {
   return {
     day,
     total: at("total"),
+    versions: Object.keys(read)
+      .filter((field) => field.startsWith("version:"))
+      .map((field) => ({
+        version: field.slice("version:".length),
+        count: read[field],
+      }))
+      .sort((a, b) => newestFirst(a.version, b.version)),
     channel: Object.fromEntries(
       channels.map((c) => [c, at(`channel:${c}`)]),
     ) as Record<Channel, number>,
@@ -195,12 +218,3 @@ export const readDays = Effect.fn("count.read")(function* (
   const results = yield* pipeline(days.map((day) => ["HGETALL", keyOf(day)]));
   return days.map((day, i) => toDay(day, results[i]));
 });
-
-/** The smallest number the public page shows. A count below it is said as
-    "fewer than" this, so a quiet day never shows one Mac's channel and age
-    on its own. */
-export const floor = 5;
-
-/** What the public page may say about a number. */
-export const shown = (value: number): number | null =>
-  value >= floor ? value : null;

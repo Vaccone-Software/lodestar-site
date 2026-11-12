@@ -5,9 +5,7 @@ import Nav from "@/components/Nav";
 import {
   ages,
   channels,
-  floor,
   readDays,
-  shown,
   type Age,
   type Channel,
   type Day,
@@ -24,10 +22,10 @@ export const metadata: Metadata = pageMetadata({
   social: "Lodestar · How many Macs use it",
 });
 
-// The daily count, shown as the site keeps it (lib/server/count.ts): the
-// whole days before today, read again every few minutes (the layout's
-// revalidate is the shorter, so it wins). Any number under the floor
-// is said as "fewer than", so a quiet day never shows what one Mac sent.
+// The daily count, shown exactly as the site keeps it (lib/server/count.ts):
+// the whole days before today, read again every few minutes (the layout's
+// revalidate is the shorter, so it wins). Nothing is rounded away or
+// hidden, since nothing kept can lead back to a Mac.
 
 const label = "text-dim text-[13px] font-semibold";
 const link =
@@ -55,15 +53,11 @@ async function days(): Promise<Day[] | null> {
   );
 }
 
-const say = (value: number) => {
-  const number = shown(value);
-  return number === null ? `Fewer than ${floor}` : number.toLocaleString("en");
-};
+const number = (value: number) =>
+  value.toLocaleString("en", { maximumFractionDigits: 1 });
 
 const mean = (values: number[]) =>
-  values.length
-    ? Math.round(values.reduce((a, b) => a + b, 0) / values.length)
-    : 0;
+  values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
 
 const dateName = (day: string) =>
   new Date(`${day}T00:00:00Z`).toLocaleDateString("en", {
@@ -72,9 +66,22 @@ const dateName = (day: string) =>
     timeZone: "UTC",
   });
 
+function Rows({ rows }: { rows: { name: string; value: number }[] }) {
+  return (
+    <dl className="mt-4 space-y-2 text-[16px]">
+      {rows.map((row) => (
+        <div key={row.name} className="flex justify-between gap-4">
+          <dt className="text-dim">{row.name}</dt>
+          <dd>{number(row.value)}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 export default async function CountPage() {
   const [{ tag }, read] = await Promise.all([stableRelease(), days()]);
-  const week = read?.slice(-7) ?? [];
+  const yesterday = read?.at(-1);
   return (
     <>
       <Nav tag={tag} />
@@ -90,7 +97,7 @@ export default async function CountPage() {
             are the only numbers the site keeps about it, shown in full.
           </p>
 
-          {read === null ? (
+          {read === null || yesterday === undefined ? (
             <section className="pane mt-10 p-6 md:p-8">
               <p className="text-dim text-[16px] leading-[1.6]">
                 The count could not be read just now. It is read again in a few
@@ -103,62 +110,64 @@ export default async function CountPage() {
                 <div className="pane p-6">
                   <h2 className={label}>Yesterday</h2>
                   <p className="mt-2 text-[32px] font-semibold tracking-[-0.02em]">
-                    {say(read.at(-1)!.total)}
+                    {number(yesterday.total)}
                   </p>
                 </div>
                 <div className="pane p-6">
                   <h2 className={label}>A day, over the last week</h2>
                   <p className="mt-2 text-[32px] font-semibold tracking-[-0.02em]">
-                    {say(mean(week.map((d) => d.total)))}
+                    {number(mean(read.slice(-7).map((d) => d.total)))}
                   </p>
                 </div>
               </section>
 
-              <section className="border-hairline mt-14 grid gap-10 border-t pt-10 md:grid-cols-2">
+              <section className="border-hairline mt-14 grid gap-10 border-t pt-10 md:grid-cols-3">
                 <div>
                   <h2 className="text-[18px] font-semibold">
                     How long ago it was installed
                   </h2>
-                  <p className="text-dim mt-1 text-[15px]">
-                    A day, over the last week
-                  </p>
-                  <dl className="mt-4 space-y-2 text-[16px]">
-                    {ages.map((age) => (
-                      <div key={age} className="flex justify-between gap-4">
-                        <dt className="text-dim">{ageNames[age]}</dt>
-                        <dd>{say(mean(week.map((d) => d.age[age])))}</dd>
-                      </div>
-                    ))}
-                  </dl>
+                  <p className="text-dim mt-1 text-[15px]">Yesterday</p>
+                  <Rows
+                    rows={ages.map((age) => ({
+                      name: ageNames[age],
+                      value: yesterday.age[age],
+                    }))}
+                  />
                 </div>
                 <div>
                   <h2 className="text-[18px] font-semibold">Update channel</h2>
-                  <p className="text-dim mt-1 text-[15px]">
-                    A day, over the last week
-                  </p>
-                  <dl className="mt-4 space-y-2 text-[16px]">
-                    {channels.map((channel) => (
-                      <div key={channel} className="flex justify-between gap-4">
-                        <dt className="text-dim">{channelNames[channel]}</dt>
-                        <dd>
-                          {say(mean(week.map((d) => d.channel[channel])))}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
+                  <p className="text-dim mt-1 text-[15px]">Yesterday</p>
+                  <Rows
+                    rows={channels.map((channel) => ({
+                      name: channelNames[channel],
+                      value: yesterday.channel[channel],
+                    }))}
+                  />
+                </div>
+                <div>
+                  <h2 className="text-[18px] font-semibold">Version</h2>
+                  <p className="text-dim mt-1 text-[15px]">Yesterday</p>
+                  {yesterday.versions.length ? (
+                    <Rows
+                      rows={yesterday.versions.map((v) => ({
+                        name: v.version,
+                        value: v.count,
+                      }))}
+                    />
+                  ) : (
+                    <p className="text-dim mt-4 text-[16px]">None</p>
+                  )}
                 </div>
               </section>
 
               <section className="border-hairline mt-14 border-t pt-10">
                 <h2 className="text-[18px] font-semibold">The last 30 days</h2>
-                <dl className="mt-4 grid gap-x-10 gap-y-2 text-[16px] sm:grid-cols-2">
-                  {[...read].reverse().map((d) => (
-                    <div key={d.day} className="flex justify-between gap-4">
-                      <dt className="text-dim">{dateName(d.day)}</dt>
-                      <dd>{say(d.total)}</dd>
-                    </div>
-                  ))}
-                </dl>
+                <Rows
+                  rows={[...read].reverse().map((d) => ({
+                    name: dateName(d.day),
+                    value: d.total,
+                  }))}
+                />
               </section>
             </>
           )}
@@ -166,14 +175,13 @@ export default async function CountPage() {
           <section className="border-hairline mt-14 border-t pt-10">
             <h2 className="text-[18px] font-semibold">How it is counted</h2>
             <p className="text-dim mt-2 max-w-[66ch] text-[16px] leading-[1.6]">
-              Each Mac sends two things: its update channel, and roughly how
-              long ago Lodestar was installed. The site adds one to that
-              day&apos;s total, one to the channel and one to the install age,
-              and keeps the three apart, so nothing it holds describes a single
+              Each Mac sends three things: its Lodestar version, its update
+              channel, and roughly how long ago Lodestar was installed. The site
+              adds one to that day&apos;s total and one to each of the three,
+              kept apart. It sends no ID, so no two days can be tied to the same
               Mac. Days are counted in UTC. The address a request comes from is
-              not kept. Any number under {floor} is shown as fewer than {floor}.
-              You can turn the count off in Lodestar&apos;s Settings, under
-              Daily count. See{" "}
+              not kept. You can turn the count off in Lodestar&apos;s Settings,
+              under Daily count. See{" "}
               <a href="/privacy" className={link}>
                 Privacy
               </a>

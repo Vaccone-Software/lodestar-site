@@ -39,7 +39,7 @@ const leaves: { name: string; line: string }[] = [
   },
   {
     name: "Daily count",
-    line: "Once a day, after you first use Lodestar, it tells this site that a Mac used it. It sends the update channel and roughly how long ago Lodestar was installed, and nothing else: no ID, no version and nothing about what you did. The site adds to three daily totals kept apart from each other and does not keep your IP address. Turn it off in Settings under Daily count.",
+    line: "Once a day, after you first use Lodestar, it tells this site that a Mac used it. It sends the Lodestar version, the update channel and roughly how long ago Lodestar was installed, and nothing else: no ID and nothing about what you did. The site adds to daily totals and does not keep your IP address. Turn it off in Settings under Daily count.",
   },
   {
     name: "Models you turn on",
